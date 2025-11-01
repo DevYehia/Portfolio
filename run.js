@@ -55,14 +55,17 @@ document.addEventListener('pointerlockchange', () => {
 window.addEventListener('keydown', e => {
     if(e.key == 'w'){
         console.log("ello");
-        
+        document.getElementById("talkDiv").hidden = false;
         let camLookAt = new THREE.Vector3;
         camera.getWorldDirection(camLookAt);
         console.log("cam look at is ", camLookAt)
         camera.position.z += camLookAt.z;
         camera.position.x += camLookAt.x
     }
-    else if(e.key == 's'){camera.position.z += moveSpeed}});
+    else if(e.key == 's'){
+        camera.position.z += moveSpeed
+        document.getElementById("talkDiv").hidden = true;
+    }});
 
 window.addEventListener('mousemove', e => {
     if(!inPointerLock){
@@ -87,6 +90,8 @@ const plane = new THREE.Mesh( geometry, material );
 scene.add( plane );
 plane.lookAt(new THREE.Vector3(0,1,0));
 plane.position.y = -boundaryCuboidHeight / 2;
+
+document.getElementById("talkDiv").hidden = true;
 
 
 function animate() {
