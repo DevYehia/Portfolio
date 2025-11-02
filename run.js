@@ -1,38 +1,8 @@
 import * as THREE from 'three';
-import { TrackballControls } from 'three/addons/controls/TrackballControls.js';
+import {addBoundaryCuboids} from './environment';
+import {animateText} from './textUtils'
+import { dialogues } from './dialogues';
 
-const boundaryCuboidHeight = 5;
-const boundaryCuboidWidth = 30;
-
-
-/**
- * @param {THREE.Scene} scene
- * @param {THREE.BoxGeometry} geometry
- * @param {THREE.MeshBasicMaterial} material
- * @param {THREE.Vector3} position
- */
-function addCuboid(scene, geometry, material, position){
-    const cuboid = new THREE.Mesh( geometry, material );
-    scene.add(cuboid);
-    cuboid.position.copy(position)
-}
-
-
-
-/**
- * @param {THREE.Scene} scene
- */
-function addBoundaryCuboids(scene, pathWidth){
-
-    const geometry = new THREE.BoxGeometry( boundaryCuboidWidth, boundaryCuboidHeight , boundaryCuboidWidth);
-    const material = new THREE.MeshBasicMaterial( { color: 0x0000ff} );
-
-    addCuboid(scene, geometry, material, new THREE.Vector3(pathWidth/2 + boundaryCuboidWidth/2, 0 , 0));
-    addCuboid(scene, geometry, material, new THREE.Vector3(-pathWidth/2 - boundaryCuboidWidth/2, 0 , 0));    
-    addCuboid(scene, geometry, material, new THREE.Vector3(pathWidth/2 + boundaryCuboidWidth/2, 0 , -100));
-    addCuboid(scene, geometry, material, new THREE.Vector3(-pathWidth/2 - boundaryCuboidWidth/2, 0 , -100));
-
-}
 
 
 const scene = new THREE.Scene();
@@ -41,30 +11,48 @@ const moveSpeed = 1
 
 let inPointerLock = false;
 
+let inDialog = true;
+let currDialogIdx = 1;
+let currDialog = dialogues.start;
+
 
 document.body.addEventListener('click', () => {
-  renderer.domElement.requestPointerLock();
+    if(!inDialog)
+        renderer.domElement.requestPointerLock();
 });
 
 document.addEventListener('pointerlockchange', () => {
   const locked = document.pointerLockElement === renderer.domElement;
   inPointerLock = locked;
+  document.getElementById("clickDiv").hidden = locked;
   console.log(locked ? 'Pointer locked!' : 'Pointer released');
 });
 
-window.addEventListener('keydown', e => {
-    if(e.key == 'w'){
+window.addEventListener('keypress', e => {
+    
+    let camLookAt = new THREE.Vector3;
+    let talkDiv = document.getElementById("talkDiv");
+    camera.getWorldDirection(camLookAt);
+    console.log("cam look at is ", camLookAt)
+    if(!inDialog && e.key == 'w'){
+
         console.log("ello");
-        document.getElementById("talkDiv").hidden = false;
-        let camLookAt = new THREE.Vector3;
-        camera.getWorldDirection(camLookAt);
-        console.log("cam look at is ", camLookAt)
+
         camera.position.z += camLookAt.z;
         camera.position.x += camLookAt.x
     }
-    else if(e.key == 's'){
-        camera.position.z += moveSpeed
-        document.getElementById("talkDiv").hidden = true;
+    else if(!inDialog && e.key == 's'){
+        camera.position.z -= camLookAt.z
+        camera.position.x -= camLookAt.x
+    }
+    else if(inDialog && e.key == 'e'){
+        if(currDialogIdx >= currDialog.length){
+            inDialog = false;
+            talkDiv.hidden = true;
+        }
+        animateText(talkDiv, currDialog[currDialogIdx]);
+        currDialogIdx++;
+
     }});
 
 window.addEventListener('mousemove', e => {
@@ -82,17 +70,20 @@ document.body.appendChild( renderer.domElement );
 
 addBoundaryCuboids(scene, 10)
 
+animateText(document.getElementById("talkDiv"), currDialog[0]);
 
-const geometry = new THREE.PlaneGeometry( 100,100 );
-const material = new THREE.MeshBasicMaterial( {color: 0x000000, side: THREE.DoubleSide} );
-const plane = new THREE.Mesh( geometry, material );
 
-scene.add( plane );
-plane.lookAt(new THREE.Vector3(0,1,0));
-plane.position.y = -boundaryCuboidHeight / 2;
+// const geometry = new THREE.PlaneGeometry( 100,100 );
+// const material = new THREE.MeshBasicMaterial( {color: 0x000000, side: THREE.DoubleSide} );
+// const plane = new THREE.Mesh( geometry, material );
 
-document.getElementById("talkDiv").hidden = true;
+// scene.add( plane );
+// plane.lookAt(new THREE.Vector3(0,1,0));
+// //plane.position.y = -boundaryCuboidHeight / 2;
 
+//document.getElementById("talkDiv").hidden = true;
+
+console.log(1/2)
 
 function animate() {
 
