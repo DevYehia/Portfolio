@@ -7,13 +7,15 @@ import { dialogues } from './dialogues';
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-const moveSpeed = 1
+const moveSpeed = 0.5
 
 let inPointerLock = false;
 
 let inDialog = true;
 let currDialogIdx = 1;
 let currDialog = dialogues.start;
+
+let movementKeys = {}
 
 
 document.body.addEventListener('click', () => {
@@ -28,24 +30,20 @@ document.addEventListener('pointerlockchange', () => {
   console.log(locked ? 'Pointer locked!' : 'Pointer released');
 });
 
+
+
+window.addEventListener('keydown', e => {movementKeys[e.key] = true});
+window.addEventListener('keyup', e => {movementKeys[e.key] = false});
+
 window.addEventListener('keypress', e => {
     
-    let camLookAt = new THREE.Vector3;
+ 
     let talkDiv = document.getElementById("talkDiv");
-    camera.getWorldDirection(camLookAt);
-    console.log("cam look at is ", camLookAt)
-    if(!inDialog && e.key == 'w'){
+   
 
-        console.log("ello");
+    movementKeys[e.key] = true
 
-        camera.position.z += camLookAt.z;
-        camera.position.x += camLookAt.x
-    }
-    else if(!inDialog && e.key == 's'){
-        camera.position.z -= camLookAt.z
-        camera.position.x -= camLookAt.x
-    }
-    else if(inDialog && e.key == 'e'){
+    if(inDialog && e.key == 'e'){
         if(currDialogIdx >= currDialog.length){
             inDialog = false;
             talkDiv.hidden = true;
@@ -87,9 +85,23 @@ console.log(1/2)
 
 function animate() {
 
+    //movement logic
+    if(!inDialog){
+        let camLookAt = new THREE.Vector3;
+        camera.getWorldDirection(camLookAt);
+        console.log("cam look at is ", camLookAt)
+        if(movementKeys['w'] == true){
+            camera.position.z += camLookAt.z * moveSpeed;
+            camera.position.x += camLookAt.x * moveSpeed;
+        }
+        else if(movementKeys['s'] == true){
+            camera.position.z -= camLookAt.z * moveSpeed;
+            camera.position.x -= camLookAt.x * moveSpeed
+        }
+    }
 
 
-  renderer.render( scene, camera );
+    renderer.render( scene, camera );
   
 }
 
