@@ -15,7 +15,7 @@ let inDialog = true;
 let currDialogIdx = 1;
 let currDialog = dialogues.start;
 
-let movementKeys = {}
+let keys = {}
 
 
 document.body.addEventListener('click', () => {
@@ -32,26 +32,31 @@ document.addEventListener('pointerlockchange', () => {
 
 
 
-window.addEventListener('keydown', e => {movementKeys[e.key] = true});
-window.addEventListener('keyup', e => {movementKeys[e.key] = false});
+window.addEventListener('keydown', e => {
 
-window.addEventListener('keypress', e => {
-    
- 
-    let talkDiv = document.getElementById("talkDiv");
-   
-
-    movementKeys[e.key] = true
-
-    if(inDialog && e.key == 'e'){
+    //dialog logic
+    if(inDialog && e.key == 'e' && !e.repeat){
+        let talkDiv = document.getElementById("talkDiv");
         if(currDialogIdx >= currDialog.length){
             inDialog = false;
             talkDiv.hidden = true;
+            
         }
-        animateText(talkDiv, currDialog[currDialogIdx]);
-        currDialogIdx++;
+        else{
+            animateText(talkDiv, currDialog[currDialogIdx]);
+            currDialogIdx++;
+        }        
+    }    
 
-    }});
+    //for movement logic
+    else{
+        keys[e.key] = true;
+    }
+
+
+});
+window.addEventListener('keyup', e => {keys[e.key] = false});
+
 
 window.addEventListener('mousemove', e => {
     if(!inPointerLock){
@@ -90,15 +95,16 @@ function animate() {
         let camLookAt = new THREE.Vector3;
         camera.getWorldDirection(camLookAt);
         console.log("cam look at is ", camLookAt)
-        if(movementKeys['w'] == true){
+        if(keys['w'] == true){
             camera.position.z += camLookAt.z * moveSpeed;
             camera.position.x += camLookAt.x * moveSpeed;
         }
-        else if(movementKeys['s'] == true){
+        else if(keys['s'] == true){
             camera.position.z -= camLookAt.z * moveSpeed;
             camera.position.x -= camLookAt.x * moveSpeed
         }
     }
+
 
 
     renderer.render( scene, camera );

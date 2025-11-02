@@ -11,6 +11,10 @@ let intervalHandler;
 */
 export function animateText(divElement, text){
 
+    //clear previous interval
+    clearInterval(intervalHandler);
+    currIdx = 0;
+
     currElem = divElement;
     originalText = text;
     let delay = 50
