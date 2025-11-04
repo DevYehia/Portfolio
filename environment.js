@@ -1,7 +1,9 @@
 import * as THREE from 'three';
 
-const boundaryCuboidHeight = 5;
-const boundaryCuboidWidth = 30;
+export const boundaryCuboidHeight = 5;
+export const boundaryCuboidWidth = 50;
+export const nearBoundaryCuboidDepth = boundaryCuboidWidth * 2;
+export const pathWidth = 20;
 
 
 /**
@@ -23,13 +25,22 @@ function addCuboid(scene, geometry, material, position){
  */
 export function addBoundaryCuboids(scene, pathWidth){
 
-    const geometry = new THREE.BoxGeometry( boundaryCuboidWidth, boundaryCuboidHeight , boundaryCuboidWidth);
+    //let nearBoundaryCuboidDepth = boundaryCuboidWidth * 2;
+
+    const nearGeometry = new THREE.BoxGeometry( boundaryCuboidWidth, boundaryCuboidHeight , nearBoundaryCuboidDepth);
+    const farGeometry = new THREE.BoxGeometry( boundaryCuboidWidth, boundaryCuboidHeight , boundaryCuboidWidth);
     const material = new THREE.MeshBasicMaterial( { color: 0x0000ff} );
 
-    addCuboid(scene, geometry, material, new THREE.Vector3(pathWidth/2 + boundaryCuboidWidth/2, 0 , 0));
-    addCuboid(scene, geometry, material, new THREE.Vector3(-pathWidth/2 - boundaryCuboidWidth/2, 0 , 0));    
-    addCuboid(scene, geometry, material, new THREE.Vector3(pathWidth/2 + boundaryCuboidWidth/2, 0 , -100));
-    addCuboid(scene, geometry, material, new THREE.Vector3(-pathWidth/2 - boundaryCuboidWidth/2, 0 , -100));
+    //near cuboids
+    addCuboid(scene, nearGeometry, material, new THREE.Vector3(pathWidth/2 + boundaryCuboidWidth/2, 0 , 0));
+    addCuboid(scene, nearGeometry, material, new THREE.Vector3(-pathWidth/2 - boundaryCuboidWidth/2, 0 , 0));
+    
+    let farCuboidZ = nearBoundaryCuboidDepth/2 + pathWidth + boundaryCuboidWidth / 2;
+    
+    
+    //far cuboids
+    addCuboid(scene, farGeometry, material, new THREE.Vector3(pathWidth/2 + boundaryCuboidWidth/2, 0 , -(farCuboidZ)));
+    addCuboid(scene, farGeometry, material, new THREE.Vector3(-pathWidth/2 - boundaryCuboidWidth/2, 0 , -(farCuboidZ)));
 
 }
 
