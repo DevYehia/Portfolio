@@ -47,7 +47,7 @@ function animate() {
         //to get perpendicular we cross product with up vector
         //this gives vector to left of look at vector
         let perpendicularToCamLookAt = new THREE.Vector3(0,1,0).cross(camLookAt).normalize();
-        console.log("cam look at is ", camLookAt)
+        //console.log("cam look at is ", camLookAt)
         
         //create a newPos vector, and add to it the movement
         let newPos = new THREE.Vector3().copy(camera.position)
@@ -77,9 +77,7 @@ function animate() {
         currState.modifyPosition(camera.position, newPos);
 
         //check for next state
-        if(currState.hasReachedNextState(newPos)){
-            console.log("I am in next state now")
-        }
+        currState.checkAndUpdateState(newPos);
 
     }
 
