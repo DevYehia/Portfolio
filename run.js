@@ -3,6 +3,7 @@ import {addBoundaryCuboids} from './environment';
 import {animateText} from './textUtils'
 import { dialogues } from './dialogues';
 import { currState } from './collision';
+import {Sign} from './sign';
 
 let inPointerLock = false;
 
@@ -24,6 +25,9 @@ document.body.appendChild( renderer.domElement );
 addBoundaryCuboids(scene, 20)
 
 animateText(document.getElementById("talkDiv"), currDialog[0]);
+
+let sign = new Sign(scene);
+sign.setPosition(new THREE.Vector3(0,0,0))
 
 
 // const geometry = new THREE.PlaneGeometry( 100,100 );
