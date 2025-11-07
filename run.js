@@ -1,9 +1,13 @@
 import * as THREE from 'three';
-import {addBoundaryCuboids} from './environment';
+import {addBoundaryCuboids, adjustCamera} from './environment';
 import {animateText} from './textUtils'
 import { dialogues } from './dialogues';
 import { currState } from './collision';
 import {Sign} from './sign';
+import { TrackballControls } from 'three/addons/controls/TrackballControls.js';
+
+let up = new THREE.Vector3(0,1,0);
+let right = new THREE.Vector3(1,0,0);
 
 let inPointerLock = false;
 
@@ -18,9 +22,16 @@ const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.inner
 const moveSpeed = 0.15
 
 
+
+
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
+
+let controls = new TrackballControls( camera, renderer.domElement );
+controls.target.set( 0, 0, 0 )
+
+adjustCamera(camera);
 
 addBoundaryCuboids(scene, 20)
 
@@ -31,12 +42,12 @@ sign.setPosition(new THREE.Vector3(0,0,0))
 
 
 // const geometry = new THREE.PlaneGeometry( 100,100 );
-// const material = new THREE.MeshBasicMaterial( {color: 0x000000, side: THREE.DoubleSide} );
+// const material = new THREE.MeshBasicMaterial( {color: 0x0000ff, side: THREE.DoubleSide} );
 // const plane = new THREE.Mesh( geometry, material );
 
 // scene.add( plane );
 // plane.lookAt(new THREE.Vector3(0,1,0));
-// //plane.position.y = -boundaryCuboidHeight / 2;
+//plane.position.y = -boundaryCuboidHeight / 2;
 
 //document.getElementById("talkDiv").hidden = true;
 
@@ -142,7 +153,19 @@ window.addEventListener('mousemove', e => {
     if(!inPointerLock){
         return;
     }
+
+    console.log("X is "+ e.movementX + " y is " + e.movementY);
+
     if(e.movementX != 0){
-        camera.rotateY(-e.movementX * 0.002)
+        //camera.rotation.y += -e.movementX * 0.002;
+        camera.rotateOnWorldAxis(up, -e.movementX * 0.002)
     }
+    if(e.movementY > 1 || e.movementY < 1){
+        camera.rotateOnWorldAxis(right, -e.movementY * 0.002)
+    }
+    // if(e.movementY != 0){
+    //     camera.rotation.x += (-e.movementY * 0.002)        
+    // }
+    //camera.rotation.z = 0;
+    
 });

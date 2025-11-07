@@ -3,10 +3,10 @@
 import * as THREE from 'three';
 
 export class Sign{
-    signBaseHeight = 10;
-    signBaseWidth = 5;
-    signPlaceHolderWidth = 20;
-    signPlaceHolderHeight = 20;
+    signBaseHeight = 2;
+    signBaseWidth = 0.5;
+    signPlaceHolderWidth = 3;
+    signPlaceHolderHeight = 3;
 
     constructor(scene){
         const baseGeometry = new THREE.BoxGeometry( this.signBaseWidth, this.signBaseHeight , 0);
@@ -30,8 +30,10 @@ export class Sign{
 
     setPosition(pos){
         this.base.position.copy(pos);
+        this.base.position.y += this.signBaseHeight / 2;
+
         this.main.position.copy(pos);
-        this.main.position.y += this.signBaseHeight / 2 + this.signPlaceHolderHeight / 2;
+        this.main.position.y += this.signBaseHeight + this.signPlaceHolderHeight / 2;
     }
 
 

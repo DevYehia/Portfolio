@@ -1,9 +1,10 @@
 import * as THREE from 'three';
+import {Sign} from './sign'
 
-export const boundaryCuboidHeight = 5;
+export const boundaryCuboidHeight = 8;
 export const boundaryCuboidWidth = 50;
 export const nearBoundaryCuboidDepth = boundaryCuboidWidth * 2;
-export const pathWidth = 20;
+export let pathWidth = 20;
 
 
 /**
@@ -18,12 +19,17 @@ function addCuboid(scene, geometry, material, position){
     cuboid.position.copy(position)
 }
 
+export function adjustCamera(camera){
+    camera.position.y += boundaryCuboidHeight / 2;
+}
 
 
 /**
  * @param {THREE.Scene} scene
  */
-export function addBoundaryCuboids(scene, pathWidth){
+export function addBoundaryCuboids(scene, inputPathWidth){
+
+    pathWidth = inputPathWidth;
 
     //let nearBoundaryCuboidDepth = boundaryCuboidWidth * 2;
 
@@ -32,16 +38,20 @@ export function addBoundaryCuboids(scene, pathWidth){
     const material = new THREE.MeshBasicMaterial( { color: 0x0000ff} );
 
     //near cuboids
-    addCuboid(scene, nearGeometry, material, new THREE.Vector3(pathWidth/2 + boundaryCuboidWidth/2, 0 , 0));
-    addCuboid(scene, nearGeometry, material, new THREE.Vector3(-pathWidth/2 - boundaryCuboidWidth/2, 0 , 0));
+    addCuboid(scene, nearGeometry, material, new THREE.Vector3(pathWidth/2 + boundaryCuboidWidth/2, boundaryCuboidHeight / 2 , 0));
+    addCuboid(scene, nearGeometry, material, new THREE.Vector3(-pathWidth/2 - boundaryCuboidWidth/2, boundaryCuboidHeight / 2 , 0));
     
     let farCuboidZ = nearBoundaryCuboidDepth/2 + pathWidth + boundaryCuboidWidth / 2;
     
-    
     //far cuboids
-    addCuboid(scene, farGeometry, material, new THREE.Vector3(pathWidth/2 + boundaryCuboidWidth/2, 0 , -(farCuboidZ)));
-    addCuboid(scene, farGeometry, material, new THREE.Vector3(-pathWidth/2 - boundaryCuboidWidth/2, 0 , -(farCuboidZ)));
+    addCuboid(scene, farGeometry, material, new THREE.Vector3(pathWidth/2 + boundaryCuboidWidth/2, boundaryCuboidHeight / 2 , -(farCuboidZ)));
+    addCuboid(scene, farGeometry, material, new THREE.Vector3(-pathWidth/2 - boundaryCuboidWidth/2, boundaryCuboidHeight / 2 , -(farCuboidZ)));
 
+}
+
+export function addSigns(scene){
+    let sign = new Sign(scene);
+    sign.setPosition()
 }
 
 // module.exports = {
