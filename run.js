@@ -1,10 +1,12 @@
 import * as THREE from 'three';
-import {addBoundaryCuboids, adjustCamera} from './environment';
+import {addBoundaryCuboids, addSigns, adjustCamera} from './environment';
 import {animateText} from './textUtils'
 import { dialogues } from './dialogues';
-import { currState } from './collision';
+import { currState, PlayerData } from './collision';
 import {Sign} from './sign';
 import { TrackballControls } from 'three/addons/controls/TrackballControls.js';
+
+
 
 let up = new THREE.Vector3(0,1,0);
 let right = new THREE.Vector3(1,0,0);
@@ -28,22 +30,26 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
-let controls = new TrackballControls( camera, renderer.domElement );
-controls.target.set( 0, 0, 0 )
 
 adjustCamera(camera);
 
-addBoundaryCuboids(scene, 20)
+addBoundaryCuboids(scene, 30)
+addSigns(scene)
 
 animateText(document.getElementById("talkDiv"), currDialog[0]);
 
 let sign = new Sign(scene);
 sign.setPosition(new THREE.Vector3(0,0,0))
 
+let playerData = new PlayerData(camera.position, camera, scene);
+
+//const geometry = new TextGeometry( 'Hello three.js!');
 
 // const geometry = new THREE.PlaneGeometry( 100,100 );
 // const material = new THREE.MeshBasicMaterial( {color: 0x0000ff, side: THREE.DoubleSide} );
 // const plane = new THREE.Mesh( geometry, material );
+
+//plane.position.copy(new THREE.Vector3(3,3,3))
 
 // scene.add( plane );
 // plane.lookAt(new THREE.Vector3(0,1,0));
@@ -92,7 +98,7 @@ function animate() {
         currState.modifyPosition(camera.position, newPos);
 
         //check for next state
-        currState.checkAndUpdateState(newPos);
+        currState.checkAndUpdateState(playerData);
 
     }
 
@@ -154,15 +160,15 @@ window.addEventListener('mousemove', e => {
         return;
     }
 
-    console.log("X is "+ e.movementX + " y is " + e.movementY);
+   // console.log("X is "+ e.movementX + " y is " + e.movementY);
 
     if(e.movementX != 0){
         //camera.rotation.y += -e.movementX * 0.002;
         camera.rotateOnWorldAxis(up, -e.movementX * 0.002)
     }
-    if(e.movementY > 1 || e.movementY < 1){
-        camera.rotateOnWorldAxis(right, -e.movementY * 0.002)
-    }
+    // if(e.movementY > 1 || e.movementY < 1){
+    //     camera.rotateOnWorldAxis(right, -e.movementY * 0.002)
+    // }
     // if(e.movementY != 0){
     //     camera.rotation.x += (-e.movementY * 0.002)        
     // }

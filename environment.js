@@ -1,10 +1,17 @@
 import * as THREE from 'three';
-import {Sign} from './sign'
+import {Sign} from './sign';
+import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
+import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 
 export const boundaryCuboidHeight = 8;
 export const boundaryCuboidWidth = 50;
 export const nearBoundaryCuboidDepth = boundaryCuboidWidth * 2;
-export let pathWidth = 20;
+export let pathWidth = 25;
+const signSpacing = 10;
+
+export let signs = [];
+
+
 
 
 /**
@@ -49,9 +56,43 @@ export function addBoundaryCuboids(scene, inputPathWidth){
 
 }
 
-export function addSigns(scene){
-    let sign = new Sign(scene);
-    sign.setPosition()
+//signs will be in a square maybe?
+export async function addSigns(scene){
+
+
+
+    let nearestSignX = -boundaryCuboidWidth - pathWidth / 2 - signSpacing;
+    let leftSignsZ =  -nearBoundaryCuboidDepth / 2;
+
+    //place left signs
+    let currPos = new THREE.Vector3(nearestSignX, 0, leftSignsZ);
+    for(let i = 0 ; i < 3 ; i++){
+        let sign = new Sign();
+        sign.addToScene(scene);
+        signs.push(sign)
+        sign.setPosition(currPos);
+        currPos.x -= signSpacing;
+    }
+    let rightSignsZ = leftSignsZ - pathWidth
+    currPos = new THREE.Vector3(nearestSignX, 0, rightSignsZ);
+
+    //place right signs
+    for(let i = 0 ; i < 3 ; i++){
+        let sign = new Sign();
+        sign.addToScene(scene);
+        signs.push(sign)
+        sign.setPosition(currPos);
+        currPos.x -= signSpacing;
+    }    
+
+    //place central sign
+    currPos.z = (leftSignsZ + rightSignsZ) / 2;
+    let sign = new Sign();
+    sign.addToScene(scene);
+    signs.push(sign)
+    sign.setPosition(currPos);
+    sign.rotateSign()
+
 }
 
 // module.exports = {

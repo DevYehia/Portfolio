@@ -10,6 +10,31 @@ import * as env from './environment';
 
 const collisionMargin = 1;
 
+
+
+//this is a helper class
+//it is needed because some states need access to camera and others don't
+//so we will just pass this object
+//don't ask me it is ChatGPT recommendation
+export class PlayerData{
+
+  /** @type {THREE.Vector3} */
+  playerPos;
+
+  /** @type {THREE.Camera} */
+  camera
+
+  /** @type {THREE.Scene} */
+  scene;
+
+
+  constructor(playerPos, camera, scene) {
+    this.playerPos = playerPos;
+    this.camera = camera;
+    this.scene = scene;
+  }    
+}
+
 class StartState{
 
 /** 
@@ -34,9 +59,10 @@ class StartState{
 
     }
 /** 
-*@param  {THREE.Vector3} playerPos
+*@param  {PlayerData} playerData
 */       
-    checkAndUpdateState(playerPos){
+    checkAndUpdateState(playerData){
+        let playerPos = playerData.playerPos;
         let limitZ = -(env.nearBoundaryCuboidDepth / 2);
 
         if(playerPos.z < limitZ){
@@ -94,9 +120,11 @@ class ForkRoadState{
         }
     }
 /** 
-*@param  {THREE.Vector3} playerPos
+*@param  {PlayerData} playerData
 */       
-    checkAndUpdateState(playerPos){
+    checkAndUpdateState(playerData){
+
+        let playerPos = playerData.playerPos;
 
 
         //if user decided to go back
@@ -149,15 +177,19 @@ class LeftState{
 
     }
 /** 
-*@param  {THREE.Vector3} playerPos
+*@param  {PlayerData} playerData
 */       
-    checkAndUpdateState(playerPos){
-
+    checkAndUpdateState(playerData){
+        let playerPos = playerData.playerPos;
         //if player goes back
-        let backLimitX = env.pathWidth / 2;
+        let backLimitX = -(env.pathWidth / 2);
+        let forwardLimitX = -(env.pathWidth / 2 + env.boundaryCuboidWidth); 
 
-        if(playerPos.x < backLimitX){
+        if(playerPos.x > backLimitX){
             currState = new ForkRoadState();
+        }
+        else if(playerPos.x < forwardLimitX){
+            currState = new ProjectsState();
         }
 
     }
@@ -188,13 +220,15 @@ class RightState{
         }
     }
 /** 
-*@param  {THREE.Vector3} playerPos
+*@param  {PlayerData} playerData
 */       
-    checkAndUpdateState(playerPos){
+    checkAndUpdateState(playerData){
+        console.log("in right state and x is " + playerData.playerPos.x);
+        let playerPos = playerData.playerPos;
         //if player goes back
-        let backLimitX = - (env.pathWidth / 2);
+        let backLimitX =  (env.pathWidth / 2);
 
-        if(playerPos.x > backLimitX){
+        if(playerPos.x < backLimitX){
             currState = new ForkRoadState();
         }
     }
@@ -226,10 +260,10 @@ class ForwardState{
 
     }
 /** 
-*@param  {THREE.Vector3} playerPos
+*@param  {PlayerData} playerData
 */       
-    checkAndUpdateState(playerPos){
-
+    checkAndUpdateState(playerData){
+        let playerPos = playerData.playerPos;
         //if player goes back
         let limitZ = -(env.nearBoundaryCuboidDepth / 2 + env.pathWidth);
 
@@ -240,5 +274,84 @@ class ForwardState{
 
 
 }
+
+class ProjectsState{
+
+    signTriggerDistance = 10;
+
+/** 
+*@param  {THREE.Vector3} playerPos
+*@param  {THREE.Vector3} newPlayerPos
+*/        
+    modifyPosition(playerPos, newPlayerPos){
+
+        let fowardLimitZ = -(env.nearBoundaryCuboidDepth / 2 + env.pathWidth - collisionMargin);
+        let backLimitZ = -(env.nearBoundaryCuboidDepth / 2 + collisionMargin);
+
+        //x will be updated regardless
+        playerPos.x = newPlayerPos.x;
+
+        //collision, don't modify
+        if(newPlayerPos.z < fowardLimitZ || newPlayerPos.z > backLimitZ){
+            return;
+        }
+        //no collision
+        else{
+            playerPos.z = newPlayerPos.z;
+        }
+
+
+    }
+/** 
+*@param  {PlayerData} playerData
+*/       
+    checkAndUpdateState(playerData){
+        let playerPos = playerData.playerPos;
+        //according to player's position we find the nearest sign
+        let signsList = env.signs;
+
+        //get lookAt
+        let camLookAt = new THREE.Vector3();
+        playerData.camera.getWorldDirection(camLookAt);
+        
+        let rayCaster = new THREE.Raycaster();
+
+        rayCaster.set(playerPos, camLookAt);
+        //here we calulate distance based on x and z, y doesnt matter
+        for(let i = 0 ; i < signsList.length ; i++){
+            let currSign = signsList[i];
+            let zDiff = playerPos.z - currSign.main.position.z;
+            let xDiff = playerPos.x - currSign.main.position.x;
+            let dist = Math.sqrt(zDiff*zDiff + xDiff*xDiff);
+
+            //console.log("dist is " + dist)
+            //check if i look at sign, it is lower than trigger distance
+            if(dist < this.signTriggerDistance){
+                console.log("in first if");
+                if(rayCaster.intersectObject(currSign.main, false).length > 0){
+                    console.log("in sconed if");
+                            currSign.changeColor();
+                }
+
+            }
+        }
+
+
+
+
+
+
+        //if player goes back
+        let backLimitX = env.pathWidth / 2;
+
+        if(playerPos.x < backLimitX){
+            currState = new ForkRoadState();
+        }
+
+    }
+
+
+}
+
 
 export let currState = new StartState();
