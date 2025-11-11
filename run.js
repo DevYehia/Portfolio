@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import {addBoundaryCuboids, addSigns, adjustCamera} from './environment';
 import {animateText} from './textUtils'
 import { dialogues } from './dialogues';
-import { currState, PlayerData } from './collision';
+import { currState, PlayerData } from './playerStates';
 import {Sign} from './sign';
 import { TrackballControls } from 'three/addons/controls/TrackballControls.js';
 
@@ -21,7 +21,7 @@ let keys = {}
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-const moveSpeed = 0.15
+const moveSpeed = 0.3
 
 
 

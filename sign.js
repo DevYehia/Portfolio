@@ -95,8 +95,12 @@ export class Sign{
     }
 
     changeColor(){
-        console.log("change color called")
+        //console.log("change color called")
         this.main.material.color.setHex(0x00ffff);
+    }
+
+    revertColor(){
+        this.main.material.color.setHex(0xff00ff);        
     }
 
 

@@ -1,0 +1,43 @@
+/* Reset default margins */
+body {
+  margin: 0;
+  overflow: hidden;
+  font-family: sans-serif;
+  color: white;
+}
+
+/* Bottom dialog box */
+#talkDiv {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  border: 2px solid white;
+  width: calc(100% - 40px); /* account for left/right padding */
+  height: 20%;
+  font-size: 20px;
+  pointer-events: none; /* clicks pass through */
+}
+
+/* Center click text */
+#clickDiv {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 30px;
+  padding: 20px 40px;
+  border-radius: 10px;
+  pointer-events: none;
+}
+
+/* Top-right info box */
+#controlsDiv {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 10px 20px;
+  border: 2px solid white;
+  font-size: 16px;
+}

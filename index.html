@@ -3,36 +3,13 @@
   <head>
     <meta charset="utf-8">
     <title>My first three.js app</title>
-    <style>
-      body { margin: 0; }
-    </style>
-    <div id="talkDiv" style="
-    position: absolute;
-    bottom: 20px;
-    left: 20px;
-    right: 20px;
-    color: white;
-    border: 2px solid white;
-    width: 100%;
-    height: 20%;
-    font-size: 20px;
-    font-family: sans-serif;
-    pointer-events: none;
-    ">Hello World</div>
-
-  <div id="clickDiv" style="
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        color: white;
-        font-size: 30px;
-        font-family: sans-serif;
-        padding: 20px 40px;
-        border-radius: 10px;
-        pointer-events: none; /* so clicks pass through to your Three.js scene */">Click to Start</div>
+    <link rel="stylesheet" href="style.css">
   </head>
-  <body style="overflow: hidden; margin: 0;">
+  <body>
+    <div id="talkDiv">Hello World</div>
+    <div id="clickDiv">Click to Start</div>
+    <div id="controlsDiv">Hello there 👋</div>
+
     <script type="module" src="/run.js"></script>
   </body>
 </html>
