@@ -5,6 +5,7 @@ import { dialogues } from './dialogues';
 import { currState, PlayerData } from './playerStates';
 import {Sign} from './sign';
 import { PointerLockControls } from 'three/addons/controls/PointerLockControls.js';
+import { Door } from './door'
 
 
 
@@ -43,6 +44,10 @@ sign.setPosition(new THREE.Vector3(0,0,0))
 
 let playerData = new PlayerData(camera.position, camera, scene);
 
+let testDoor = new Door();
+scene.add(testDoor.door)
+
+
 //let controls = new PointerLockControls(camera, renderer.domElement)
 
 
@@ -62,6 +67,8 @@ let playerData = new PlayerData(camera.position, camera, scene);
 
 
 function animate() {
+
+    //testDoor.door.rotation.y += 0.1
 
     //movement logic
     if(!inDialog){
@@ -86,11 +93,13 @@ function animate() {
 
         if(keys['a'] == true){
             newPos.z += perpendicularToCamLookAt.z * moveSpeed;
-            newPos.x += perpendicularToCamLookAt.x * moveSpeed;            
+            newPos.x += perpendicularToCamLookAt.x * moveSpeed;   
+            testDoor.open()         
         }
         else if(keys['d'] == true){
             newPos.z -= perpendicularToCamLookAt.z * moveSpeed;
-            newPos.x -= perpendicularToCamLookAt.x * moveSpeed;              
+            newPos.x -= perpendicularToCamLookAt.x * moveSpeed;    
+            testDoor.close()          
         }
 
         //check for collision using newPos
