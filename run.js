@@ -4,7 +4,7 @@ import {animateText} from './textUtils'
 import { dialogues } from './dialogues';
 import { currState, PlayerData } from './playerStates';
 import {Sign} from './sign';
-import { TrackballControls } from 'three/addons/controls/TrackballControls.js';
+import { PointerLockControls } from 'three/addons/controls/PointerLockControls.js';
 
 
 
@@ -42,6 +42,9 @@ let sign = new Sign(scene);
 sign.setPosition(new THREE.Vector3(0,0,0))
 
 let playerData = new PlayerData(camera.position, camera, scene);
+
+//let controls = new PointerLockControls(camera, renderer.domElement)
+
 
 //const geometry = new TextGeometry( 'Hello three.js!');
 
@@ -154,24 +157,34 @@ window.addEventListener('keydown', e => {
 });
 window.addEventListener('keyup', e => {keys[e.key] = false});
 
+const clampMargin = Math.PI / 4;
+
+THREE.Euler.DEFAULT_ORDER
+camera.rotation.order = 'YXZ';
 
 window.addEventListener('mousemove', e => {
     if(!inPointerLock){
         return;
     }
 
-   // console.log("X is "+ e.movementX + " y is " + e.movementY);
 
-    if(e.movementX != 0){
-        //camera.rotation.y += -e.movementX * 0.002;
-        camera.rotateOnWorldAxis(up, -e.movementX * 0.002)
-    }
-    // if(e.movementY > 1 || e.movementY < 1){
-    //     camera.rotateOnWorldAxis(right, -e.movementY * 0.002)
+    // if(e.movementX != 0){
+    //     camera.rotateOnWorldAxis(up, -e.movementX * 0.002)
     // }
-    // if(e.movementY != 0){
-    //     camera.rotation.x += (-e.movementY * 0.002)        
-    // }
-    //camera.rotation.z = 0;
+    // let eulerRot = new THREE.Euler( 0, 0, 0, 'YXZ' );
+    // eulerRot.setFromQuaternion(camera.quaternion);
+
+    // eulerRot.y += -e.movementX * 0.002;
+    // eulerRot.x += -e.movementY * 0.002;
+
+    // camera.quaternion.setFromEuler(eulerRot);
+    camera.rotation.y += -e.movementX * 0.002;
+    let newCamRotX = camera.rotation.x + (-e.movementY * 0.002);
+    if(newCamRotX < clampMargin && newCamRotX > -clampMargin)
+        camera.rotation.x += -e.movementY * 0.002;
+
+
+    console.log("Cam up is " + camera.up.x, " , " + camera.up.y + " , " +  camera.up.z)
+
     
 });
