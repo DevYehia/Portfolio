@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {addBoundaryCuboids, addSigns, adjustCamera} from './environment';
+import {addBoundaryCuboids, addDoor, addSigns, adjustCamera} from './environment';
 import {animateText} from './textUtils'
 import { dialogues } from './dialogues';
 import { currState, PlayerData } from './playerStates';
@@ -46,6 +46,7 @@ let playerData = new PlayerData(camera.position, camera, scene);
 
 let testDoor = new Door();
 scene.add(testDoor.door)
+addDoor(scene)
 
 
 //let controls = new PointerLockControls(camera, renderer.domElement)

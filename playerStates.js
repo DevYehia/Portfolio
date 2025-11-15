@@ -280,11 +280,17 @@ class ProjectsState{
     signTriggerDistance = 10;
     currTriggeredSign = null;
 
+    constructor(){
+        env.door.open()
+    }
+
 /** 
 *@param  {THREE.Vector3} playerPos
 *@param  {THREE.Vector3} newPlayerPos
 
 */
+
+
 
 
     modifyPosition(playerPos, newPlayerPos){

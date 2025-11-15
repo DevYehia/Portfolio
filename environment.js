@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import {Sign} from './sign';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
+import { Door } from './door';
 
 export const boundaryCuboidHeight = 8;
 export const boundaryCuboidWidth = 50;
@@ -10,6 +11,7 @@ export let pathWidth = 25;
 const signSpacing = 10;
 
 export let signs = [];
+export let door = null;
 
 
 
@@ -92,6 +94,18 @@ export async function addSigns(scene){
     signs.push(sign)
     sign.setPosition(currPos);
     sign.rotateSign()
+
+}
+
+export function addDoor(scene){
+    door = new Door(false);
+    let doorX = - boundaryCuboidWidth - pathWidth / 2;
+    let doorY = 0;
+    let doorZ = - ( nearBoundaryCuboidDepth / 2 + pathWidth / 2 - door.doorWidth / 2)
+
+    door.door.rotation.y += Math.PI / 2;
+    door.door.position.copy(new THREE.Vector3(doorX, doorY, doorZ))
+    scene.add(door.door)
 
 }
 
