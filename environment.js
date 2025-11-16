@@ -13,6 +13,8 @@ const signSpacing = 10;
 export let signs = [];
 export let door = null;
 
+export let projectsRoom = null;
+
 
 
 
@@ -59,54 +61,66 @@ export function addBoundaryCuboids(scene, inputPathWidth){
 }
 
 //signs will be in a square maybe?
-export async function addSigns(scene){
+function addSigns(group, roomWidth){
 
-
-
-    let nearestSignX = -boundaryCuboidWidth - pathWidth / 2 - signSpacing;
-    let leftSignsZ =  -nearBoundaryCuboidDepth / 2;
 
     //place left signs
-    let currPos = new THREE.Vector3(nearestSignX, 0, leftSignsZ);
+    let currPos = new THREE.Vector3(-signSpacing, 0, 0);
     for(let i = 0 ; i < 3 ; i++){
         let sign = new Sign();
-        sign.addToScene(scene);
+        sign.addToGroup(group)
         signs.push(sign)
         sign.setPosition(currPos);
         currPos.x -= signSpacing;
     }
-    let rightSignsZ = leftSignsZ - pathWidth
-    currPos = new THREE.Vector3(nearestSignX, 0, rightSignsZ);
+    let rightSignsZ = -roomWidth
+    currPos = new THREE.Vector3(-signSpacing, 0, rightSignsZ);
 
     //place right signs
     for(let i = 0 ; i < 3 ; i++){
         let sign = new Sign();
-        sign.addToScene(scene);
+        sign.addToGroup(group);
         signs.push(sign)
         sign.setPosition(currPos);
         currPos.x -= signSpacing;
     }    
 
     //place central sign
-    currPos.z = (leftSignsZ + rightSignsZ) / 2;
+    currPos.z = -roomWidth / 2;
     let sign = new Sign();
-    sign.addToScene(scene);
+    sign.addToGroup(group);
     signs.push(sign)
     sign.setPosition(currPos);
     sign.rotateSign()
 
 }
 
-export function addDoor(scene){
+function addProjectsDoor(group, roomWidth){
     door = new Door(false);
-    let doorX = - boundaryCuboidWidth - pathWidth / 2;
+    let doorX = 0;
     let doorY = 0;
-    let doorZ = - ( nearBoundaryCuboidDepth / 2 + pathWidth / 2 - door.doorWidth / 2)
+    let doorZ = - (roomWidth / 2 - door.doorWidth / 2)
 
     door.door.rotation.y += Math.PI / 2;
     door.door.position.copy(new THREE.Vector3(doorX, doorY, doorZ))
-    scene.add(door.door)
+    door.door.name = "door";
+    group.add(door.door)
 
+}
+
+export function addProjectsRoom(scene){
+    projectsRoom = new THREE.Group();
+    addSigns(projectsRoom, pathWidth);
+    addProjectsDoor(projectsRoom, pathWidth)
+    scene.add(projectsRoom);
+    
+
+    let roomX = -(pathWidth / 2 + boundaryCuboidWidth);
+    let roomY = 0;
+    let roomZ = -nearBoundaryCuboidDepth / 2; 
+
+
+    projectsRoom.position.set(roomX, roomY, roomZ);
 }
 
 // module.exports = {

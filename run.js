@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {addBoundaryCuboids, addDoor, addSigns, adjustCamera} from './environment';
+import {addBoundaryCuboids, addProjectsRoom, adjustCamera} from './environment';
 import {animateText} from './textUtils'
 import { dialogues } from './dialogues';
 import { currState, PlayerData } from './playerStates';
@@ -35,7 +35,7 @@ document.body.appendChild( renderer.domElement );
 adjustCamera(camera);
 
 addBoundaryCuboids(scene, 30)
-addSigns(scene)
+//addSigns(scene)
 
 animateText(document.getElementById("talkDiv"), currDialog[0]);
 
@@ -46,8 +46,8 @@ let playerData = new PlayerData(camera.position, camera, scene);
 
 let testDoor = new Door();
 scene.add(testDoor.door)
-addDoor(scene)
-
+// addDoor(scene)
+addProjectsRoom(scene)
 
 //let controls = new PointerLockControls(camera, renderer.domElement)
 

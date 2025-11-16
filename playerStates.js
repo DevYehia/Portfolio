@@ -6,6 +6,8 @@
 
 import * as THREE from 'three';
 import * as env from './environment';
+import { Sign } from './sign';
+import { getDistanceXZ } from './MathUtils';
 
 
 const collisionMargin = 1;
@@ -153,6 +155,31 @@ class ForkRoadState{
 
 class LeftState{
 
+    //for checking collision with door
+
+    /**
+     * @type {THREE.Vector3}
+     */
+    camLookAt = new THREE.Vector3()
+
+    /**
+     * @type {THREE.Raycaster}
+     */
+    rayCaster = new THREE.Raycaster()
+
+    /**
+     * @type {THREE.Mesh}
+     */
+    door
+
+    doorTriggerDistance = 10
+
+    constructor(){
+        //get door
+        this.door = env.projectsRoom.getObjectByName("door");
+    }
+
+
 /** 
 *@param  {THREE.Vector3} playerPos
 *@param  {THREE.Vector3} newPlayerPos
@@ -180,7 +207,29 @@ class LeftState{
 *@param  {PlayerData} playerData
 */       
     checkAndUpdateState(playerData){
+
         let playerPos = playerData.playerPos;
+
+        //get lookAt
+        playerData.camera.getWorldDirection(this.camLookAt);
+        
+        this.rayCaster.set(playerPos, this.camLookAt);
+
+        let dist = getDistanceXZ(playerPos, this.door)
+
+        let controlsDiv = document.getElementById("controlsDiv");
+
+        //see the door and be at good distance
+        if (this.rayCaster.intersectObject(this.door, false).length > 0 && dist <= this.doorTriggerDistance){
+            controlsDiv.innerHTML = "Door<br>E - Open/Close";
+            controlsDiv.hidden = false;
+        }
+        else{
+            controlsDiv.hidden = true;
+        }
+
+
+
         //if player goes back
         let backLimitX = -(env.pathWidth / 2);
         let forwardLimitX = -(env.pathWidth / 2 + env.boundaryCuboidWidth); 
@@ -323,6 +372,7 @@ class ProjectsState{
         //according to player's position we find the nearest sign
         let signsList = env.signs;
 
+
         //get lookAt
         let camLookAt = new THREE.Vector3();
         playerData.camera.getWorldDirection(camLookAt);
@@ -354,7 +404,7 @@ class ProjectsState{
             for(let i = 0 ; i < signsList.length ; i++){
                 let currSign = signsList[i];
 
-                let dist = this.getPlayerAndSignDistance(playerPos, currSign)
+                let dist = getDistanceXZ(playerPos, currSign.main)
                 //console.log("dist is " + dist)
                 //check if i look at sign, it is lower than trigger distance
                 if(dist < this.signTriggerDistance){
@@ -385,10 +435,18 @@ class ProjectsState{
         }
 
     }
+
+    //for optimization
+    tmpSignPos = new THREE.Vector3();
+
+    /** 
+    *@param  {Sign} sign
+    */       
     //here we calulate distance based on x and z, y doesnt matter
     getPlayerAndSignDistance(playerPos, sign){
-        let zDiff = playerPos.z - sign.main.position.z;
-        let xDiff = playerPos.x - sign.main.position.x;
+        sign.main.getWorldPosition(this.tmpSignPos)
+        let zDiff = playerPos.z - this.tmpSignPos.z;
+        let xDiff = playerPos.x - this.tmpSignPos.x;
         let dist = Math.sqrt(zDiff*zDiff + xDiff*xDiff);
         return dist;
     }

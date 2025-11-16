@@ -5,6 +5,11 @@ import * as THREE from 'three';
 
 export class Sign{
 
+    /**
+   * @type {THREE.Mesh}
+   */
+  main;
+
     //the sign is composed of two pieces
     //the base which is the bottom part
     //and the main which is the top part having the image
@@ -24,6 +29,7 @@ export class Sign{
 
         this.base = new THREE.Mesh(baseGeometry, baseMaterial);
         this.main = new THREE.Mesh(mainGeometry, mainMaterial);
+
 
         
 
@@ -72,6 +78,12 @@ export class Sign{
         scene.add(this.base);
         scene.add(this.main);
         //scene.add(this.textMesh)
+    }
+
+
+    addToGroup(group){
+        group.add(this.base);
+        group.add(this.main);
     }
 
 
