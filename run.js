@@ -2,7 +2,8 @@ import * as THREE from 'three';
 import {addBoundaryCuboids, addProjectsRoom, adjustCamera} from './environment';
 import {animateText} from './textUtils'
 import { dialogues } from './dialogues';
-import { currState, PlayerData } from './playerStates';
+import { PlayerData, changeState, currState } from './PlayerStates/common';
+import { StartState } from './PlayerStates/startState';
 import {Sign} from './sign';
 import { PointerLockControls } from 'three/addons/controls/PointerLockControls.js';
 import { Door } from './door'
@@ -30,6 +31,9 @@ const moveSpeed = 0.3
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
+
+//important to start game
+changeState(new StartState());
 
 
 adjustCamera(camera);
@@ -169,7 +173,7 @@ window.addEventListener('keyup', e => {keys[e.key] = false});
 
 const clampMargin = Math.PI / 4;
 
-THREE.Euler.DEFAULT_ORDER
+
 camera.rotation.order = 'YXZ';
 
 window.addEventListener('mousemove', e => {
@@ -193,8 +197,6 @@ window.addEventListener('mousemove', e => {
     if(newCamRotX < clampMargin && newCamRotX > -clampMargin)
         camera.rotation.x += -e.movementY * 0.002;
 
-
-    console.log("Cam up is " + camera.up.x, " , " + camera.up.y + " , " +  camera.up.z)
 
     
 });
