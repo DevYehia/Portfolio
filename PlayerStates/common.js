@@ -21,10 +21,14 @@ export class PlayerData{
   /** @type {THREE.Scene} */
   scene;
 
+  //user input is stored here
+  inputKeys;
 
-  constructor(playerPos, camera, scene) {
+
+  constructor(playerPos, camera, scene, inputKeys) {
     this.playerPos = playerPos;
     this.camera = camera;
     this.scene = scene;
+    this.inputKeys = inputKeys
   }    
 }

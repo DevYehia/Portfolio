@@ -10,7 +10,7 @@ export class ProjectsState{
     currTriggeredSign = null;
 
     constructor(){
-        env.door.open()
+
     }
 
 /** 

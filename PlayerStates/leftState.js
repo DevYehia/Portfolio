@@ -4,6 +4,7 @@ import {PlayerData, collisionMargin, changeState} from './common';
 import { ProjectsState } from './ProjectsState';
 import { ForkRoadState } from './forkRoadState';
 import { getDistanceXZ } from '.././MathUtils';
+import { Door } from '../door';
 
 export class LeftState{
 
@@ -20,15 +21,16 @@ export class LeftState{
     rayCaster = new THREE.Raycaster()
 
     /**
-     * @type {THREE.Mesh}
+     * @type {Door}
      */
     door
 
     doorTriggerDistance = 10
 
+
     constructor(){
         //get door
-        this.door = env.projectsRoom.getObjectByName("door");
+        this.door = env.projectsRoomDoor;
     }
 
 
@@ -38,16 +40,33 @@ export class LeftState{
 */        
     modifyPosition(playerPos, newPlayerPos){
 
+        let forwardLimitX = -(env.pathWidth / 2 + env.boundaryCuboidWidth) + collisionMargin; 
+
         let fowardLimitZ = -(env.nearBoundaryCuboidDepth / 2 + env.pathWidth - collisionMargin);
         let backLimitZ = -(env.nearBoundaryCuboidDepth / 2 + collisionMargin);
 
-        //x will be updated regardless
-        playerPos.x = newPlayerPos.x;
+        let doorWorldPos = this.door.getWorldPos();
+        let doorLeftZ = doorWorldPos.z;
+        let doorRightZ = doorWorldPos.z - this.door.doorWidth;
+
+        console.log("doorLfetZ is " + doorLeftZ + " right is " + doorRightZ + " my left is " + newPlayerPos.z)
+    
+
+        //x will be updated according to the door
+        if(newPlayerPos.x >= forwardLimitX || 
+            (this.door.isOpen() && 
+            newPlayerPos.z < doorLeftZ && 
+            newPlayerPos.z > doorRightZ)){
+                playerPos.x = newPlayerPos.x;
+            }
+
 
         //collision, don't modify
         if(newPlayerPos.z < fowardLimitZ || newPlayerPos.z > backLimitZ){
             return;
         }
+        
+
         //no collision
         else{
             playerPos.z = newPlayerPos.z;
@@ -67,14 +86,20 @@ export class LeftState{
         
         this.rayCaster.set(playerPos, this.camLookAt);
 
-        let dist = getDistanceXZ(playerPos, this.door)
+        let dist = getDistanceXZ(playerPos, this.door.doorMesh)
 
         let controlsDiv = document.getElementById("controlsDiv");
 
         //see the door and be at good distance
-        if (this.rayCaster.intersectObject(this.door, false).length > 0 && dist <= this.doorTriggerDistance){
+        if (this.rayCaster.intersectObject(this.door.doorMesh, false).length > 0 && dist <= this.doorTriggerDistance){
             controlsDiv.innerHTML = "Door<br>E - Open/Close";
             controlsDiv.hidden = false;
+
+            //now check for keyboard input
+            if(playerData.inputKeys["e"] == true){
+                env.projectsRoomDoor.trigger();
+            }
+
         }
         else{
             controlsDiv.hidden = true;
@@ -89,6 +114,8 @@ export class LeftState{
         if(playerPos.x > backLimitX){
             changeState(new ForkRoadState());
         }
+
+        //go to project state if door is opened
         else if(playerPos.x < forwardLimitX){
             changeState(new ProjectsState());
         }

@@ -11,7 +11,7 @@ export let pathWidth = 25;
 const signSpacing = 10;
 
 export let signs = [];
-export let door = null;
+export let projectsRoomDoor = null;
 
 export let projectsRoom = null;
 
@@ -96,15 +96,15 @@ function addSigns(group, roomWidth){
 }
 
 function addProjectsDoor(group, roomWidth){
-    door = new Door(false);
+    projectsRoomDoor = new Door(false);
     let doorX = 0;
     let doorY = 0;
-    let doorZ = - (roomWidth / 2 - door.doorWidth / 2)
+    let doorZ = - (roomWidth / 2 - projectsRoomDoor.doorWidth / 2)
 
-    door.door.rotation.y += Math.PI / 2;
-    door.door.position.copy(new THREE.Vector3(doorX, doorY, doorZ))
-    door.door.name = "door";
-    group.add(door.door)
+    projectsRoomDoor.doorMesh.rotation.y += Math.PI / 2;
+    projectsRoomDoor.doorMesh.position.copy(new THREE.Vector3(doorX, doorY, doorZ))
+    projectsRoomDoor.doorMesh.name = "door";
+    group.add(projectsRoomDoor.doorMesh)
 
 }
 

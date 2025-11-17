@@ -46,10 +46,10 @@ animateText(document.getElementById("talkDiv"), currDialog[0]);
 let sign = new Sign(scene);
 sign.setPosition(new THREE.Vector3(0,0,0))
 
-let playerData = new PlayerData(camera.position, camera, scene);
+let playerData = new PlayerData(camera.position, camera, scene, keys);
 
 let testDoor = new Door();
-scene.add(testDoor.door)
+scene.add(testDoor.doorMesh)
 // addDoor(scene)
 addProjectsRoom(scene)
 
