@@ -3,14 +3,45 @@ import * as env from '../environment';
 import {PlayerData, collisionMargin, changeState} from './common';
 import { LeftState } from './leftState'
 import { getDistanceXZ } from '.././MathUtils';
+import { projectsData } from '../projects';
+import { animateText } from '../textUtils';
 
 export class ProjectsState{
 
+   //for checking collision with door
+
+    /**
+     * @type {THREE.Vector3}
+     */
+    camLookAt = new THREE.Vector3()
+
+    /**
+     * @type {THREE.Raycaster}
+     */
+    rayCaster = new THREE.Raycaster()
+
+    /**
+     * @type {Door}
+     */
+    door
+
+    doorTriggerDistance = 10
+
     signTriggerDistance = 10;
+
+    /**
+     * @type {Sign}
+     */    
     currTriggeredSign = null;
 
-    constructor(){
+    inDialog = false //to check if user is in dialog (no shit)
 
+    currDialogLineIdx = 0;
+
+    origInputKeys = {};
+
+    constructor(){
+        this.door = env.projectsRoomDoor
     }
 
 /** 
@@ -20,9 +51,12 @@ export class ProjectsState{
 */
 
 
-
-
     modifyPosition(playerPos, newPlayerPos){
+
+        //if in dialog, respct the dialog
+        if(this.inDialog){
+            return;
+        }
 
         let fowardLimitZ = -(env.nearBoundaryCuboidDepth / 2 + env.pathWidth - collisionMargin);
         let backLimitZ = -(env.nearBoundaryCuboidDepth / 2 + collisionMargin);
@@ -46,21 +80,59 @@ export class ProjectsState{
 */       
     checkAndUpdateState(playerData){
 
+
+
+        let inputKeys = playerData.inputKeys;
+
+        let usedKeys = {};
+
         let playerPos = playerData.playerPos;
 
+
+        //check for single presses, will be moved later to a base class;
+        for(let key in inputKeys){
+            if(this.origInputKeys[key] == true && inputKeys[key] == true){
+                usedKeys[key] = false;
+            }
+            else if(this.origInputKeys[key] != true && inputKeys[key] == true){
+                usedKeys[key] = true;
+            }
+            else{
+                usedKeys[key] = false;
+            }
+            this.origInputKeys[key] = inputKeys[key];
+        }
+
         let controlsDiv = document.getElementById("controlsDiv");
-        //according to player's position we find the nearest sign
+
         let signsList = env.signs;
 
 
-        //get lookAt
-        let camLookAt = new THREE.Vector3();
-        playerData.camera.getWorldDirection(camLookAt);
+        playerData.camera.getWorldDirection(this.camLookAt);
         
-        let rayCaster = new THREE.Raycaster();
+        this.rayCaster.set(playerPos, this.camLookAt);
 
-        rayCaster.set(playerPos, camLookAt);
+        let dist = getDistanceXZ(playerPos, this.door.doorMesh)
 
+        //check for door collision
+        //see the door and be at good distance
+        if (dist <= this.doorTriggerDistance && this.rayCaster.intersectObject(this.door.doorMesh, false).length > 0 ){
+            controlsDiv.innerHTML = "Door<br>E - Open/Close";
+            controlsDiv.hidden = false;
+
+            //now check for keyboard input
+            if(playerData.inputKeys["e"] == true){
+                env.projectsRoomDoor.trigger();
+            }
+            return //don't continue to sign checking , no need
+
+        }
+        else{
+            //controlsDiv.hidden = true;
+        }        
+
+
+        //according to player's position we find the nearest sign
         //first we check the current looked at sign
         console.log("Sign now is " + this.currTriggeredSign)
         if(this.currTriggeredSign != null){
@@ -68,19 +140,40 @@ export class ProjectsState{
             let dist = this.getPlayerAndSignDistance(playerPos, this.currTriggeredSign)
             //if distance is exceeded or sign is no longer looked at
             if(dist > this.signTriggerDistance || 
-            rayCaster.intersectObject(this.currTriggeredSign.main, false).length == 0){
+            this.rayCaster.intersectObject(this.currTriggeredSign.main, false).length == 0){
                 this.currTriggeredSign.revertColor();
                 this.currTriggeredSign = null;
                 controlsDiv.hidden = true;
             }
-            else{
-                //hide controls div
-
+            else{ //still triggering sign, handle interactions
+                if(!this.inDialog && usedKeys["e"] == true){
+                    console.log("Hey am here")
+                    this.inDialog = true;
+                    this.currDialogLineIdx = 0;
+                    let signID = this.currTriggeredSign.signID;
+                    console.log("Sign id " + signID)
+                    let talkDiv = document.getElementById("talkDiv");
+                    talkDiv.hidden = false;
+                    animateText(talkDiv, projectsData[signID].dialogue[this.currDialogLineIdx])
+                    this.currDialogLineIdx++;
+                }
+                else if(this.inDialog && usedKeys["q"] == true){
+                    let signID = this.currTriggeredSign.signID;
+                    let dialogueList = projectsData[signID].dialogue;
+                    if(this.currDialogLineIdx < dialogueList.length){ //there ares still more lines{
+                        animateText(talkDiv, dialogueList[this.currDialogLineIdx])
+                        this.currDialogLineIdx++;
+                    }
+                    else{ //end of dialog
+                        talkDiv.hidden = true;
+                        this.inDialog = false;
+                    }
+                }
             }
         }
 
         else{
-            console.log("In Else")
+            let foundSign = false;
             for(let i = 0 ; i < signsList.length ; i++){
                 let currSign = signsList[i];
 
@@ -89,7 +182,7 @@ export class ProjectsState{
                 //check if i look at sign, it is lower than trigger distance
                 if(dist < this.signTriggerDistance){
                     //console.log("in first if");
-                    if(rayCaster.intersectObject(currSign.main, false).length > 0){
+                    if(this.rayCaster.intersectObject(currSign.main, false).length > 0){
                        // console.log("in sconed if");
                         currSign.changeColor();
                         this.currTriggeredSign = currSign;
@@ -98,10 +191,16 @@ export class ProjectsState{
                         controlsDiv.innerHTML = "Sign<br>V - Show Video<br>E - Interact";
                         controlsDiv.hidden = false;
 
+                        foundSign = true;
+
                         break; //found a sign,end loop
                     }
 
                 }
+            }
+
+            if(!foundSign){
+                controlsDiv.hidden = true; //didn't trigger any door or sign
             }
         }
 

@@ -10,15 +10,19 @@ export class Sign{
    */
   main;
 
+  //will be used to access projects dictioanry to get its data
+  signID;
+
     //the sign is composed of two pieces
     //the base which is the bottom part
     //and the main which is the top part having the image
 
-    constructor( signBaseHeight = 2, signBaseWidth = 0.5, signMainWidth = 5, signMainHeight = 5){
+    constructor(signID=null, signBaseHeight = 2, signBaseWidth = 0.5, signMainWidth = 5, signMainHeight = 5){
         this.signBaseHeight = signBaseHeight;
         this.signBaseWidth = signBaseWidth;
         this.signMainHeight = signMainHeight;
         this.signMainWidth = signMainWidth;
+        this.signID = signID
 
 
         const baseGeometry = new THREE.BoxGeometry( signBaseWidth, signBaseHeight , 0);

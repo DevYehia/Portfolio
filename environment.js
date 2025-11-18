@@ -3,6 +3,7 @@ import {Sign} from './sign';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 import { Door } from './door';
+import { projectsData } from './projects';
 
 export const boundaryCuboidHeight = 8;
 export const boundaryCuboidWidth = 50;
@@ -67,7 +68,7 @@ function addSigns(group, roomWidth){
     //place left signs
     let currPos = new THREE.Vector3(-signSpacing, 0, 0);
     for(let i = 0 ; i < 3 ; i++){
-        let sign = new Sign();
+        let sign = new Sign("HzdDet");
         sign.addToGroup(group)
         signs.push(sign)
         sign.setPosition(currPos);
