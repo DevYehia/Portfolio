@@ -17,7 +17,7 @@ export function animateText(divElement, text){
 
     currElem = divElement;
     originalText = text;
-    let delay = 50
+    let delay = 25
     intervalHandler = setInterval(animateIteration, delay);
 
 }

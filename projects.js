@@ -1,8 +1,18 @@
+//Embedded 1
+//KindQuest
+//Embedded 2 (Maybe)
+//Distributed
+//N-Queens (A Cool one)
+//Linux Shell (Not Sure)
+//Hediaty
+//Grad Project
+
 
 export const projectsData = {
     "HzdDet" : {
         name : "Hazard Detection",
-        imagePath : "Not yet",
+        imagePath : "C.jpg",
+        github: "https://github.com/DevYehia/Hazard-Detection-System",
         dialogue : [
             "This my embedded systems project",
             "We built a Hazard detection system using Tiva-C, ultrasonic sensor and smoke sensor",

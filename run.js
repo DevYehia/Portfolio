@@ -200,3 +200,13 @@ window.addEventListener('mousemove', e => {
 
     
 });
+
+
+//for smooth experience
+// document.addEventListener("visibilitychange", () => {
+//   if (document.hidden) {
+//     keys = {};
+//   } else {
+//     //do nothing
+//   }
+// });

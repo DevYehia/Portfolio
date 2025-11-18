@@ -68,7 +68,7 @@ function addSigns(group, roomWidth){
     //place left signs
     let currPos = new THREE.Vector3(-signSpacing, 0, 0);
     for(let i = 0 ; i < 3 ; i++){
-        let sign = new Sign("HzdDet");
+        let sign = new Sign("HzdDet", projectsData["HzdDet"].imagePath);
         sign.addToGroup(group)
         signs.push(sign)
         sign.setPosition(currPos);

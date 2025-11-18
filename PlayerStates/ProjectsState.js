@@ -5,8 +5,9 @@ import { LeftState } from './leftState'
 import { getDistanceXZ } from '.././MathUtils';
 import { projectsData } from '../projects';
 import { animateText } from '../textUtils';
+import { BaseState, KeyStates } from './baseState';
 
-export class ProjectsState{
+export class ProjectsState extends BaseState{
 
    //for checking collision with door
 
@@ -34,13 +35,12 @@ export class ProjectsState{
      */    
     currTriggeredSign = null;
 
-    inDialog = false //to check if user is in dialog (no shit)
-
     currDialogLineIdx = 0;
 
     origInputKeys = {};
 
     constructor(){
+        super()
         this.door = env.projectsRoomDoor
     }
 
@@ -54,7 +54,7 @@ export class ProjectsState{
     modifyPosition(playerPos, newPlayerPos){
 
         //if in dialog, respct the dialog
-        if(this.inDialog){
+        if(this.isInDialog){
             return;
         }
 
@@ -84,24 +84,13 @@ export class ProjectsState{
 
         let inputKeys = playerData.inputKeys;
 
-        let usedKeys = {};
+        let usedKeys = this.handleKeys(inputKeys);
+
+        console.log("aloalo" + JSON.stringify(usedKeys))
 
         let playerPos = playerData.playerPos;
 
 
-        //check for single presses, will be moved later to a base class;
-        for(let key in inputKeys){
-            if(this.origInputKeys[key] == true && inputKeys[key] == true){
-                usedKeys[key] = false;
-            }
-            else if(this.origInputKeys[key] != true && inputKeys[key] == true){
-                usedKeys[key] = true;
-            }
-            else{
-                usedKeys[key] = false;
-            }
-            this.origInputKeys[key] = inputKeys[key];
-        }
 
         let controlsDiv = document.getElementById("controlsDiv");
 
@@ -146,19 +135,16 @@ export class ProjectsState{
                 controlsDiv.hidden = true;
             }
             else{ //still triggering sign, handle interactions
-                if(!this.inDialog && usedKeys["e"] == true){
-                    console.log("Hey am here")
-                    this.inDialog = true;
+                let signID = this.currTriggeredSign.signID;
+                if(!this.isInDialog && usedKeys["e"] == KeyStates.SINGLE_PRESS){
+                    this.isInDialog = true;
                     this.currDialogLineIdx = 0;
-                    let signID = this.currTriggeredSign.signID;
-                    console.log("Sign id " + signID)
                     let talkDiv = document.getElementById("talkDiv");
                     talkDiv.hidden = false;
                     animateText(talkDiv, projectsData[signID].dialogue[this.currDialogLineIdx])
                     this.currDialogLineIdx++;
                 }
-                else if(this.inDialog && usedKeys["q"] == true){
-                    let signID = this.currTriggeredSign.signID;
+                else if(this.isInDialog && usedKeys["q"] == KeyStates.SINGLE_PRESS){
                     let dialogueList = projectsData[signID].dialogue;
                     if(this.currDialogLineIdx < dialogueList.length){ //there ares still more lines{
                         animateText(talkDiv, dialogueList[this.currDialogLineIdx])
@@ -166,8 +152,12 @@ export class ProjectsState{
                     }
                     else{ //end of dialog
                         talkDiv.hidden = true;
-                        this.inDialog = false;
+                        this.isInDialog = false;
                     }
+                }
+                else if(usedKeys["g"] == KeyStates.SINGLE_PRESS){
+                    console.log("aloalo")
+                    window.open(projectsData[signID].github)
                 }
             }
         }
@@ -188,7 +178,7 @@ export class ProjectsState{
                         this.currTriggeredSign = currSign;
 
                         //show the controlsDiv
-                        controlsDiv.innerHTML = "Sign<br>V - Show Video<br>E - Interact";
+                        controlsDiv.innerHTML = "Sign<br>V - Show Video<br>E - Interact<br>G - Github";
                         controlsDiv.hidden = false;
 
                         foundSign = true;

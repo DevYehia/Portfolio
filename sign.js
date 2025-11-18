@@ -17,7 +17,7 @@ export class Sign{
     //the base which is the bottom part
     //and the main which is the top part having the image
 
-    constructor(signID=null, signBaseHeight = 2, signBaseWidth = 0.5, signMainWidth = 5, signMainHeight = 5){
+    constructor(signID=null,signPic="TheYous.jpg", signBaseHeight = 2, signBaseWidth = 0.5, signMainWidth = 5, signMainHeight = 5){
         this.signBaseHeight = signBaseHeight;
         this.signBaseWidth = signBaseWidth;
         this.signMainHeight = signMainHeight;
@@ -28,7 +28,8 @@ export class Sign{
         const baseGeometry = new THREE.BoxGeometry( signBaseWidth, signBaseHeight , 0);
         const mainGeometry = new THREE.BoxGeometry( signMainWidth, this.signMainHeight , 0);
         const baseMaterial = new THREE.MeshBasicMaterial( { color: 0x00ffff} );
-        const texture = new THREE.TextureLoader().load( "textures/TheYous.jpg" );
+
+        const texture = new THREE.TextureLoader().load( "textures/" + signPic );
         const mainMaterial = new THREE.MeshBasicMaterial( { color: 0xff00ff, map: texture} );    
 
         this.base = new THREE.Mesh(baseGeometry, baseMaterial);
