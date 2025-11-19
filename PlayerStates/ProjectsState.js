@@ -139,6 +139,11 @@ export class ProjectsState extends BaseState{
                 if(!this.isInDialog && usedKeys["e"] == KeyStates.SINGLE_PRESS){
                     this.isInDialog = true;
                     this.currDialogLineIdx = 0;
+
+                    //show dialogue controls
+                    controlsDiv.innerHTML = "Q - Next Line<br>X - Skip All"
+                    controlsDiv.hidden = false;
+
                     let talkDiv = document.getElementById("talkDiv");
                     talkDiv.hidden = false;
                     animateText(talkDiv, projectsData[signID].dialogue[this.currDialogLineIdx])
@@ -152,12 +157,19 @@ export class ProjectsState extends BaseState{
                     }
                     else{ //end of dialog
                         talkDiv.hidden = true;
+                        controlsDiv.hidden = true;
                         this.isInDialog = false;
                     }
                 }
                 else if(usedKeys["g"] == KeyStates.SINGLE_PRESS){
                     console.log("aloalo")
                     window.open(projectsData[signID].github)
+                }
+                //end dialogue
+                else if(this.isInDialog && usedKeys["x"] == KeyStates.SINGLE_PRESS){
+                    talkDiv.hidden = true;
+                    controlsDiv.hidden = true;
+                    this.isInDialog = false;
                 }
             }
         }

@@ -64,31 +64,37 @@ export function addBoundaryCuboids(scene, inputPathWidth){
 //signs will be in a square maybe?
 function addSigns(group, roomWidth){
 
-
+    let projectKeys = Object.keys(projectsData); 
+    let currProjectKeyIdx = 0;
+    let currProjectKey = projectKeys[currProjectKeyIdx];
     //place left signs
     let currPos = new THREE.Vector3(-signSpacing, 0, 0);
     for(let i = 0 ; i < 3 ; i++){
-        let sign = new Sign("HzdDet", projectsData["HzdDet"].imagePath);
+        let sign = new Sign(currProjectKey, projectsData[currProjectKey].imagePath);
         sign.addToGroup(group)
         signs.push(sign)
         sign.setPosition(currPos);
         currPos.x -= signSpacing;
+        currProjectKeyIdx = (currProjectKeyIdx + 1) % projectKeys.length;
+        currProjectKey = projectKeys[currProjectKeyIdx]
     }
     let rightSignsZ = -roomWidth
     currPos = new THREE.Vector3(-signSpacing, 0, rightSignsZ);
 
     //place right signs
     for(let i = 0 ; i < 3 ; i++){
-        let sign = new Sign();
+        let sign = new Sign(currProjectKey, projectsData[currProjectKey].imagePath);
         sign.addToGroup(group);
         signs.push(sign)
         sign.setPosition(currPos);
         currPos.x -= signSpacing;
+        currProjectKeyIdx = (currProjectKeyIdx + 1) % projectKeys.length;
+        currProjectKey = projectKeys[currProjectKeyIdx]
     }    
 
     //place central sign
     currPos.z = -roomWidth / 2;
-    let sign = new Sign();
+    let sign = new Sign(currProjectKey, projectsData[currProjectKey].imagePath);
     sign.addToGroup(group);
     signs.push(sign)
     sign.setPosition(currPos);

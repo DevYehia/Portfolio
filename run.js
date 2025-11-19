@@ -177,7 +177,7 @@ const clampMargin = Math.PI / 4;
 camera.rotation.order = 'YXZ';
 
 window.addEventListener('mousemove', e => {
-    if(!inPointerLock){
+    if(!inPointerLock || currState.isInDialog){
         return;
     }
 
