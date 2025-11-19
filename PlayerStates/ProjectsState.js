@@ -6,6 +6,7 @@ import { getDistanceXZ } from '.././MathUtils';
 import { projectsData } from '../projects';
 import { animateText } from '../textUtils';
 import { BaseState, KeyStates } from './baseState';
+import { ProjectsRoom } from '../Rooms/projectsRoom';
 
 export class ProjectsState extends BaseState{
 
@@ -39,9 +40,32 @@ export class ProjectsState extends BaseState{
 
     origInputKeys = {};
 
+    /**
+     * @type {ProjectsRoom}
+     */
+    projectsRoom
+
+
+    lightInterval;
+
     constructor(){
         super()
-        this.door = env.projectsRoomDoor
+        this.door = env.projectsRoom.door
+        //start lighting animation
+        this.projectsRoom = env.projectsRoom;
+        //console.log(JSON.stringify(this.ambLight))
+        this.lightInterval = setInterval(this.incLight.bind(this), 1 / 1000);
+
+    }
+
+
+    incLight(){
+        console.log("Light is " + JSON.stringify(this.ambLight))
+        this.projectsRoom.ambLight.intensity += 1 / 1000;
+       // console.log("Light is " + this.ambLight.intensity)
+        if(this.projectsRoom.ambLight.intensity >= 1){
+            clearInterval(this.lightInterval)
+        }
     }
 
 /** 
@@ -81,21 +105,15 @@ export class ProjectsState extends BaseState{
     checkAndUpdateState(playerData){
 
 
-
         let inputKeys = playerData.inputKeys;
 
         let usedKeys = this.handleKeys(inputKeys);
 
-        console.log("aloalo" + JSON.stringify(usedKeys))
-
         let playerPos = playerData.playerPos;
-
-
 
         let controlsDiv = document.getElementById("controlsDiv");
 
-        let signsList = env.signs;
-
+        let signsList = this.projectsRoom.signsList;
 
         playerData.camera.getWorldDirection(this.camLookAt);
         
@@ -111,7 +129,7 @@ export class ProjectsState extends BaseState{
 
             //now check for keyboard input
             if(playerData.inputKeys["e"] == true){
-                env.projectsRoomDoor.trigger();
+                this.door.trigger();
             }
             return //don't continue to sign checking , no need
 
@@ -122,55 +140,21 @@ export class ProjectsState extends BaseState{
 
 
         //according to player's position we find the nearest sign
-        //first we check the current looked at sign
-        console.log("Sign now is " + this.currTriggeredSign)
+
+        //check current triggered sign
+    
         if(this.currTriggeredSign != null){
            //console.log("Entered currSign check")
             let dist = this.getPlayerAndSignDistance(playerPos, this.currTriggeredSign)
             //if distance is exceeded or sign is no longer looked at
             if(dist > this.signTriggerDistance || 
             this.rayCaster.intersectObject(this.currTriggeredSign.main, false).length == 0){
-                this.currTriggeredSign.revertColor();
+                this.currTriggeredSign.revert();
                 this.currTriggeredSign = null;
                 controlsDiv.hidden = true;
             }
             else{ //still triggering sign, handle interactions
-                let signID = this.currTriggeredSign.signID;
-                if(!this.isInDialog && usedKeys["e"] == KeyStates.SINGLE_PRESS){
-                    this.isInDialog = true;
-                    this.currDialogLineIdx = 0;
-
-                    //show dialogue controls
-                    controlsDiv.innerHTML = "Q - Next Line<br>X - Skip All"
-                    controlsDiv.hidden = false;
-
-                    let talkDiv = document.getElementById("talkDiv");
-                    talkDiv.hidden = false;
-                    animateText(talkDiv, projectsData[signID].dialogue[this.currDialogLineIdx])
-                    this.currDialogLineIdx++;
-                }
-                else if(this.isInDialog && usedKeys["q"] == KeyStates.SINGLE_PRESS){
-                    let dialogueList = projectsData[signID].dialogue;
-                    if(this.currDialogLineIdx < dialogueList.length){ //there ares still more lines{
-                        animateText(talkDiv, dialogueList[this.currDialogLineIdx])
-                        this.currDialogLineIdx++;
-                    }
-                    else{ //end of dialog
-                        talkDiv.hidden = true;
-                        controlsDiv.hidden = true;
-                        this.isInDialog = false;
-                    }
-                }
-                else if(usedKeys["g"] == KeyStates.SINGLE_PRESS){
-                    console.log("aloalo")
-                    window.open(projectsData[signID].github)
-                }
-                //end dialogue
-                else if(this.isInDialog && usedKeys["x"] == KeyStates.SINGLE_PRESS){
-                    talkDiv.hidden = true;
-                    controlsDiv.hidden = true;
-                    this.isInDialog = false;
-                }
+                this.handleInput(usedKeys)
             }
         }
 
@@ -186,7 +170,7 @@ export class ProjectsState extends BaseState{
                     //console.log("in first if");
                     if(this.rayCaster.intersectObject(currSign.main, false).length > 0){
                        // console.log("in sconed if");
-                        currSign.changeColor();
+                        currSign.trigger();
                         this.currTriggeredSign = currSign;
 
                         //show the controlsDiv
@@ -207,6 +191,7 @@ export class ProjectsState extends BaseState{
         }
 
 
+        //handle state change
 
         //if player goes back
         let backLimitX = - (env.pathWidth / 2 + env.boundaryCuboidWidth);
@@ -230,6 +215,46 @@ export class ProjectsState extends BaseState{
         let xDiff = playerPos.x - this.tmpSignPos.x;
         let dist = Math.sqrt(zDiff*zDiff + xDiff*xDiff);
         return dist;
+    }
+
+    handleInput(usedKeys){
+        let controlsDiv = document.getElementById("controlsDiv");
+        let signID = this.currTriggeredSign.signID;
+        if(!this.isInDialog && usedKeys["e"] == KeyStates.SINGLE_PRESS){
+            this.isInDialog = true;
+            this.currDialogLineIdx = 0;
+
+            //show dialogue controls
+            controlsDiv.innerHTML = "Q - Next Line<br>X - Skip All"
+            controlsDiv.hidden = false;
+
+            let talkDiv = document.getElementById("talkDiv");
+            talkDiv.hidden = false;
+            animateText(talkDiv, projectsData[signID].dialogue[this.currDialogLineIdx])
+            this.currDialogLineIdx++;
+        }
+        else if(this.isInDialog && usedKeys["q"] == KeyStates.SINGLE_PRESS){
+            let dialogueList = projectsData[signID].dialogue;
+            if(this.currDialogLineIdx < dialogueList.length){ //there ares still more lines{
+                animateText(talkDiv, dialogueList[this.currDialogLineIdx])
+                this.currDialogLineIdx++;
+            }
+            else{ //end of dialog
+                talkDiv.hidden = true;
+                controlsDiv.hidden = true;
+                this.isInDialog = false;
+            }
+        }
+        else if(usedKeys["g"] == KeyStates.SINGLE_PRESS){
+            console.log("aloalo")
+            window.open(projectsData[signID].github)
+        }
+        //end dialogue
+        else if(this.isInDialog && usedKeys["x"] == KeyStates.SINGLE_PRESS){
+            talkDiv.hidden = true;
+            controlsDiv.hidden = true;
+            this.isInDialog = false;
+        }
     }
 
 

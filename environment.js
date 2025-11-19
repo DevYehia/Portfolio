@@ -4,6 +4,7 @@ import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 import { Door } from './door';
 import { projectsData } from './projects';
+import { ProjectsRoom } from './Rooms/projectsRoom';
 
 export const boundaryCuboidHeight = 8;
 export const boundaryCuboidWidth = 50;
@@ -11,10 +12,13 @@ export const nearBoundaryCuboidDepth = boundaryCuboidWidth * 2;
 export let pathWidth = 25;
 const signSpacing = 10;
 
-export let signs = [];
-export let projectsRoomDoor = null;
+//export let signs = [];
+//export let projectsRoomDoor = null;
 
+export let projectsRoomGroup = null;
+//export let projectRoomLight = null;
 export let projectsRoom = null;
+
 
 
 
@@ -64,13 +68,14 @@ export function addBoundaryCuboids(scene, inputPathWidth){
 //signs will be in a square maybe?
 function addSigns(group, roomWidth){
 
+    let signs = []
     let projectKeys = Object.keys(projectsData); 
     let currProjectKeyIdx = 0;
     let currProjectKey = projectKeys[currProjectKeyIdx];
     //place left signs
     let currPos = new THREE.Vector3(-signSpacing, 0, 0);
     for(let i = 0 ; i < 3 ; i++){
-        let sign = new Sign(currProjectKey, projectsData[currProjectKey].imagePath);
+        let sign = new Sign(currProjectKey, projectsData[currProjectKey].imagePath, projectsData[currProjectKey].name);
         sign.addToGroup(group)
         signs.push(sign)
         sign.setPosition(currPos);
@@ -83,7 +88,7 @@ function addSigns(group, roomWidth){
 
     //place right signs
     for(let i = 0 ; i < 3 ; i++){
-        let sign = new Sign(currProjectKey, projectsData[currProjectKey].imagePath);
+        let sign = new Sign(currProjectKey, projectsData[currProjectKey].imagePath, projectsData[currProjectKey].name);
         sign.addToGroup(group);
         signs.push(sign)
         sign.setPosition(currPos);
@@ -94,32 +99,26 @@ function addSigns(group, roomWidth){
 
     //place central sign
     currPos.z = -roomWidth / 2;
-    let sign = new Sign(currProjectKey, projectsData[currProjectKey].imagePath);
+    let sign = new Sign(currProjectKey, projectsData[currProjectKey].imagePath, projectsData[currProjectKey].name);
     sign.addToGroup(group);
     signs.push(sign)
     sign.setPosition(currPos);
     sign.rotateSign()
 
-}
-
-function addProjectsDoor(group, roomWidth){
-    projectsRoomDoor = new Door(false);
-    let doorX = 0;
-    let doorY = 0;
-    let doorZ = - (roomWidth / 2 - projectsRoomDoor.doorWidth / 2)
-
-    projectsRoomDoor.doorMesh.rotation.y += Math.PI / 2;
-    projectsRoomDoor.doorMesh.position.copy(new THREE.Vector3(doorX, doorY, doorZ))
-    projectsRoomDoor.doorMesh.name = "door";
-    group.add(projectsRoomDoor.doorMesh)
+    return signs
 
 }
+
 
 export function addProjectsRoom(scene){
-    projectsRoom = new THREE.Group();
-    addSigns(projectsRoom, pathWidth);
-    addProjectsDoor(projectsRoom, pathWidth)
-    scene.add(projectsRoom);
+    const projectsRoomGroup = new THREE.Group()
+    let signList = addSigns(projectsRoomGroup, pathWidth);
+
+    projectsRoom = new ProjectsRoom(signList, projectsRoomGroup, pathWidth)
+
+
+
+    scene.add(projectsRoomGroup);
     
 
     let roomX = -(pathWidth / 2 + boundaryCuboidWidth);
@@ -127,7 +126,7 @@ export function addProjectsRoom(scene){
     let roomZ = -nearBoundaryCuboidDepth / 2; 
 
 
-    projectsRoom.position.set(roomX, roomY, roomZ);
+    projectsRoomGroup.position.set(roomX, roomY, roomZ);
 }
 
 // module.exports = {

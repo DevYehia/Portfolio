@@ -30,7 +30,7 @@ export class LeftState{
 
     constructor(){
         //get door
-        this.door = env.projectsRoomDoor;
+        this.door = env.projectsRoom.door;
     }
 
 
@@ -49,7 +49,7 @@ export class LeftState{
         let doorLeftZ = doorWorldPos.z;
         let doorRightZ = doorWorldPos.z - this.door.doorWidth;
 
-        console.log("doorLfetZ is " + doorLeftZ + " right is " + doorRightZ + " my left is " + newPlayerPos.z)
+        //console.log("doorLfetZ is " + doorLeftZ + " right is " + doorRightZ + " my left is " + newPlayerPos.z)
     
 
         //x will be updated according to the door
@@ -97,7 +97,7 @@ export class LeftState{
 
             //now check for keyboard input
             if(playerData.inputKeys["e"] == true){
-                env.projectsRoomDoor.trigger();
+                this.door.trigger();
             }
 
         }

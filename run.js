@@ -99,7 +99,8 @@ function animate() {
         if(keys['a'] == true){
             newPos.z += perpendicularToCamLookAt.z * moveSpeed;
             newPos.x += perpendicularToCamLookAt.x * moveSpeed;   
-            testDoor.open()         
+            testDoor.open()      
+            //testDoor.doorMesh.scale.set(20,20,1)   
         }
         else if(keys['d'] == true){
             newPos.z -= perpendicularToCamLookAt.z * moveSpeed;
