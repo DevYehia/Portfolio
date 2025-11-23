@@ -10,13 +10,7 @@ export const boundaryCuboidHeight = 8;
 export const boundaryCuboidWidth = 50;
 export const nearBoundaryCuboidDepth = boundaryCuboidWidth * 2;
 export let pathWidth = 25;
-const signSpacing = 10;
 
-//export let signs = [];
-//export let projectsRoomDoor = null;
-
-export let projectsRoomGroup = null;
-//export let projectRoomLight = null;
 export let projectsRoom = null;
 
 
@@ -65,58 +59,13 @@ export function addBoundaryCuboids(scene, inputPathWidth){
 
 }
 
-//signs will be in a square maybe?
-function addSigns(group, roomWidth){
-
-    let signs = []
-    let projectKeys = Object.keys(projectsData); 
-    let currProjectKeyIdx = 0;
-    let currProjectKey = projectKeys[currProjectKeyIdx];
-    //place left signs
-    let currPos = new THREE.Vector3(-signSpacing, 0, 0);
-    for(let i = 0 ; i < 3 ; i++){
-        let sign = new Sign(currProjectKey, projectsData[currProjectKey].imagePath, projectsData[currProjectKey].name);
-        sign.addToGroup(group)
-        signs.push(sign)
-        sign.setPosition(currPos);
-        currPos.x -= signSpacing;
-        currProjectKeyIdx = (currProjectKeyIdx + 1) % projectKeys.length;
-        currProjectKey = projectKeys[currProjectKeyIdx]
-    }
-    let rightSignsZ = -roomWidth
-    currPos = new THREE.Vector3(-signSpacing, 0, rightSignsZ);
-
-    //place right signs
-    for(let i = 0 ; i < 3 ; i++){
-        let sign = new Sign(currProjectKey, projectsData[currProjectKey].imagePath, projectsData[currProjectKey].name);
-        sign.addToGroup(group);
-        signs.push(sign)
-        sign.setPosition(currPos);
-        currPos.x -= signSpacing;
-        currProjectKeyIdx = (currProjectKeyIdx + 1) % projectKeys.length;
-        currProjectKey = projectKeys[currProjectKeyIdx]
-    }    
-
-    //place central sign
-    currPos.z = -roomWidth / 2;
-    let sign = new Sign(currProjectKey, projectsData[currProjectKey].imagePath, projectsData[currProjectKey].name);
-    sign.addToGroup(group);
-    signs.push(sign)
-    sign.setPosition(currPos);
-    sign.rotateSign()
-
-    return signs
-
-}
 
 
 export function addProjectsRoom(scene){
-    const projectsRoomGroup = new THREE.Group()
-    let signList = addSigns(projectsRoomGroup, pathWidth);
 
-    projectsRoom = new ProjectsRoom(signList, projectsRoomGroup, pathWidth)
+    projectsRoom = new ProjectsRoom(pathWidth)
 
-
+    let projectsRoomGroup = projectsRoom.group
 
     scene.add(projectsRoomGroup);
     

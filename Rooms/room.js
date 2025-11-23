@@ -19,10 +19,9 @@ export class Room{
     /**
      * @type {THREE.Group}
      */
-    group
+    group = new THREE.Group()
 
-    constructor(group, startIntensity, roomWidth){
-        this.group = group;
+    constructor(startIntensity, roomWidth){
         this.ambLight.intensity = startIntensity
         this.roomWidth = roomWidth
         this.group.add(this.ambLight);
