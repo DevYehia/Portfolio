@@ -7,6 +7,7 @@ import { StartState } from './PlayerStates/startState';
 import {Sign} from './sign';
 import { PointerLockControls } from 'three/addons/controls/PointerLockControls.js';
 import { Door } from './door'
+import { KeyStates, keys, initKeyboardUtils, processKeyboardInput, resetKeys } from './keyboardUtils';
 
 
 
@@ -19,7 +20,6 @@ let inDialog = true;
 let currDialogIdx = 1;
 let currDialog = dialogues.start;
 
-let keys = {}
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
@@ -32,6 +32,8 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
+initKeyboardUtils()
+
 //important to start game
 changeState(new StartState());
 
@@ -40,8 +42,6 @@ adjustCamera(camera);
 
 addBoundaryCuboids(scene, 30)
 //addSigns(scene)
-
-animateText(document.getElementById("talkDiv"), currDialog[0]);
 
 let sign = new Sign(scene);
 sign.setPosition(new THREE.Vector3(0,0,0))
@@ -73,10 +73,12 @@ addProjectsRoom(scene)
 
 function animate() {
 
+    processKeyboardInput()
+
     //testDoor.door.rotation.y += 0.1
 
     //movement logic
-    if(!inDialog){
+    if(!currState.isInDialog){
         let camLookAt = new THREE.Vector3;
         camera.getWorldDirection(camLookAt);
 
@@ -84,25 +86,24 @@ function animate() {
         //this gives vector to left of look at vector
         let perpendicularToCamLookAt = new THREE.Vector3(0,1,0).cross(camLookAt).normalize();
         //console.log("cam look at is ", camLookAt)
-        
         //create a newPos vector, and add to it the movement
         let newPos = new THREE.Vector3().copy(camera.position)
-        if(keys['w'] == true){
+        if(keys['w'] == KeyStates.SINGLE_PRESS || keys['w'] == KeyStates.LONG_PRESS){
             newPos.z += camLookAt.z * moveSpeed;
             newPos.x += camLookAt.x * moveSpeed;
         }
-        else if(keys['s'] == true){
+        else if(keys['s'] == KeyStates.SINGLE_PRESS || keys['s'] == KeyStates.LONG_PRESS){
             newPos.z -= camLookAt.z * moveSpeed;
             newPos.x -= camLookAt.x * moveSpeed
         }
 
-        if(keys['a'] == true){
+        if(keys['a'] == KeyStates.SINGLE_PRESS || keys['a'] == KeyStates.LONG_PRESS){
             newPos.z += perpendicularToCamLookAt.z * moveSpeed;
             newPos.x += perpendicularToCamLookAt.x * moveSpeed;   
             testDoor.open()      
             //testDoor.doorMesh.scale.set(20,20,1)   
         }
-        else if(keys['d'] == true){
+        else if(keys['d'] == KeyStates.SINGLE_PRESS || keys['d'] == KeyStates.LONG_PRESS){
             newPos.z -= perpendicularToCamLookAt.z * moveSpeed;
             newPos.x -= perpendicularToCamLookAt.x * moveSpeed;    
             testDoor.close()          
@@ -115,12 +116,12 @@ function animate() {
         // }
         currState.modifyPosition(camera.position, newPos);
 
-        //check for next state
-        currState.checkAndUpdateState(playerData);
+
 
     }
 
-
+    //check for next state
+    currState.checkAndUpdateState(playerData);
 
     renderer.render( scene, camera );
   
@@ -134,7 +135,7 @@ renderer.setAnimationLoop( animate );
 //event listeners
 
 document.body.addEventListener('click', () => {
-    if(!inDialog)
+    if(!currState.isInDialog)
         renderer.domElement.requestPointerLock();
 });
 
@@ -142,35 +143,17 @@ document.addEventListener('pointerlockchange', () => {
   const locked = document.pointerLockElement === renderer.domElement;
   inPointerLock = locked;
   document.getElementById("clickDiv").hidden = locked;
+
+  if(!locked){
+    resetKeys()
+  }
+  
   console.log(locked ? 'Pointer locked!' : 'Pointer released');
 });
 
 
 
-window.addEventListener('keydown', e => {
 
-    //dialog logic
-    if(inDialog && e.key == 'e' && !e.repeat){
-        let talkDiv = document.getElementById("talkDiv");
-        if(currDialogIdx >= currDialog.length){
-            inDialog = false;
-            talkDiv.hidden = true;
-            
-        }
-        else{
-            animateText(talkDiv, currDialog[currDialogIdx]);
-            currDialogIdx++;
-        }        
-    }    
-
-    //for movement logic
-    else{
-        keys[e.key] = true;
-    }
-
-
-});
-window.addEventListener('keyup', e => {keys[e.key] = false});
 
 const clampMargin = Math.PI / 4;
 
@@ -204,10 +187,10 @@ window.addEventListener('mousemove', e => {
 
 
 //for smooth experience
-// document.addEventListener("visibilitychange", () => {
-//   if (document.hidden) {
-//     keys = {};
-//   } else {
-//     //do nothing
-//   }
-// });
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) {
+    resetKeys()
+  } else {
+    //do nothing
+  }
+});

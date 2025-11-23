@@ -3,8 +3,9 @@ import * as env from '../environment';
 import {PlayerData, collisionMargin, changeState} from './common';
 
 import { ForkRoadState } from './forkRoadState';
+import { BaseState } from './baseState';
 
-export class ForwardState{
+export class ForwardState extends BaseState{
 
 /** 
 *@param  {THREE.Vector3} playerPos

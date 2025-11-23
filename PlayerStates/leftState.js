@@ -5,8 +5,10 @@ import { ProjectsState } from './ProjectsState';
 import { ForkRoadState } from './forkRoadState';
 import { getDistanceXZ } from '.././MathUtils';
 import { Door } from '../door';
+import { BaseState } from './baseState';
+import { keys, KeyStates} from '../keyboardUtils'
 
-export class LeftState{
+export class LeftState extends BaseState{
 
     //for checking collision with door
 
@@ -29,6 +31,7 @@ export class LeftState{
 
 
     constructor(){
+        super()
         //get door
         this.door = env.projectsRoom.door;
     }
@@ -81,6 +84,7 @@ export class LeftState{
 
         let playerPos = playerData.playerPos;
 
+
         //get lookAt
         playerData.camera.getWorldDirection(this.camLookAt);
         
@@ -96,7 +100,7 @@ export class LeftState{
             controlsDiv.hidden = false;
 
             //now check for keyboard input
-            if(playerData.inputKeys["e"] == true){
+            if(keys["e"] == KeyStates.SINGLE_PRESS || keys["e"] == KeyStates.LONG_PRESS){
                 this.door.trigger();
             }
 

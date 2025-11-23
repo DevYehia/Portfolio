@@ -5,8 +5,9 @@ import { LeftState } from './leftState'
 import { getDistanceXZ } from '.././MathUtils';
 import { projectsData } from '../projects';
 import { animateText } from '../textUtils';
-import { BaseState, KeyStates } from './baseState';
+import { BaseState } from './baseState';
 import { ProjectsRoom } from '../Rooms/projectsRoom';
+import { keys, KeyStates } from '../keyboardUtils';
 
 export class ProjectsState extends BaseState{
 
@@ -37,8 +38,6 @@ export class ProjectsState extends BaseState{
     currTriggeredSign = null;
 
     currDialogLineIdx = 0;
-
-    origInputKeys = {};
 
     /**
      * @type {ProjectsRoom}
@@ -105,9 +104,7 @@ export class ProjectsState extends BaseState{
     checkAndUpdateState(playerData){
 
 
-        let inputKeys = playerData.inputKeys;
-
-        let usedKeys = this.handleKeys(inputKeys);
+        let usedKeys = keys;
 
         let playerPos = playerData.playerPos;
 
@@ -128,7 +125,7 @@ export class ProjectsState extends BaseState{
             controlsDiv.hidden = false;
 
             //now check for keyboard input
-            if(playerData.inputKeys["e"] == true){
+            if(keys["e"] == KeyStates.SINGLE_PRESS || keys["e"] == KeyStates.LONG_PRESS){
                 this.door.trigger();
             }
             return //don't continue to sign checking , no need

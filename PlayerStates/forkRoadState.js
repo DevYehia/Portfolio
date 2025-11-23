@@ -5,10 +5,11 @@ import { LeftState } from './leftState'
 import { StartState } from './startState';
 import { RightState } from './rightState';
 import { ForwardState } from './forwardState'
+import { BaseState } from './baseState';
 
 
 
-export class ForkRoadState{
+export class ForkRoadState extends BaseState{
 
     forwardLimitZ = -(env.nearBoundaryCuboidDepth / 2 + env.pathWidth);
     backwardLimitZ = -(env.nearBoundaryCuboidDepth / 2);
@@ -17,6 +18,7 @@ export class ForkRoadState{
 
     constructor(){
         //Here will be the logic to shift camera up
+        super();
     }
 
 
