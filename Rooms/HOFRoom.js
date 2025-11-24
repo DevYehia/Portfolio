@@ -7,18 +7,19 @@ export class HOFRoom extends Room{
     //this is the board where the ppl will be displayed
     board;
 
-    imageDim = 2
+    imageDim = 3
 
     imageSpacing = 0.5;
 
     constructor(roomWidth, pplList){
         super(0, roomWidth)
 
+        let numRows = 2
         let numPeople = pplList.length;
-        let numPplInRow = numPeople / 3
+        let numPplInRow = numPeople / numRows
         //init the board
         let boardWidth = (numPplInRow) * (this.imageDim) + (numPplInRow + 1) * (this.imageSpacing); //there will be three rows
-        let boardHeight = (this.imageDim) * 3 + this.imageSpacing * 4;
+        let boardHeight = (this.imageDim) * numRows + this.imageSpacing * (numRows + 1);
 
         const boardGeo = new THREE.PlaneGeometry(boardWidth, boardHeight);
         const boardMat = new THREE.MeshBasicMaterial({color : 0xff0000, side: THREE.DoubleSide})
@@ -36,7 +37,7 @@ export class HOFRoom extends Room{
 
         this.group.add(this.board)
 
-
+        const texture = new THREE.TextureLoader().load( "textures/" + "TheYous.jpg" );
 
         //place the images
         let currPos = new THREE.Vector3().copy(this.board.position);
@@ -44,12 +45,12 @@ export class HOFRoom extends Room{
         currPos.y = this.imageSpacing + this.imageDim / 2 + offSet;
         currPos.z += -boardWidth / 2+ this.imageSpacing + this.imageDim / 2
         let origZ = currPos.z
-        for(let row = 0 ; row < numPplInRow ; row++){
+        for(let row = 0 ; row < numRows ; row++){
 
-            for(let col = 0 ; col < 3 ; col++)
+            for(let col = 0 ; col < numPplInRow  ; col++)
             {
                 const imageGeo = new THREE.PlaneGeometry(this.imageDim, this.imageDim);
-                const imageMat = new THREE.MeshBasicMaterial({color : 0x00ff00, side: THREE.DoubleSide})       
+                const imageMat = new THREE.MeshBasicMaterial({ side: THREE.DoubleSide, map: texture})       
                 
                 let img = new THREE.Mesh(imageGeo, imageMat);
                 img.rotateY(Math.PI/2)
