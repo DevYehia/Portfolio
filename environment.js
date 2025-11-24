@@ -5,6 +5,8 @@ import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 import { Door } from './door';
 import { projectsData } from './projects';
 import { ProjectsRoom } from './Rooms/projectsRoom';
+import { HOFRoom } from './Rooms/HOFRoom';
+import { friends } from './friends';
 
 export const boundaryCuboidHeight = 8;
 export const boundaryCuboidWidth = 50;
@@ -12,6 +14,7 @@ export const nearBoundaryCuboidDepth = boundaryCuboidWidth * 2;
 export let pathWidth = 25;
 
 export let projectsRoom = null;
+export let hallOfFameRoom = null;
 
 
 
@@ -76,6 +79,23 @@ export function addProjectsRoom(scene){
 
 
     projectsRoomGroup.position.set(roomX, roomY, roomZ);
+}
+
+export function addHOFRoom(scene){
+    hallOfFameRoom = new HOFRoom(pathWidth, friends);
+    let HOFRoomGroup = hallOfFameRoom.group
+
+    scene.add(HOFRoomGroup);
+    
+
+    let roomX = pathWidth / 2 + boundaryCuboidWidth;
+    let roomY = 0;
+    let roomZ = -nearBoundaryCuboidDepth / 2; 
+
+
+    HOFRoomGroup.position.set(roomX, roomY, roomZ);
+    let doorTest = new THREE.Vector3();
+    //console.log("door at " + JSON.stringify(hallOfFameRoom.door.doorMesh.getWorldPosition(doorTest)))
 }
 
 // module.exports = {

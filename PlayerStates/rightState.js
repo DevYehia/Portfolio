@@ -3,9 +3,22 @@ import * as env from '../environment';
 import {PlayerData, collisionMargin, changeState} from './common';
 import { ForkRoadState } from './forkRoadState';
 import { BaseState } from './baseState';
+import { keys, KeyStates } from '../keyboardUtils';
+import { getDistanceXZ } from '../MathUtils';
 
 export class RightState extends BaseState{
 
+
+    //the door to the HOF Room
+    door;
+
+    doorTriggerDistance = 10;
+
+
+    constructor(){
+        super();
+        this.door = env.hallOfFameRoom.door
+    }
 /** 
 *@param  {THREE.Vector3} playerPos
 *@param  {THREE.Vector3} newPlayerPos
@@ -32,6 +45,32 @@ export class RightState extends BaseState{
     checkAndUpdateState(playerData){
         console.log("in right state and x is " + playerData.playerPos.x);
         let playerPos = playerData.playerPos;
+
+        //get lookAt
+        playerData.camera.getWorldDirection(this.camLookAt);
+        
+        this.rayCaster.set(playerPos, this.camLookAt);
+
+        let dist = getDistanceXZ(playerPos, this.door.doorMesh)
+
+        let controlsDiv = document.getElementById("controlsDiv");
+
+        //see the door and be at good distance
+        if (this.rayCaster.intersectObject(this.door.doorMesh, false).length > 0 && dist <= this.doorTriggerDistance){
+            controlsDiv.innerHTML = "Door<br>E - Open/Close";
+            controlsDiv.hidden = false;
+
+            //now check for keyboard input
+            if(keys["e"] == KeyStates.SINGLE_PRESS || keys["e"] == KeyStates.LONG_PRESS){
+                this.door.trigger();
+            }
+
+        }
+        else{
+            controlsDiv.hidden = true;
+        }
+
+
         //if player goes back
         let backLimitX =  (env.pathWidth / 2);
 

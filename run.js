@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {addBoundaryCuboids, addProjectsRoom, adjustCamera} from './environment';
+import {addBoundaryCuboids, addHOFRoom, addProjectsRoom, adjustCamera} from './environment';
 import {animateText} from './textUtils'
 import { dialogues } from './dialogues';
 import { PlayerData, changeState, currState } from './PlayerStates/common';
@@ -52,6 +52,7 @@ let testDoor = new Door();
 scene.add(testDoor.doorMesh)
 // addDoor(scene)
 addProjectsRoom(scene)
+addHOFRoom(scene)
 
 //let controls = new PointerLockControls(camera, renderer.domElement)
 

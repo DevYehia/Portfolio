@@ -1,15 +1,16 @@
-
-export const KeyStates = {
-    NOT_PRESSED: 0,
-    SINGLE_PRESS: 1,
-    LONG_PRESS: 2
-}
+import * as THREE from 'three'
 
 
 export class BaseState{
 
     //is the user in dialog (no shit)
     isInDialog = false;
+
+    
+    //for checking looking at
+    camLookAt = new THREE.Vector3()
+
+    rayCaster = new THREE.Raycaster()
 
 
 
