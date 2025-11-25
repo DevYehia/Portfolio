@@ -4,9 +4,9 @@ import {animateText} from './textUtils'
 import { dialogues } from './dialogues';
 import { PlayerData, changeState, currState } from './PlayerStates/common';
 import { StartState } from './PlayerStates/startState';
-import {Sign} from './sign';
+import {Sign} from './Objects/sign';
 import { PointerLockControls } from 'three/addons/controls/PointerLockControls.js';
-import { Door } from './door'
+import { Door } from './Objects/door'
 import { KeyStates, keys, initKeyboardUtils, processKeyboardInput, resetKeys } from './keyboardUtils';
 
 
@@ -23,7 +23,7 @@ let currDialog = dialogues.start;
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-const moveSpeed = 0.3
+const moveSpeed = 20
 
 
 
@@ -54,27 +54,18 @@ scene.add(testDoor.doorMesh)
 addProjectsRoom(scene)
 addHOFRoom(scene)
 
-//let controls = new PointerLockControls(camera, renderer.domElement)
+const clock = new THREE.Clock();
 
-
-//const geometry = new TextGeometry( 'Hello three.js!');
-
-// const geometry = new THREE.PlaneGeometry( 100,100 );
-// const material = new THREE.MeshBasicMaterial( {color: 0x0000ff, side: THREE.DoubleSide} );
-// const plane = new THREE.Mesh( geometry, material );
-
-//plane.position.copy(new THREE.Vector3(3,3,3))
-
-// scene.add( plane );
-// plane.lookAt(new THREE.Vector3(0,1,0));
-//plane.position.y = -boundaryCuboidHeight / 2;
-
-//document.getElementById("talkDiv").hidden = true;
 
 
 function animate() {
 
     processKeyboardInput()
+
+    const delta = clock.getDelta();
+
+   //console.log("oh delta is " + delta)
+
 
     //testDoor.door.rotation.y += 0.1
 
@@ -86,27 +77,29 @@ function animate() {
         //to get perpendicular we cross product with up vector
         //this gives vector to left of look at vector
         let perpendicularToCamLookAt = new THREE.Vector3(0,1,0).cross(camLookAt).normalize();
-        //console.log("cam look at is ", camLookAt)
+
+        let finalMoveSpeed = moveSpeed * delta
+
         //create a newPos vector, and add to it the movement
         let newPos = new THREE.Vector3().copy(camera.position)
         if(keys['w'] == KeyStates.SINGLE_PRESS || keys['w'] == KeyStates.LONG_PRESS){
-            newPos.z += camLookAt.z * moveSpeed;
-            newPos.x += camLookAt.x * moveSpeed;
+            newPos.z += camLookAt.z * finalMoveSpeed;
+            newPos.x += camLookAt.x * finalMoveSpeed;
         }
         else if(keys['s'] == KeyStates.SINGLE_PRESS || keys['s'] == KeyStates.LONG_PRESS){
-            newPos.z -= camLookAt.z * moveSpeed;
-            newPos.x -= camLookAt.x * moveSpeed
+            newPos.z -= camLookAt.z * finalMoveSpeed;
+            newPos.x -= camLookAt.x * finalMoveSpeed
         }
 
         if(keys['a'] == KeyStates.SINGLE_PRESS || keys['a'] == KeyStates.LONG_PRESS){
-            newPos.z += perpendicularToCamLookAt.z * moveSpeed;
-            newPos.x += perpendicularToCamLookAt.x * moveSpeed;   
+            newPos.z += perpendicularToCamLookAt.z * finalMoveSpeed;
+            newPos.x += perpendicularToCamLookAt.x * finalMoveSpeed;   
             testDoor.open()      
             //testDoor.doorMesh.scale.set(20,20,1)   
         }
         else if(keys['d'] == KeyStates.SINGLE_PRESS || keys['d'] == KeyStates.LONG_PRESS){
-            newPos.z -= perpendicularToCamLookAt.z * moveSpeed;
-            newPos.x -= perpendicularToCamLookAt.x * moveSpeed;    
+            newPos.z -= perpendicularToCamLookAt.z * finalMoveSpeed;
+            newPos.x -= perpendicularToCamLookAt.x * finalMoveSpeed;    
             testDoor.close()          
         }
 

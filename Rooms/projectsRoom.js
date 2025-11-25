@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import { Room } from "./room";
 import { projectsData } from '../projects';
-import { Sign } from '../sign';
+import { Sign } from '../Objects/sign';
 
 export class ProjectsRoom extends Room{
 

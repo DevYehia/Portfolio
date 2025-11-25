@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import {Door} from '../door'
+import {Door} from '../Objects/door'
 
 export class Room{
 

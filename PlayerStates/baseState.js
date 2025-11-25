@@ -12,6 +12,23 @@ export class BaseState{
 
     rayCaster = new THREE.Raycaster()
 
+    /**
+     * 
+     * @param {Number} dist 
+     * @param {THREE.Camera} camera 
+     * @param {THREE.Object3D} object 
+     */
+
+    
+    checkForTrigger(dist, triggerDistance, camera, object){
+
+        camera.getWorldDirection(this.camLookAt);
+        this.rayCaster.set(camera.position, this.camLookAt);
+
+        return (dist <= triggerDistance && this.rayCaster.intersectObject(object, false).length > 0)
+
+    }
+
 
 
 }

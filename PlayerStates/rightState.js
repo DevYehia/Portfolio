@@ -5,6 +5,7 @@ import { ForkRoadState } from './forkRoadState';
 import { BaseState } from './baseState';
 import { keys, KeyStates } from '../keyboardUtils';
 import { getDistanceXZ } from '../MathUtils';
+import { HOFState } from './HOFState';
 
 export class RightState extends BaseState{
 
@@ -43,7 +44,6 @@ export class RightState extends BaseState{
 *@param  {PlayerData} playerData
 */       
     checkAndUpdateState(playerData){
-        console.log("in right state and x is " + playerData.playerPos.x);
         let playerPos = playerData.playerPos;
 
         //get lookAt
@@ -73,9 +73,13 @@ export class RightState extends BaseState{
 
         //if player goes back
         let backLimitX =  (env.pathWidth / 2);
+        let forwardLimitX = backLimitX + env.boundaryCuboidWidth
 
         if(playerPos.x < backLimitX){
             changeState(new ForkRoadState());
+        }
+        else if(playerPos.x > forwardLimitX){
+            changeState(new HOFState())
         }
     }
 

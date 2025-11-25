@@ -1,8 +1,8 @@
 import * as THREE from 'three';
-import {Sign} from './sign';
+import {Sign} from './Objects/sign';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
-import { Door } from './door';
+import { Door } from './Objects/door';
 import { projectsData } from './projects';
 import { ProjectsRoom } from './Rooms/projectsRoom';
 import { HOFRoom } from './Rooms/HOFRoom';
@@ -14,6 +14,10 @@ export const nearBoundaryCuboidDepth = boundaryCuboidWidth * 2;
 export let pathWidth = 25;
 
 export let projectsRoom = null;
+
+/**
+ * @type {HOFRoom}
+ */
 export let hallOfFameRoom = null;
 
 

@@ -4,7 +4,7 @@ import {PlayerData, collisionMargin, changeState} from './common';
 import { ProjectsState } from './ProjectsState';
 import { ForkRoadState } from './forkRoadState';
 import { getDistanceXZ } from '.././MathUtils';
-import { Door } from '../door';
+import { Door } from '../Objects/door';
 import { BaseState } from './baseState';
 import { keys, KeyStates} from '../keyboardUtils'
 
