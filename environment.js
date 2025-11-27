@@ -72,24 +72,27 @@ export function addProjectsRoom(scene){
 
     projectsRoom = new ProjectsRoom(pathWidth)
 
-    let projectsRoomGroup = projectsRoom.group
+    projectsRoom.addWalls(pathWidth + 5, boundaryCuboidHeight, 50);
+    //scene.add(projectsRoom.wallGroup)
 
-    scene.add(projectsRoomGroup);
-    
+    projectsRoom.wallGroup.rotateY(Math.PI / 2)
+
+
+    scene.add(projectsRoom);
+    console.log(JSON.stringify(projectsRoom))
 
     let roomX = -(pathWidth / 2 + boundaryCuboidWidth);
     let roomY = 0;
     let roomZ = -nearBoundaryCuboidDepth / 2; 
 
 
-    projectsRoomGroup.position.set(roomX, roomY, roomZ);
+    projectsRoom.position.set(roomX, roomY, roomZ);
 }
 
 export function addHOFRoom(scene){
     hallOfFameRoom = new HOFRoom(pathWidth, friends);
-    let HOFRoomGroup = hallOfFameRoom.group
 
-    scene.add(HOFRoomGroup);
+    scene.add(hallOfFameRoom);
     
 
     let roomX = pathWidth / 2 + boundaryCuboidWidth;
@@ -97,7 +100,7 @@ export function addHOFRoom(scene){
     let roomZ = -nearBoundaryCuboidDepth / 2; 
 
 
-    HOFRoomGroup.position.set(roomX, roomY, roomZ);
+    hallOfFameRoom.position.set(roomX, roomY, roomZ);
     let doorTest = new THREE.Vector3();
     //console.log("door at " + JSON.stringify(hallOfFameRoom.door.doorMesh.getWorldPosition(doorTest)))
 }

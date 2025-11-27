@@ -59,7 +59,7 @@ export class ProjectsRoom extends Room{
     }
 
     addSignAt(sign, pos){
-        sign.addToGroup(this.group)
+        this.add(sign)
         this.signsList.push(sign)
         sign.setPosition(pos);
     }

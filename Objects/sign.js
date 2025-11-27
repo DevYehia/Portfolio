@@ -3,7 +3,7 @@
 import * as THREE from 'three';
 
 
-export class Sign{
+export class Sign extends THREE.Object3D{
 
     /**
    * @type {THREE.Mesh}
@@ -24,6 +24,7 @@ export class Sign{
     //and the main which is the top part having the image
 
     constructor(signID=null,signPic="TheYous.jpg", signName = "Mohamed", signBaseHeight = 2, signBaseWidth = 0.5, signMainWidth = 5, signMainHeight = 5){
+        super()
         this.signBaseHeight = signBaseHeight;
         this.signBaseWidth = signBaseWidth;
         this.signMainHeight = signMainHeight;
@@ -33,7 +34,7 @@ export class Sign{
 
         const baseGeometry = new THREE.BoxGeometry( signBaseWidth, signBaseHeight , 0);
         const mainGeometry = new THREE.BoxGeometry( signMainWidth, this.signMainHeight , 0);
-        const baseMaterial = new THREE.MeshBasicMaterial( { color: 0x00ffff} );
+        const baseMaterial = new THREE.MeshStandardMaterial( { color: 0x00ffff} );
 
         const texture = new THREE.TextureLoader().load( "textures/" + signPic );
         const mainMaterial = new THREE.MeshStandardMaterial( { map: texture} );    
@@ -45,34 +46,22 @@ export class Sign{
         this.textSprite = this.addText(signName)
         this.textSprite.visible = false;
 
+        //setup positions
+        this.base.position.y += this.signBaseHeight / 2;
+        this.main.position.y += this.signBaseHeight + this.signMainHeight / 2;
+        this.textSprite.position.y += this.signBaseHeight + this.signMainHeight + 2
 
-    }
+        //add sign components to object
+        this.add(this.base, this.main, this.textSprite)
 
-    addToScene(scene){
-        scene.add(this.base);
-        scene.add(this.main);
-        scene.add(this.textSprite)
-    }
-
-
-    addToGroup(group){
-        group.add(this.base);
-        group.add(this.main);
-        group.add(this.textSprite)
     }
 
 
     //this sets x and z
     //and sets y relative to the bottom of the base
     setPosition(pos){
-        this.base.position.copy(pos);
-        this.base.position.y += this.signBaseHeight / 2;
-
-        this.main.position.copy(pos);
-        this.main.position.y += this.signBaseHeight + this.signMainHeight / 2;
-
-        this.textSprite.position.copy(pos);
-        this.textSprite.position.y += this.signBaseHeight + this.signMainHeight + 1.5;
+        this.position.x = pos.x;
+        this.position.z = pos.z;
     }
 
     //used for 90 degrees rotation of signs
