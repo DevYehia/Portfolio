@@ -22,11 +22,10 @@ export class HOFRoom extends Room{
             numRows: 2
         })
 
-        this.board.rotateY(-Math.PI / 2);
 
-        this.board.position.z -= roomWidth / 2;
+        this.board.position.x += roomWidth / 2;
         this.board.position.y += this.board.boardHeight / 2
-        this.board.position.x += 30;
+        this.board.position.z -= 30;
 
         this.add(this.board)
 

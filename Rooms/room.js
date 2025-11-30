@@ -41,6 +41,13 @@ export class Room extends THREE.Object3D{
         const backWallGeo = new THREE.PlaneGeometry(roomWidth, roomHeight);
         const sideWallGeo = new THREE.PlaneGeometry(roomDepth, roomHeight);
         const WallTexture = new THREE.TextureLoader().load("../textures/Wall.jpg")
+
+        //WallTexture.wrapS = THREE.RepeatWrapping;
+        //WallTexture.wrapT = THREE.RepeatWrapping;
+
+        //WallTexture.repeat.set(4,4)
+
+
         let wallMat = new THREE.MeshBasicMaterial({color: 0xffffff, side: THREE.DoubleSide, map: WallTexture})
 
         this.wallGroup = new THREE.Group();

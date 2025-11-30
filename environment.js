@@ -104,11 +104,13 @@ export function addHOFRoom(scene){
     hallOfFameRoom = new HOFRoom(pathWidth, friends);
 
     scene.add(hallOfFameRoom);
+
+    hallOfFameRoom.rotateY(-Math.PI / 2)
     
 
     let roomX = pathWidth / 2 + boundaryCuboidWidth;
     let roomY = 0;
-    let roomZ = -nearBoundaryCuboidDepth / 2; 
+    let roomZ = -nearBoundaryCuboidDepth / 2 - pathWidth; 
 
 
     hallOfFameRoom.position.set(roomX, roomY, roomZ);
@@ -119,7 +121,6 @@ export function addHOFRoom(scene){
 export function addMyRoom(scene){
     myRoom = new MyRoom(pathWidth);
 
-    myRoom.rotateY(-Math.PI/2);
 
     scene.add(myRoom)
 
