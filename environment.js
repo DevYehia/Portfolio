@@ -90,7 +90,6 @@ export function addProjectsRoom(scene){
 
 
     scene.add(projectsRoom);
-    console.log(JSON.stringify(projectsRoom))
 
     let roomX = -(pathWidth / 2 + boundaryCuboidWidth);
     let roomY = 0;

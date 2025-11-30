@@ -3,10 +3,10 @@ import * as env from '../environment';
 import {PlayerData, collisionMargin, changeState} from './common';
 import { ProjectsState } from './ProjectsState';
 import { ForkRoadState } from './forkRoadState';
-import { getDistanceXZ } from '.././MathUtils';
+import { getDistanceXZ } from '../Utils/MathUtils';
 import { Door } from '../Objects/door';
 import { BaseState } from './baseState';
-import { keys, KeyStates} from '../keyboardUtils'
+import { keys, KeyStates} from '../Utils/keyboardUtils'
 
 export class LeftState extends BaseState{
 

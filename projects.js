@@ -7,6 +7,7 @@
 //Grad Project
 
 
+
 export const projectsData = [
     {
         name : "Hazard Detection",
@@ -34,6 +35,35 @@ export const projectsData = [
         ]
     },
     {
-
-    }
+        name: "Distributed Image\nProcessing",
+        imagePath : "KindQuest.jpg",
+        github: "https://github.com/DevYehia/DIstributed_Image_Processing",
+        dialgoue : [
+            "ello"
+        ]
+    },
+    {
+        name: "N-Queens\nVisualizer",
+        imagePath : "KindQuest.jpg",
+        github: "https://github.com/DevYehia/DIstributed_Image_Processing",
+        dialgoue : [
+            "ello"
+        ]
+    },
+    {
+        name: "Custom Linux\nShell",
+        imagePath : "KindQuest.jpg",
+        github: "https://github.com/DevYehia/DIstributed_Image_Processing",
+        dialgoue : [
+            "ello"
+        ]
+    },
+    {
+        name: "Hediaty",
+        imagePath : "KindQuest.jpg",
+        github: "https://github.com/DevYehia/DIstributed_Image_Processing",
+        dialgoue : [
+            "ello"
+        ]
+    },
 ]

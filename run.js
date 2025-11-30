@@ -1,13 +1,13 @@
 import * as THREE from 'three';
 import {addBoundaryCuboids, addHOFRoom, addMyRoom, addProjectsRoom, adjustCamera} from './environment';
-import {animateText} from './textUtils'
+import {animateText} from './Utils/textUtils'
 import { dialogues } from './dialogues';
 import { PlayerData, changeState, currState } from './PlayerStates/common';
 import { StartState } from './PlayerStates/startState';
 import {Sign} from './Objects/sign';
 import { PointerLockControls } from 'three/addons/controls/PointerLockControls.js';
 import { Door } from './Objects/door'
-import { KeyStates, keys, initKeyboardUtils, processKeyboardInput, resetKeys } from './keyboardUtils';
+import { KeyStates, keys, initKeyboardUtils, processKeyboardInput, resetKeys } from './Utils/keyboardUtils';
 
 
 

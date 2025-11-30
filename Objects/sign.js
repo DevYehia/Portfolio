@@ -86,18 +86,34 @@ export class Sign extends THREE.Object3D{
         const fontSize = 60
 
         ctx.font = fontSize + "px Arial";
+        ctx.textBaseline = "top"
 
-        // Measure the text
-        const textWidth = ctx.measureText(signName).width;
-        canvas.width = textWidth
-        canvas.height = fontSize;
+        const lines = signName.split("\n");
+
+        console.log("lines is " + lines)
+
+        const numLines = lines.length
+
+        //get line with max width
+        let maxWidth = 0;
+        for (let line of lines) {
+            const w = ctx.measureText(line).width;
+            if (w > maxWidth) maxWidth = w;
+        }
+
+        canvas.width = maxWidth
+        canvas.height = fontSize * numLines;
 
         // Redraw because changing canvas size clears it
         ctx.font = fontSize + "px Arial";
         ctx.fillStyle = "rgba(0,0,0,0)";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = "#ffffff";
-        ctx.fillText(signName, 0, canvas.height);
+        lines.forEach((line, i) => {
+            const lineWidth = ctx.measureText(line).width;
+            const x = (canvas.width - lineWidth) / 2;  // CENTER X
+            ctx.fillText(line, x, 50 + i * fontSize);
+        });
 
         // Create texture
         const cnvTexture = new THREE.CanvasTexture(canvas);

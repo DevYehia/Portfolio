@@ -7,14 +7,14 @@ export class Room extends THREE.Object3D{
     /**
      * @type {Door}
      */
-    door = new Door();
+    door = new Door(true);
 
     //the ambient light of the room
     /**
      * @type {THREE.AmbientLight}
      */    
     ambLight = new THREE.AmbientLight(0xffffff, 0);
-
+    //ambLight = new THREE.HemisphereLight()
 
 
     constructor(startIntensity, roomWidth){
@@ -40,6 +40,7 @@ export class Room extends THREE.Object3D{
 
         const backWallGeo = new THREE.PlaneGeometry(roomWidth, roomHeight);
         const sideWallGeo = new THREE.PlaneGeometry(roomDepth, roomHeight);
+        const roofGeo = new THREE.PlaneGeometry(roomWidth, roomDepth)
         const WallTexture = new THREE.TextureLoader().load("../textures/Wall.jpg")
 
         //WallTexture.wrapS = THREE.RepeatWrapping;
@@ -48,7 +49,7 @@ export class Room extends THREE.Object3D{
         //WallTexture.repeat.set(4,4)
 
 
-        let wallMat = new THREE.MeshBasicMaterial({color: 0xffffff, side: THREE.DoubleSide, map: WallTexture})
+        let wallMat = new THREE.MeshStandardMaterial({color: 0xffffff, side: THREE.DoubleSide, map: WallTexture})
 
         this.wallGroup = new THREE.Group();
 
@@ -56,6 +57,7 @@ export class Room extends THREE.Object3D{
         let rightWall = new THREE.Mesh(sideWallGeo, wallMat);
         let leftWall = new THREE.Mesh(sideWallGeo, wallMat);        
         let backWall = new THREE.Mesh(backWallGeo, wallMat);
+        let roof = new THREE.Mesh(roofGeo, wallMat);
 
 
         //walls will be positioned around the origin of the group at the bottom left corner of da room
@@ -72,7 +74,10 @@ export class Room extends THREE.Object3D{
 
         backWall.position.set( roomWidth / 2,  roomHeight / 2, -roomDepth);
 
-        this.wallGroup.add(frontWall, rightWall, leftWall, backWall)
+        roof.rotateX(Math.PI / 2)
+        roof.position.set(roomWidth / 2, roomHeight, -roomDepth / 2);
+
+        this.wallGroup.add(frontWall, rightWall, leftWall, backWall, roof)
 
         this.add(this.wallGroup);
 

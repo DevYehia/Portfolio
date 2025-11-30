@@ -1,8 +1,8 @@
 import * as THREE from 'three'
 import { BaseState } from "./baseState";
 import { hallOfFameRoom } from '../environment';
-import { keys, KeyStates } from '../keyboardUtils';
-import { getDistanceXZ } from '../MathUtils';
+import { keys, KeyStates } from '../Utils/keyboardUtils';
+import { getDistanceXZ } from '../Utils/MathUtils';
 import { Image } from '../Objects/image';
 import * as env from '../environment'
 import { RightState } from './rightState';

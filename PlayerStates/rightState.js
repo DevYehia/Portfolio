@@ -3,8 +3,8 @@ import * as env from '../environment';
 import {PlayerData, collisionMargin, changeState} from './common';
 import { ForkRoadState } from './forkRoadState';
 import { BaseState } from './baseState';
-import { keys, KeyStates } from '../keyboardUtils';
-import { getDistanceXZ } from '../MathUtils';
+import { keys, KeyStates } from '../Utils/keyboardUtils';
+import { getDistanceXZ } from '../Utils/MathUtils';
 import { HOFState } from './HOFState';
 
 export class RightState extends BaseState{

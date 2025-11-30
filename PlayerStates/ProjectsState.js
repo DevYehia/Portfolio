@@ -2,12 +2,13 @@ import * as THREE from 'three';
 import * as env from '../environment';
 import {PlayerData, collisionMargin, changeState} from './common';
 import { LeftState } from './leftState'
-import { getDistanceXZ } from '.././MathUtils';
+import { getDistanceXZ } from '../Utils/MathUtils';
 import { projectsData } from '../projects';
-import { animateText } from '../textUtils';
+import { animateText } from '../Utils/textUtils';
 import { BaseState } from './baseState';
 import { ProjectsRoom } from '../Rooms/projectsRoom';
-import { keys, KeyStates } from '../keyboardUtils';
+import { keys, KeyStates } from '../Utils/keyboardUtils';
+import { endDialogue, nextLine, startDialogue } from '../Utils/dialogUtils';
 
 export class ProjectsState extends BaseState{
 
@@ -30,7 +31,7 @@ export class ProjectsState extends BaseState{
 
     doorTriggerDistance = 10
 
-    signTriggerDistance = 10;
+    signTriggerDistance = 20;
 
     /**
      * @type {Sign}
@@ -219,28 +220,11 @@ export class ProjectsState extends BaseState{
         let signID = this.currTriggeredSign.signID;
         if(!this.isInDialog && usedKeys["e"] == KeyStates.SINGLE_PRESS){
             this.isInDialog = true;
-            this.currDialogLineIdx = 0;
-
-            //show dialogue controls
-            controlsDiv.innerHTML = "Q - Next Line<br>X - Skip All"
-            controlsDiv.hidden = false;
-
-            let talkDiv = document.getElementById("talkDiv");
-            talkDiv.hidden = false;
-            animateText(talkDiv, projectsData[signID].dialogue[this.currDialogLineIdx])
-            this.currDialogLineIdx++;
+            startDialogue(projectsData[signID].dialogue)
         }
         else if(this.isInDialog && usedKeys["q"] == KeyStates.SINGLE_PRESS){
-            let dialogueList = projectsData[signID].dialogue;
-            if(this.currDialogLineIdx < dialogueList.length){ //there ares still more lines{
-                animateText(talkDiv, dialogueList[this.currDialogLineIdx])
-                this.currDialogLineIdx++;
-            }
-            else{ //end of dialog
-                talkDiv.hidden = true;
-                controlsDiv.hidden = true;
-                this.isInDialog = false;
-            }
+            let areThereMoreLines = nextLine()
+            this.isInDialog = areThereMoreLines;
         }
         else if(usedKeys["g"] == KeyStates.SINGLE_PRESS){
             console.log("aloalo")
@@ -248,9 +232,19 @@ export class ProjectsState extends BaseState{
         }
         //end dialogue
         else if(this.isInDialog && usedKeys["x"] == KeyStates.SINGLE_PRESS){
-            talkDiv.hidden = true;
-            controlsDiv.hidden = true;
+            endDialogue()
             this.isInDialog = false;
+        }
+
+        else if(!this.isInDialog && usedKeys["v"] == KeyStates.SINGLE_PRESS){
+            let video = projectsData[signID].video
+            if(video != null){
+                window.open(video)
+            }
+            else{
+                this.isInDialog = true
+                startDialogue(["No video here bud"])
+            }
         }
     }
 
