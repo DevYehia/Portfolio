@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {addBoundaryCuboids, addHOFRoom, addProjectsRoom, adjustCamera} from './environment';
+import {addBoundaryCuboids, addHOFRoom, addMyRoom, addProjectsRoom, adjustCamera} from './environment';
 import {animateText} from './textUtils'
 import { dialogues } from './dialogues';
 import { PlayerData, changeState, currState } from './PlayerStates/common';
@@ -53,6 +53,7 @@ scene.add(testDoor.doorMesh)
 // addDoor(scene)
 addProjectsRoom(scene)
 addHOFRoom(scene)
+addMyRoom(scene)
 
 const clock = new THREE.Clock();
 

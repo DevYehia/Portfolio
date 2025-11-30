@@ -7,6 +7,7 @@ import { projectsData } from './projects';
 import { ProjectsRoom } from './Rooms/projectsRoom';
 import { HOFRoom } from './Rooms/HOFRoom';
 import { friends } from './friends';
+import { MyRoom } from './Rooms/MyRoom';
 
 export const boundaryCuboidHeight = 8;
 export const boundaryCuboidWidth = 50;
@@ -19,6 +20,12 @@ export let projectsRoom = null;
  * @type {HOFRoom}
  */
 export let hallOfFameRoom = null;
+
+/**
+ * @type {MyRoom}
+ */
+
+export let myRoom = null;
 
 
 
@@ -70,12 +77,16 @@ export function addBoundaryCuboids(scene, inputPathWidth){
 
 export function addProjectsRoom(scene){
 
-    projectsRoom = new ProjectsRoom(pathWidth)
+    projectsRoom = new ProjectsRoom(pathWidth + 20)
 
-    projectsRoom.addWalls(pathWidth + 5, boundaryCuboidHeight, 50);
+    const box = new THREE.Box3().setFromObject(projectsRoom);
+    const size = new THREE.Vector3();
+    box.getSize(size);
+    console.log(JSON.stringify(size))
+    projectsRoom.addWalls(pathWidth + 20, boundaryCuboidHeight + 20, size.z + 10);
     //scene.add(projectsRoom.wallGroup)
 
-    projectsRoom.wallGroup.rotateY(Math.PI / 2)
+    //projectsRoom.rotateY(Math.PI / 2)
 
 
     scene.add(projectsRoom);
@@ -83,7 +94,7 @@ export function addProjectsRoom(scene){
 
     let roomX = -(pathWidth / 2 + boundaryCuboidWidth);
     let roomY = 0;
-    let roomZ = -nearBoundaryCuboidDepth / 2; 
+    let roomZ = -nearBoundaryCuboidDepth / 2 + 10; 
 
 
     projectsRoom.position.set(roomX, roomY, roomZ);
@@ -103,6 +114,21 @@ export function addHOFRoom(scene){
     hallOfFameRoom.position.set(roomX, roomY, roomZ);
     let doorTest = new THREE.Vector3();
     //console.log("door at " + JSON.stringify(hallOfFameRoom.door.doorMesh.getWorldPosition(doorTest)))
+}
+
+export function addMyRoom(scene){
+    myRoom = new MyRoom(pathWidth);
+
+    myRoom.rotateY(-Math.PI/2);
+
+    scene.add(myRoom)
+
+
+    let roomX = - pathWidth / 2;
+    let roomY = 0;
+    let roomZ = -(nearBoundaryCuboidDepth / 2 + pathWidth + boundaryCuboidWidth);
+    
+    myRoom.position.set(roomX, roomY, roomZ)
 }
 
 // module.exports = {

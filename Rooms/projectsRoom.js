@@ -24,7 +24,7 @@ export class ProjectsRoom extends Room{
         let currProjectKeyIdx = 0;
         let currProjectKey = projectKeys[currProjectKeyIdx];
         //place left signs
-        let leftSignsPos = new THREE.Vector3(-this.signSpacing, 0, 0);
+        let leftSignsPos = new THREE.Vector3(-this.signSpacing, 0, -2);
 
         const leftSideSignsNum = 3
         const rightSideSignsNum = 3;
@@ -38,7 +38,7 @@ export class ProjectsRoom extends Room{
         }
 
 
-        let rightSignsZ = -this.roomWidth
+        let rightSignsZ = -this.roomWidth + 2
         let rightSignsPos = new THREE.Vector3(-this.signSpacing, 0, rightSignsZ);
 
         //place right signs

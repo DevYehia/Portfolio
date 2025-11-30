@@ -5,6 +5,6 @@ export class MyRoom extends Room{
 
 
     constructor(roomWidth){
-        super(0, )
+        super(0, roomWidth)
     }
 }
