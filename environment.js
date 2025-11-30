@@ -86,7 +86,7 @@ export function addProjectsRoom(scene){
     projectsRoom.addWalls(pathWidth + 20, boundaryCuboidHeight + 20, size.z + 10);
     //scene.add(projectsRoom.wallGroup)
 
-    //projectsRoom.rotateY(Math.PI / 2)
+    projectsRoom.rotateY(Math.PI / 2)
 
 
     scene.add(projectsRoom);

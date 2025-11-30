@@ -24,7 +24,7 @@ export class ProjectsRoom extends Room{
         let currProjectKeyIdx = 0;
         let currProjectKey = projectKeys[currProjectKeyIdx];
         //place left signs
-        let leftSignsPos = new THREE.Vector3(-this.signSpacing, 0, -2);
+        let leftSignsPos = new THREE.Vector3(2, 0, -this.signSpacing);
 
         const leftSideSignsNum = 3
         const rightSideSignsNum = 3;
@@ -32,30 +32,31 @@ export class ProjectsRoom extends Room{
         for(let i = 0 ; i < leftSideSignsNum ; i++){
             let sign = new Sign(currProjectKey, projectsData[currProjectKey].imagePath, projectsData[currProjectKey].name);
             this.addSignAt(sign, leftSignsPos)
-            leftSignsPos.x -= this.signSpacing;
+            sign.rotateSign()
+            leftSignsPos.z -= this.signSpacing;
             currProjectKeyIdx = (currProjectKeyIdx + 1) % projectKeys.length;
             currProjectKey = projectKeys[currProjectKeyIdx]
         }
 
 
-        let rightSignsZ = -this.roomWidth + 2
-        let rightSignsPos = new THREE.Vector3(-this.signSpacing, 0, rightSignsZ);
+        let rightSignsX = this.roomWidth - 2
+        let rightSignsPos = new THREE.Vector3(rightSignsX, 0, -this.signSpacing);
 
         //place right signs
         for(let i = 0 ; i < rightSideSignsNum ; i++){
             let sign = new Sign(currProjectKey, projectsData[currProjectKey].imagePath, projectsData[currProjectKey].name);
             this.addSignAt(sign, rightSignsPos)
-            rightSignsPos.x -= this.signSpacing;
+            sign.rotateSign()
+            rightSignsPos.z -= this.signSpacing;
             currProjectKeyIdx = (currProjectKeyIdx + 1) % projectKeys.length;
             currProjectKey = projectKeys[currProjectKeyIdx]
         }    
 
         //place central sign
         let centralSignPos = new THREE.Vector3().copy(rightSignsPos) //get last x
-        centralSignPos.z = -this.roomWidth / 2;
+        centralSignPos.x = this.roomWidth / 2;
         let sign = new Sign(currProjectKey, projectsData[currProjectKey].imagePath, projectsData[currProjectKey].name);
         this.addSignAt(sign, centralSignPos)
-        sign.rotateSign()
     }
 
     addSignAt(sign, pos){

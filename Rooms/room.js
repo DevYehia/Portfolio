@@ -27,10 +27,9 @@ export class Room extends THREE.Object3D{
     }
 
     addDoor(){
-        let doorX = 0;
+        let doorX = (this.roomWidth / 2 - this.door.doorWidth / 2);
         let doorY = 0;
-        let doorZ = -(this.roomWidth / 2 - this.door.doorWidth / 2);
-        this.door.doorMesh.rotation.y += Math.PI / 2;
+        let doorZ = 0;
         this.door.doorMesh.position.copy(new THREE.Vector3(doorX, doorY, doorZ))
         this.door.doorMesh.name = "door";
         this.add(this.door.doorMesh)
@@ -39,11 +38,10 @@ export class Room extends THREE.Object3D{
     //didn't make it in constructor as room depth is sometimes calculated dynamically
     addWalls(roomWidth, roomHeight, roomDepth){
 
-
-
         const backWallGeo = new THREE.PlaneGeometry(roomWidth, roomHeight);
         const sideWallGeo = new THREE.PlaneGeometry(roomDepth, roomHeight);
-        let wallMat = new THREE.MeshBasicMaterial({color: 0xff0000, side: THREE.DoubleSide})
+        const WallTexture = new THREE.TextureLoader().load("../textures/Wall.jpg")
+        let wallMat = new THREE.MeshBasicMaterial({color: 0xffffff, side: THREE.DoubleSide, map: WallTexture})
 
         this.wallGroup = new THREE.Group();
 
@@ -68,7 +66,6 @@ export class Room extends THREE.Object3D{
         backWall.position.set( roomWidth / 2,  roomHeight / 2, -roomDepth);
 
         this.wallGroup.add(frontWall, rightWall, leftWall, backWall)
-        this.wallGroup.rotateY(Math.PI / 2)
 
         this.add(this.wallGroup);
 
