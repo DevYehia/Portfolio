@@ -1,13 +1,14 @@
 import * as THREE from 'three';
-import {addBoundaryCuboids, addHOFRoom, addMyRoom, addProjectsRoom, adjustCamera} from './environment';
+import {addBoundaryCuboids, addHOFRoom, addMyRoom, addProjectsRoom,  adjustCamera} from './environment';
 import {animateText} from './Utils/textUtils'
-import { dialogues } from './dialogues';
+import { dialogues } from './Data/dialogues';
 import { PlayerData, changeState, currState } from './PlayerStates/common';
 import { StartState } from './PlayerStates/startState';
 import {Sign} from './Objects/sign';
 import { PointerLockControls } from 'three/addons/controls/PointerLockControls.js';
 import { Door } from './Objects/door'
 import { KeyStates, keys, initKeyboardUtils, processKeyboardInput, resetKeys } from './Utils/keyboardUtils';
+import { CSS3DRenderer } from 'three/examples/jsm/Addons.js';
 
 
 
@@ -24,6 +25,7 @@ let currDialog = dialogues.start;
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 const moveSpeed = 20
+let videoPlayer = null;
 
 
 
@@ -31,6 +33,10 @@ const moveSpeed = 20
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
+
+const cssRenederer = new CSS3DRenderer();
+cssRenederer.setSize( window.innerWidth, window.innerHeight );
+document.body.appendChild( cssRenederer.domElement );
 
 initKeyboardUtils()
 
@@ -56,7 +62,6 @@ addHOFRoom(scene)
 addMyRoom(scene)
 
 const clock = new THREE.Clock();
-
 
 
 function animate() {
@@ -120,6 +125,7 @@ function animate() {
 
     renderer.render( scene, camera );
   
+    cssRenederer.render( scene, camera )
 }
 
 
@@ -189,3 +195,16 @@ document.addEventListener("visibilitychange", () => {
     //do nothing
   }
 });
+
+
+function onYouTubeIframeAPIReady() {
+    videoPlayer = new YT.Player('player', {
+        height: '390',
+        width: '640',
+        videoId: 'CU9RgI9j7Do',
+        playerVars: {
+            autoplay: 1,
+            mute: 1,
+        }
+    });
+}

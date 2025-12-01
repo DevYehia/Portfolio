@@ -38,6 +38,7 @@ export const projectsData = [
         name: "Distributed Image\nProcessing",
         imagePath : "KindQuest.jpg",
         github: "https://github.com/DevYehia/DIstributed_Image_Processing",
+        video: "https://youtu.be/yUOk4aUAsx0?si=M3Gxyc-txp2hzi5g",
         dialgoue : [
             "ello"
         ]

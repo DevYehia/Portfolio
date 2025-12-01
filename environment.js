@@ -3,11 +3,12 @@ import {Sign} from './Objects/sign';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 import { Door } from './Objects/door';
-import { projectsData } from './projects';
+import { projectsData } from './Data/projects';
 import { ProjectsRoom } from './Rooms/projectsRoom';
 import { HOFRoom } from './Rooms/HOFRoom';
-import { friends } from './friends';
+import { friends } from './Data/friends';
 import { MyRoom } from './Rooms/MyRoom';
+
 
 export const boundaryCuboidHeight = 8;
 export const boundaryCuboidWidth = 50;
@@ -27,7 +28,11 @@ export let hallOfFameRoom = null;
 
 export let myRoom = null;
 
+/**
+ * @type {TheaterRoom}
+ */
 
+export let theaterRoom = null;
 
 
 
@@ -130,6 +135,8 @@ export function addMyRoom(scene){
     
     myRoom.position.set(roomX, roomY, roomZ)
 }
+
+
 
 // module.exports = {
 //     addBoundaryCuboids

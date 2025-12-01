@@ -3,7 +3,7 @@ import * as env from '../environment';
 import {PlayerData, collisionMargin, changeState} from './common';
 import { LeftState } from './leftState'
 import { getDistanceXZ } from '../Utils/MathUtils';
-import { projectsData } from '../projects';
+import { projectsData } from '../Data/projects';
 import { animateText } from '../Utils/textUtils';
 import { BaseState } from './baseState';
 import { ProjectsRoom } from '../Rooms/projectsRoom';
@@ -108,6 +108,7 @@ export class ProjectsState extends BaseState{
         let usedKeys = keys;
 
         let playerPos = playerData.playerPos;
+        let camera = playerData.camera;
 
         let controlsDiv = document.getElementById("controlsDiv");
 
@@ -121,7 +122,7 @@ export class ProjectsState extends BaseState{
 
         //check for door collision
         //see the door and be at good distance
-        if (dist <= this.doorTriggerDistance && this.rayCaster.intersectObject(this.door.doorMesh, false).length > 0 ){
+        if (this.checkForTrigger(dist, this.doorTriggerDistance, camera, this.door.doorMesh)){
             controlsDiv.innerHTML = "Door<br>E - Open/Close";
             controlsDiv.hidden = false;
 
@@ -145,8 +146,7 @@ export class ProjectsState extends BaseState{
            //console.log("Entered currSign check")
             let dist = this.getPlayerAndSignDistance(playerPos, this.currTriggeredSign)
             //if distance is exceeded or sign is no longer looked at
-            if(dist > this.signTriggerDistance || 
-            this.rayCaster.intersectObject(this.currTriggeredSign.main, false).length == 0){
+            if(!this.checkForTrigger(dist, this.signTriggerDistance, camera, this.currTriggeredSign.hitBox)){
                 this.currTriggeredSign.revert();
                 this.currTriggeredSign = null;
                 controlsDiv.hidden = true;
@@ -164,10 +164,8 @@ export class ProjectsState extends BaseState{
                 let dist = getDistanceXZ(playerPos, currSign.main)
                 //console.log("dist is " + dist)
                 //check if i look at sign, it is lower than trigger distance
-                if(dist < this.signTriggerDistance){
-                    //console.log("in first if");
-                    if(this.rayCaster.intersectObject(currSign.main, false).length > 0){
-                       // console.log("in sconed if");
+                if(this.checkForTrigger(dist, this.signTriggerDistance, camera, currSign.hitBox)){
+
                         currSign.trigger();
                         this.currTriggeredSign = currSign;
 
@@ -178,7 +176,6 @@ export class ProjectsState extends BaseState{
                         foundSign = true;
 
                         break; //found a sign,end loop
-                    }
 
                 }
             }

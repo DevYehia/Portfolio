@@ -23,7 +23,15 @@ export class Sign extends THREE.Object3D{
     //the base which is the bottom part
     //and the main which is the top part having the image
 
-    constructor(signID=null,signPic="TheYous.jpg", signName = "Mohamed", signBaseHeight = 2, signBaseWidth = 0.5, signMainWidth = 5, signMainHeight = 5){
+    constructor({signID=null,
+        signPic="TheYous.jpg", 
+        signName = "Mohamed", 
+        signBaseHeight = 2, 
+        signBaseWidth = 0.5, 
+        signMainWidth = 5, 
+        signMainHeight = 5,
+        padding = 4} = {}){
+
         super()
         this.signBaseHeight = signBaseHeight;
         this.signBaseWidth = signBaseWidth;
@@ -34,6 +42,13 @@ export class Sign extends THREE.Object3D{
 
         const baseGeometry = new THREE.BoxGeometry( signBaseWidth, signBaseHeight , 0);
         const mainGeometry = new THREE.BoxGeometry( signMainWidth, this.signMainHeight , 0);
+
+        let hitBoxWidth = signMainWidth + 2 * padding;
+        let hitBoxHeight = signMainHeight + signBaseHeight + 2 * padding;
+        const hitBoxGeo = new THREE.BoxGeometry(hitBoxWidth, hitBoxHeight, 0);
+        const hitBoxMat = new THREE.MeshBasicMaterial({visible: false});
+        this.hitBox = new THREE.Mesh(hitBoxGeo, hitBoxMat); //will be an attribute, needed for collision detection        
+
         const baseMaterial = new THREE.MeshStandardMaterial( { color: 0x00ffff} );
 
         const texture = new THREE.TextureLoader().load( "textures/" + signPic );
@@ -52,7 +67,7 @@ export class Sign extends THREE.Object3D{
         this.textSprite.position.y += this.signBaseHeight + this.signMainHeight + 2
 
         //add sign components to object
-        this.add(this.base, this.main, this.textSprite)
+        this.add(this.base, this.main, this.textSprite, this.hitBox)
 
     }
 
@@ -66,8 +81,7 @@ export class Sign extends THREE.Object3D{
 
     //used for 90 degrees rotation of signs
     rotateSign(){
-        this.base.rotateY(Math.PI / 2);
-        this.main.rotateY(Math.PI / 2);
+        this.rotateY(Math.PI / 2);
     }
 
     changeColor(){
