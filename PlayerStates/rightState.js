@@ -28,8 +28,28 @@ export class RightState extends BaseState{
         let fowardLimitZ = -(env.nearBoundaryCuboidDepth / 2 + env.pathWidth - collisionMargin);
         let backLimitZ = -(env.nearBoundaryCuboidDepth / 2 + collisionMargin);
 
+        let forwardLimitX = env.boundaryCuboidWidth + env.pathWidth / 2 - collisionMargin
+
+        let doorWorldPos = this.door.getWorldPos();
+        let doorLeftZ = doorWorldPos.z;
+        let doorRightZ = doorWorldPos.z + this.door.doorWidth;
+
+        console.log("Door leftz and door right z are " + doorLeftZ + " " + doorRightZ + " " + playerPos.z)
+        
+
         //x will be updated regardless
-        playerPos.x = newPlayerPos.x;
+        if((newPlayerPos.x <= forwardLimitX) || 
+            (this.door.isOpen() && 
+            newPlayerPos.z > doorLeftZ && 
+            newPlayerPos.z < doorRightZ)){
+                playerPos.x = newPlayerPos.x;
+            }
+
+        //unstuck player
+        if(playerPos.x > forwardLimitX && !this.door.isOpen()){
+            playerPos.x = forwardLimitX - 1
+        }
+
 
         //collision, don't modify
         if(newPlayerPos.z < fowardLimitZ || newPlayerPos.z > backLimitZ){

@@ -6,6 +6,7 @@ import { getDistanceXZ } from '../Utils/MathUtils';
 import { Image } from '../Objects/image';
 import * as env from '../environment'
 import { RightState } from './rightState';
+import { changeState } from './common';
 
 export class HOFState extends BaseState{
    //for checking collision with door
@@ -90,7 +91,7 @@ export class HOFState extends BaseState{
 
             //now check for keyboard input
             if(keys["e"] == KeyStates.SINGLE_PRESS || keys["e"] == KeyStates.LONG_PRESS){
-                this.door.trigger();
+                hallOfFameRoom.door.trigger();
             }
             return //don't continue to image checking , no need
 
@@ -139,14 +140,14 @@ export class HOFState extends BaseState{
         }
 
 
-        // //handle state change
+        //handle state change
 
-        // //if player goes back
-        // let backLimitX = - (env.pathWidth / 2 + env.boundaryCuboidWidth);
+        //if player goes back
+        let backLimitX = env.pathWidth / 2 + env.boundaryCuboidWidth;
 
-        // if(playerPos.x > backLimitX){
-        //     changeState(new RightState());
-        // }
+        if(playerPos.x < backLimitX){
+            changeState(new RightState());
+        }
 
     }
 

@@ -52,12 +52,7 @@ export class LeftState extends BaseState{
         let doorLeftZ = doorWorldPos.z;
         let doorRightZ = doorWorldPos.z - this.door.doorWidth;
 
-        //console.log("doorLfetZ is " + doorLeftZ + " right is " + doorRightZ + " my left is " + newPlayerPos.z)
-    
 
-        //x will be updated if any of these conditions happen
-        // - player pos x has not exceeded forward limit (fLimit here is -ve)
-        // - door is open 
         if((newPlayerPos.x >= forwardLimitX) || 
             (this.door.isOpen() && 
             newPlayerPos.z < doorLeftZ && 
