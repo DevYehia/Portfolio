@@ -9,36 +9,30 @@ import { PointerLockControls } from 'three/addons/controls/PointerLockControls.j
 import { Door } from './Objects/door'
 import { KeyStates, keys, initKeyboardUtils, processKeyboardInput, resetKeys } from './Utils/keyboardUtils';
 import { CSS3DRenderer } from 'three/examples/jsm/Addons.js';
+import { setupPauseMenu } from './pauseMenu';
 
 
 
-let up = new THREE.Vector3(0,1,0);
-let right = new THREE.Vector3(1,0,0);
+let optionsMenuDiv = document.getElementById("menuButton")
+
 
 let inPointerLock = false;
 
-let inDialog = true;
-let currDialogIdx = 1;
-let currDialog = dialogues.start;
 
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 const moveSpeed = 20
-let videoPlayer = null;
-
 
 
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
-
-const cssRenederer = new CSS3DRenderer();
-cssRenederer.setSize( window.innerWidth, window.innerHeight );
-document.body.appendChild( cssRenederer.domElement );
+renderer.localClippingEnabled = true;
 
 initKeyboardUtils()
+setupPauseMenu()
 
 //important to start game
 changeState(new StartState());
@@ -61,10 +55,30 @@ addProjectsRoom(scene)
 addHOFRoom(scene)
 addMyRoom(scene)
 
+const clipPlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 5);
+
+let testMat = new THREE.MeshBasicMaterial({color: 0xff0000, clippingPlanes: [clipPlane]})
+let geo = new THREE.DodecahedronGeometry(8, 0);
+
+let mesh = new THREE.Mesh(geo, testMat);
+//mesh.position.y = camera.position.y
+
+scene.add(mesh)
+
+
+
+
 const clock = new THREE.Clock();
 
 
 function animate() {
+
+
+ // console.log("In state " + JSON.stringify(currState))
+    mesh.position.z = (mesh.position.z - 0.1) 
+    if(mesh.position.z < -5){
+        mesh.position.z = 0;
+    }
 
     processKeyboardInput()
 
@@ -124,8 +138,6 @@ function animate() {
     currState.checkAndUpdateState(playerData);
 
     renderer.render( scene, camera );
-  
-    cssRenederer.render( scene, camera )
 }
 
 
@@ -147,6 +159,10 @@ document.addEventListener('pointerlockchange', () => {
 
   if(!locked){
     resetKeys()
+    optionsMenuDiv.hidden = false;
+  }
+  else{
+    optionsMenuDiv.hidden = true;
   }
   
   console.log(locked ? 'Pointer locked!' : 'Pointer released');
@@ -197,14 +213,3 @@ document.addEventListener("visibilitychange", () => {
 });
 
 
-function onYouTubeIframeAPIReady() {
-    videoPlayer = new YT.Player('player', {
-        height: '390',
-        width: '640',
-        videoId: 'CU9RgI9j7Do',
-        playerVars: {
-            autoplay: 1,
-            mute: 1,
-        }
-    });
-}

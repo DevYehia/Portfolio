@@ -4,12 +4,24 @@
     <meta charset="utf-8">
     <title>My first three.js app</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://www.youtube.com/iframe_api"></script>
   </head>
   <body>
     <div id="talkDiv" hidden="true">Hello World</div>
     <div id="clickDiv">Click to Start</div>
-    <div id="controlsDiv">Hello there 👋</div>
+    <div id="controlsDiv" hidden = "true">Hello there 👋</div>
+
+    <!-- Pause Menu Icons -->
+    <!-- Hamburger Icon -->
+    <div id="menuButton">
+      ☰
+    </div>
+
+    <!-- Side Menu -->
+    <div id="gameMenu" hidden>
+      <div class="menu-item" id="continueBtn">Continue</div>
+      <div class="menu-item" id="collectiblesBtn">Collectibles</div>
+      <div class="menu-item" id="restartBtn">Restart</div>
+    </div>
 
     <script type="module" src="/run.js"></script>
   </body>

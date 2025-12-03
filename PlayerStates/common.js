@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 
 
-export const collisionMargin = 1;
+export const collisionMargin = 0.5;
 
 export let currState = null;
 

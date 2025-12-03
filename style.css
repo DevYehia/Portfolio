@@ -41,3 +41,64 @@ body {
   border: 2px solid white;
   font-size: 16px;
 }
+
+
+
+/*Pause Menu Styling*/
+#menuButton {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  font-size: 32px;
+  cursor: pointer;
+  z-index: 1000;
+  background: rgba(0,0,0,0.5);
+  padding: 10px 14px;
+  border-radius: 8px;
+  color: white;
+  user-select: none;
+}
+
+#gameMenu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+
+  background: rgba(20, 20, 20, 0.9);
+
+  z-index: 999;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* center vertically */
+  align-items: center; /* center horizontally */
+  gap: 30px;
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+/* When menu is open */
+#gameMenu.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.menu-item {
+  color: white;
+  padding: 15px 25px;
+  font-size: 24px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+  width: 200px;
+  text-align: center;
+}
+
+.menu-item:hover {
+  background: rgba(255,255,255,0.25);
+}

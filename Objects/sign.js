@@ -104,7 +104,6 @@ export class Sign extends THREE.Object3D{
 
         const lines = signName.split("\n");
 
-        console.log("lines is " + lines)
 
         const numLines = lines.length
 
