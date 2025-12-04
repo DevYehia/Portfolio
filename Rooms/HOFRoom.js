@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import { Room } from './room'
-import { FameBoard } from '../Objects/fameBoard';
+import { Board } from '../Objects/Board';
 
 export class HOFRoom extends Room{
 
@@ -15,7 +15,7 @@ export class HOFRoom extends Room{
     constructor(roomWidth, pplList){
         super(0, roomWidth)
 
-        this.board = new FameBoard({
+        this.board = new Board({
             pplList: pplList,
             imageDim: 3,
             imageSpacing: 1,
