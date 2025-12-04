@@ -60,7 +60,7 @@ export class ProjectsState extends BaseState{
 
 
     incLight(){
-        console.log("Light is " + JSON.stringify(this.ambLight))
+
         this.projectsRoom.ambLight.intensity += 1 / 1000;
        // console.log("Light is " + this.ambLight.intensity)
         if(this.projectsRoom.ambLight.intensity >= 1){

@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import { BaseState } from "./baseState";
-import { hallOfFameRoom } from '../environment';
+import { hallOfFameRoom, projectsRoom } from '../environment';
 import { keys, KeyStates } from '../Utils/keyboardUtils';
 import { getDistanceXZ } from '../Utils/MathUtils';
 import { Image } from '../Objects/image';
@@ -29,7 +29,7 @@ export class HOFState extends BaseState{
 
 
     incLight(){
-        console.log("Light is " + JSON.stringify(this.ambLight))
+
         hallOfFameRoom.ambLight.intensity += 1 / 1000;
        // console.log("Light is " + this.ambLight.intensity)
         if(hallOfFameRoom.ambLight.intensity >= 1){
@@ -75,6 +75,8 @@ export class HOFState extends BaseState{
 *@param  {PlayerData} playerData
 */       
     checkAndUpdateState(playerData){
+
+        console.log("Light is " + JSON.stringify(projectsRoom.ambLight))
 
         let playerPos = playerData.playerPos;
         let camera = playerData.camera

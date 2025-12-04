@@ -123,15 +123,17 @@ export function addHOFRoom(scene){
 }
 
 export function addMyRoom(scene){
-    myRoom = new MyRoom(pathWidth);
-
-
-    scene.add(myRoom)
-
 
     let roomX = - pathWidth / 2;
     let roomY = 0;
     let roomZ = -(nearBoundaryCuboidDepth / 2 + pathWidth + boundaryCuboidWidth);
+
+    let roomPos = new THREE.Vector3(roomX, roomY, roomZ);
+
+    myRoom = new MyRoom(pathWidth, roomPos);
+
+
+    scene.add(myRoom)
     
     myRoom.position.set(roomX, roomY, roomZ)
 }

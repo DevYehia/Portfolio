@@ -16,6 +16,9 @@ export class Room extends THREE.Object3D{
     ambLight = new THREE.AmbientLight(0xffffff, 0);
     //ambLight = new THREE.HemisphereLight()
 
+    //not included in constructor will be calculated after child's constructor
+    roomDepth;
+
 
     constructor(startIntensity, roomWidth){
         super()
@@ -108,6 +111,13 @@ export class Room extends THREE.Object3D{
         let frontWallMat = new THREE.MeshBasicMaterial({color: 0xff0000, side: THREE.DoubleSide}); //will not be affected by lighting
 
         return new THREE.Mesh(frontWallGeo, frontWallMat)
+    }
+
+    setDepth(){
+        const box = new THREE.Box3().setFromObject(this);
+        const size = new THREE.Vector3();
+        box.getSize(size);   
+        this.roomDepth = size.z;     
     }
     
 }
