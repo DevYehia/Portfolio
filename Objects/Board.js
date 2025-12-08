@@ -7,6 +7,10 @@ export class Board extends THREE.Object3D{
     worldPos = new THREE.Vector3()
 
 
+    //ppl list will be dictionary of keys:
+    //name: Friend name
+    //profile: linkedin profile
+    //image: image name in textures/friends folder
     constructor({
         pplList = [],
         imageDim = 3,
@@ -15,6 +19,8 @@ export class Board extends THREE.Object3D{
         numRows = 2
     } = {}){
         super();
+
+        console.log("ppl list is " + JSON.stringify(pplList))
 
         this.imageDim = imageDim
         this.imageSpacing = imageSpacing;
@@ -46,11 +52,17 @@ export class Board extends THREE.Object3D{
             for(let col = 0 ; col < numImagePerRow ; col++){
                 let idx = col + row * numImagePerRow
 
+                if(idx >= pplList.length){
+                    break;
+                }
+
                 let image = new Image({
                     width: imageDim,
                     height: imageDim,
                     padding: imageSpacing / 2,
-                    name: pplList[idx]
+                    name: pplList[idx].name,
+                    profile: pplList[idx].profile,
+                    imageName: "../textures/friends/" + pplList[idx].image
                 });
                 this.add(image)
                 image.position.copy(currPos);

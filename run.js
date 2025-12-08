@@ -50,6 +50,7 @@ let playerData = new PlayerData(camera.position, camera, scene, keys);
 
 let testDoor = new Door();
 scene.add(testDoor.doorMesh)
+
 // addDoor(scene)
 addProjectsRoom(scene)
 addHOFRoom(scene)
@@ -63,17 +64,31 @@ let geo = new THREE.DodecahedronGeometry(8, 0);
 let mesh = new THREE.Mesh(geo, testMat);
 //mesh.position.y = camera.position.y
 
-scene.add(mesh)
-
+//scene.add(mesh)
+const particles = new THREE.Points(
+  new THREE.BufferGeometry().setAttribute('position',
+    new THREE.Float32BufferAttribute(
+      Array.from({length: 1000}, () => (Math.random()-0.5)*20), 3
+    )
+  ),
+  new THREE.PointsMaterial({ color: 0xffffff, size: 0.1 })
+);
+scene.add(particles);
 
 
 
 const clock = new THREE.Clock();
 
+const sphere = new THREE.Mesh(
+  new THREE.SphereGeometry(0.5, 32, 32),
+  new THREE.MeshStandardMaterial({ color: 0xff5500, emissive: 0xff5500 })
+);
+//scene.add(sphere);
+
 
 function animate() {
-
-
+  particles.rotation.y += 0.001;
+ //sphere.material.emissiveIntensity = 0.5 + 0.5 * Math.sin(Date.now() * 0.005);
  // console.log("In state " + JSON.stringify(currState))
     mesh.position.z = (mesh.position.z - 0.1) 
     if(mesh.position.z < -5){

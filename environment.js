@@ -10,7 +10,7 @@ import { friends } from './Data/friends';
 import { MyRoom } from './Rooms/MyRoom';
 
 
-export const boundaryCuboidHeight = 8;
+export const boundaryCuboidHeight = 12;
 export const boundaryCuboidWidth = 50;
 export const nearBoundaryCuboidDepth = boundaryCuboidWidth * 2;
 export let pathWidth = 25;

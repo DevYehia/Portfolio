@@ -17,7 +17,7 @@ export class HOFRoom extends Room{
 
         this.board = new Board({
             pplList: pplList,
-            imageDim: 3,
+            imageDim: 4,
             imageSpacing: 1,
             numRows: 2
         })

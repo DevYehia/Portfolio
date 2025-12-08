@@ -28,6 +28,7 @@ export class Image extends THREE.Object3D{
 
         //the image
         const imageTexture = new THREE.TextureLoader().load("textures/" + imageName);
+        imageTexture.colorSpace = THREE.SRGBColorSpace
         const imageGeo = new THREE.PlaneGeometry(width, height);
         const imageMat = new THREE.MeshBasicMaterial({map: imageTexture, side: THREE.DoubleSide})
         const imageMesh = new THREE.Mesh(imageGeo, imageMat); //no need to access it from outside, not an attribute

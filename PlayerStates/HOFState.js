@@ -112,7 +112,7 @@ export class HOFState extends BaseState{
                 controlsDiv.hidden = true;
             }
             else{ //still triggering sign, handle interactions
-                //this.handleInput(usedKeys)
+                this.handleInput(keys)
             }
         }
 
@@ -156,41 +156,9 @@ export class HOFState extends BaseState{
 
     handleInput(usedKeys){
         let controlsDiv = document.getElementById("controlsDiv");
-        let signID = this.currTriggeredSign.signID;
-        if(!this.isInDialog && usedKeys["e"] == KeyStates.SINGLE_PRESS){
-            this.isInDialog = true;
-            this.currDialogLineIdx = 0;
+        if(!this.isInDialog && usedKeys["p"] == KeyStates.SINGLE_PRESS){
+            window.open(this.currImage.profile)
+        }
 
-            //show dialogue controls
-            controlsDiv.innerHTML = "Q - Next Line<br>X - Skip All"
-            controlsDiv.hidden = false;
-
-            let talkDiv = document.getElementById("talkDiv");
-            talkDiv.hidden = false;
-            animateText(talkDiv, projectsData[signID].dialogue[this.currDialogLineIdx])
-            this.currDialogLineIdx++;
-        }
-        else if(this.isInDialog && usedKeys["q"] == KeyStates.SINGLE_PRESS){
-            let dialogueList = projectsData[signID].dialogue;
-            if(this.currDialogLineIdx < dialogueList.length){ //there ares still more lines{
-                animateText(talkDiv, dialogueList[this.currDialogLineIdx])
-                this.currDialogLineIdx++;
-            }
-            else{ //end of dialog
-                talkDiv.hidden = true;
-                controlsDiv.hidden = true;
-                this.isInDialog = false;
-            }
-        }
-        else if(usedKeys["g"] == KeyStates.SINGLE_PRESS){
-            console.log("aloalo")
-            window.open(projectsData[signID].github)
-        }
-        //end dialogue
-        else if(this.isInDialog && usedKeys["x"] == KeyStates.SINGLE_PRESS){
-            talkDiv.hidden = true;
-            controlsDiv.hidden = true;
-            this.isInDialog = false;
-        }
     }    
 }
