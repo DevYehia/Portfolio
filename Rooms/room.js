@@ -33,9 +33,9 @@ export class Room extends THREE.Object3D{
         let doorX = (this.roomWidth / 2 - this.door.doorWidth / 2);
         let doorY = 0;
         let doorZ = 0;
-        this.door.doorMesh.position.copy(new THREE.Vector3(doorX, doorY, doorZ))
-        this.door.doorMesh.name = "door";
-        this.add(this.door.doorMesh)
+        this.door.position.copy(new THREE.Vector3(doorX, doorY, doorZ))
+        this.door.name = "door";
+        this.add(this.door)
     }
 
     //didn't make it in constructor as room depth is sometimes calculated dynamically

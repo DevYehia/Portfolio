@@ -122,7 +122,7 @@ export class ProjectsState extends BaseState{
 
         //check for door collision
         //see the door and be at good distance
-        if (this.checkForTrigger(dist, this.doorTriggerDistance, camera, this.door.doorMesh)){
+        if (this.checkForTrigger(dist, this.doorTriggerDistance, camera, this.door.hitBox)){
             controlsDiv.innerHTML = "Door<br>E - Open/Close";
             controlsDiv.hidden = false;
 

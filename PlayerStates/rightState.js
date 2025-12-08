@@ -76,7 +76,7 @@ export class RightState extends BaseState{
         let controlsDiv = document.getElementById("controlsDiv");
 
         //see the door and be at good distance
-        if (this.rayCaster.intersectObject(this.door.doorMesh, false).length > 0 && dist <= this.doorTriggerDistance){
+        if (this.rayCaster.intersectObject(this.door.hitBox, false).length > 0 && dist <= this.doorTriggerDistance){
             controlsDiv.innerHTML = "Door<br>E - Open/Close";
             controlsDiv.hidden = false;
 

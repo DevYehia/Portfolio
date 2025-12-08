@@ -13,7 +13,7 @@ const DoorStates = {
 }
 
 
-export class Door{
+export class Door extends THREE.Object3D{
 
     doorHeight = 10;
     doorWidth = 5;
@@ -30,6 +30,8 @@ export class Door{
     worldPos = new THREE.Vector3()
 
     constructor(isClockWiseOpen){
+
+        super()
 
         if(isClockWiseOpen){
             this.rotationSign = -1;
@@ -66,12 +68,25 @@ export class Door{
         let mat = new THREE.MeshBasicMaterial({color: 0x00ffff})
         this.doorMesh = new THREE.Mesh(geo, mat);
 
+        //add hitbox
+        let hitBoxWidth = this.doorWidth;
+        let hitBoxHeight = this.doorHeight;
+        const hitBoxGeo = new THREE.BoxGeometry(hitBoxWidth, hitBoxHeight, 0);
+        const hitBoxMat = new THREE.MeshBasicMaterial({visible: false});
+        this.hitBox = new THREE.Mesh(hitBoxGeo, hitBoxMat); //will be an attribute, needed for collision detection
+
+        //origin of object is bottom left so need to adjust hitbox position
+        this.hitBox.position.x += this.doorWidth / 2;
+        this.hitBox.position.y += this.doorHeight / 2;
+        
+        this.add(this.doorMesh, this.hitBox)
+
     }
 
 
     async open(){
 
-        let originalRotationY = this.doorMesh.rotation.y;
+        let originalRotationY = this.rotation.y;
 
         if(this.state == DoorStates.OPEN || this.state == DoorStates.OPENING || this.state == DoorStates.CLOSING){
             return;
@@ -79,8 +94,8 @@ export class Door{
         this.state = DoorStates.OPENING
 
         let sleepDuration = this.animationTime / this.numRotationsPerAnimation
-        while(Math.abs(this.doorMesh.rotation.y - originalRotationY) < Math.PI/2){
-            this.doorMesh.rotation.y += (Math.PI/2) / this.numRotationsPerAnimation * this.rotationSign
+        while(Math.abs(this.rotation.y - originalRotationY) < Math.PI/2){
+            this.rotation.y += (Math.PI/2) / this.numRotationsPerAnimation * this.rotationSign
             await sleep(sleepDuration)
         }
         this.state = DoorStates.OPEN
@@ -90,7 +105,7 @@ export class Door{
     }
 
     async close(){
-        let originalRotationY = this.doorMesh.rotation.y;
+        let originalRotationY = this.rotation.y;
         if(this.state == DoorStates.CLOSED || this.state == DoorStates.OPENING || this.state == DoorStates.CLOSING){
             return;
         }
@@ -98,8 +113,8 @@ export class Door{
 
         let sleepDuration = this.animationTime / this.numRotationsPerAnimation
 
-        while(Math.abs(this.doorMesh.rotation.y - originalRotationY) < Math.PI/2){
-            this.doorMesh.rotation.y -= (Math.PI/2) / this.numRotationsPerAnimation * this.rotationSign
+        while(Math.abs(this.rotation.y - originalRotationY) < Math.PI/2){
+            this.rotation.y -= (Math.PI/2) / this.numRotationsPerAnimation * this.rotationSign
             await sleep(sleepDuration)
         }
         this.state = DoorStates.CLOSED

@@ -13,7 +13,7 @@ export class HOFState extends BaseState{
 
     doorTriggerDistance = 10
 
-    boardTriggerDist = 10;
+    boardTriggerDist = 20;
 
     /**
      * @type {Image}
@@ -87,7 +87,7 @@ export class HOFState extends BaseState{
 
         //check for door collision
         //see the door and be at good distance
-        if (this.checkForTrigger(doorDist, this.doorTriggerDistance, camera, hallOfFameRoom.door.doorMesh)){
+        if (this.checkForTrigger(doorDist, this.doorTriggerDistance, camera, hallOfFameRoom.door.hitBox)){
             controlsDiv.innerHTML = "Door<br>E - Open/Close";
             controlsDiv.hidden = false;
 

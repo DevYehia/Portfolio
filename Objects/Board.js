@@ -31,10 +31,12 @@ export class Board extends THREE.Object3D{
         //add the board
         let numImagePerRow = Math.ceil(pplList.length / numRows)
         let boardWidth = (imageDim * numImagePerRow) + (imageSpacing * (numImagePerRow + 1));
+        this.boardWidth = boardWidth
         console.log("width is " + boardWidth)
         let boardHeight = (imageDim * numRows) + (imageSpacing * (numRows + 1));
         this.boardHeight = boardHeight
 
+        const boardTexture = new THREE.TextureLoader().load("textures/portrait.jpg");
         const baordGeo = new THREE.PlaneGeometry(boardWidth, boardHeight);
         const boardMat = new THREE.MeshBasicMaterial({color: 0xff0000, side: THREE.DoubleSide});
         this.boardMesh = new THREE.Mesh(baordGeo, boardMat);
@@ -47,7 +49,18 @@ export class Board extends THREE.Object3D{
             imageSpacing + imageDim / 2,
             -(imageSpacing + imageDim / 2),
             0.1).add(boardTopLeft);
+
+        let isOddNum = (pplList.length % 2 != 0);
+
+
         for(let row = 0 ; row < numRows ; row++){
+
+            if(isOddNum && row == numRows - 1){ //last row
+                //center last row
+                let numImageInLastRow = numImagePerRow - 1;
+                let lastRowX =  (boardWidth - (numImageInLastRow * imageDim + (numImageInLastRow - 1) * imageSpacing)) / 2;
+                currPos.x = -boardWidth / 2 + lastRowX + imageDim / 2 
+            }
 
             for(let col = 0 ; col < numImagePerRow ; col++){
                 let idx = col + row * numImagePerRow

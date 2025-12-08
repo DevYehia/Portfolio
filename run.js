@@ -10,6 +10,7 @@ import { Door } from './Objects/door'
 import { KeyStates, keys, initKeyboardUtils, processKeyboardInput, resetKeys } from './Utils/keyboardUtils';
 import { CSS3DRenderer } from 'three/examples/jsm/Addons.js';
 import { setupPauseMenu } from './pauseMenu';
+import { loadStuff } from './loader';
 
 
 
@@ -30,6 +31,8 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 renderer.localClippingEnabled = true;
+
+await loadStuff()
 
 initKeyboardUtils()
 setupPauseMenu()
@@ -154,7 +157,6 @@ function animate() {
 
     renderer.render( scene, camera );
 }
-
 
 renderer.setAnimationLoop( animate );
 
