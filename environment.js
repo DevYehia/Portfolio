@@ -14,6 +14,7 @@ export const boundaryCuboidHeight = 12;
 export const boundaryCuboidWidth = 50;
 export const nearBoundaryCuboidDepth = boundaryCuboidWidth * 2;
 export let pathWidth = 25;
+export let stars;
 
 export let projectsRoom = null;
 
@@ -139,6 +140,30 @@ export function addMyRoom(scene){
 }
 
 
+export function addStars(scene){
+
+
+    //consturct vertices
+    let vertices = [];
+
+    for(let i = 0 ; i < 1500 ; i++){
+        vertices.push((Math.random() * 3000) - 500 , 300 , (Math.random() * 3000) - 2000);
+    }
+
+    console.log(vertices)
+
+    //scene.add(mesh)
+    const particles = new THREE.Points(
+    new THREE.BufferGeometry().setAttribute('position',
+        new THREE.Float32BufferAttribute(
+        vertices, 3
+        )
+    ),
+    new THREE.PointsMaterial({ color: 0xffffff, size: 1 })
+    );
+    scene.add(particles);
+    stars = particles
+}
 
 // module.exports = {
 //     addBoundaryCuboids

@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {addBoundaryCuboids, addHOFRoom, addMyRoom, addProjectsRoom,  adjustCamera} from './environment';
+import {addBoundaryCuboids, addHOFRoom, addMyRoom, addProjectsRoom,  addStars,  adjustCamera} from './environment';
 import {animateText} from './Utils/textUtils'
 import { dialogues } from './Data/dialogues';
 import { PlayerData, changeState, currState } from './PlayerStates/common';
@@ -58,6 +58,7 @@ scene.add(testDoor.doorMesh)
 addProjectsRoom(scene)
 addHOFRoom(scene)
 addMyRoom(scene)
+addStars(scene)
 
 const clipPlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 5);
 
@@ -67,16 +68,7 @@ let geo = new THREE.DodecahedronGeometry(8, 0);
 let mesh = new THREE.Mesh(geo, testMat);
 //mesh.position.y = camera.position.y
 
-//scene.add(mesh)
-const particles = new THREE.Points(
-  new THREE.BufferGeometry().setAttribute('position',
-    new THREE.Float32BufferAttribute(
-      Array.from({length: 1000}, () => (Math.random()-0.5)*20), 3
-    )
-  ),
-  new THREE.PointsMaterial({ color: 0xffffff, size: 0.1 })
-);
-scene.add(particles);
+
 
 
 
@@ -90,7 +82,7 @@ const sphere = new THREE.Mesh(
 
 
 function animate() {
-  particles.rotation.y += 0.001;
+  //particles.rotation.y += 0.001;
  //sphere.material.emissiveIntensity = 0.5 + 0.5 * Math.sin(Date.now() * 0.005);
  // console.log("In state " + JSON.stringify(currState))
     mesh.position.z = (mesh.position.z - 0.1) 
@@ -189,7 +181,7 @@ document.addEventListener('pointerlockchange', () => {
 
 
 
-const clampMargin = Math.PI / 4;
+const clampMargin = Math.PI / 3;
 
 
 camera.rotation.order = 'YXZ';
