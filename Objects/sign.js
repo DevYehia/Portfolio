@@ -52,6 +52,7 @@ export class Sign extends THREE.Object3D{
         const baseMaterial = new THREE.MeshStandardMaterial( { color: 0x00ffff} );
 
         const texture = new THREE.TextureLoader().load( "textures/" + signPic );
+        texture.colorSpace = THREE.SRGBColorSpace
         const mainMaterial = new THREE.MeshStandardMaterial( { map: texture} );    
 
         this.base = new THREE.Mesh(baseGeometry, baseMaterial);

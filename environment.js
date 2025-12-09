@@ -37,6 +37,8 @@ export let theaterRoom = null;
 
 
 
+
+
 /**
  * @param {THREE.Scene} scene
  * @param {THREE.BoxGeometry} geometry
@@ -65,7 +67,7 @@ export function addBoundaryCuboids(scene, inputPathWidth){
 
     const nearGeometry = new THREE.BoxGeometry( boundaryCuboidWidth, boundaryCuboidHeight , nearBoundaryCuboidDepth);
     const farGeometry = new THREE.BoxGeometry( boundaryCuboidWidth, boundaryCuboidHeight , boundaryCuboidWidth);
-    const material = new THREE.MeshBasicMaterial( { color: 0x0000ff} );
+    const material = new THREE.MeshStandardMaterial( { color: 0x0000ff} );
 
     //near cuboids
     addCuboid(scene, nearGeometry, material, new THREE.Vector3(pathWidth/2 + boundaryCuboidWidth/2, boundaryCuboidHeight / 2 , 0));
@@ -115,11 +117,12 @@ export function addHOFRoom(scene){
 
     let roomX = pathWidth / 2 + boundaryCuboidWidth;
     let roomY = 0;
-    let roomZ = -nearBoundaryCuboidDepth / 2 - pathWidth; 
+    let roomZ = -nearBoundaryCuboidDepth / 2 - pathWidth - 20; 
 
 
     hallOfFameRoom.position.set(roomX, roomY, roomZ);
-    let doorTest = new THREE.Vector3();
+
+    
     //console.log("door at " + JSON.stringify(hallOfFameRoom.door.doorMesh.getWorldPosition(doorTest)))
 }
 
@@ -134,7 +137,7 @@ export function addMyRoom(scene){
     myRoom = new MyRoom(pathWidth, roomPos);
 
 
-    scene.add(myRoom)
+    //scene.add(myRoom)
     
     myRoom.position.set(roomX, roomY, roomZ)
 }

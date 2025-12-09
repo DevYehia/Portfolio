@@ -46,5 +46,10 @@ export class HOFRoom extends Room{
 
         this.add(this.board, this.title)
 
+
+        //let roomDims = this.getRoomDims();
+
+        //this.addWalls(roomDims.x + 20, roomDims.y + 20, roomDims.z + 20)
+
     }
 }

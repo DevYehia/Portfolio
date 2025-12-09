@@ -11,6 +11,7 @@ import { KeyStates, keys, initKeyboardUtils, processKeyboardInput, resetKeys } f
 import { CSS3DRenderer } from 'three/examples/jsm/Addons.js';
 import { setupPauseMenu } from './pauseMenu';
 import { loadStuff } from './loader';
+import { Torch } from './Objects/torch';
 
 
 
@@ -51,8 +52,6 @@ sign.setPosition(new THREE.Vector3(0,0,0))
 
 let playerData = new PlayerData(camera.position, camera, scene, keys);
 
-let testDoor = new Door();
-scene.add(testDoor.doorMesh)
 
 // addDoor(scene)
 addProjectsRoom(scene)
@@ -68,8 +67,16 @@ let geo = new THREE.DodecahedronGeometry(8, 0);
 let mesh = new THREE.Mesh(geo, testMat);
 //mesh.position.y = camera.position.y
 
+let torch = new Torch();
+//scene.add(torch)
 
+let pointLight = new THREE.PointLight(0xFFFFFF, 100, 0)
+scene.add(pointLight)
 
+// let ambLight = new THREE.AmbientLight(0xffffff, 0.05)
+// scene.add(ambLight)
+
+pointLight.position.copy(camera.position)
 
 
 const clock = new THREE.Clock();
@@ -124,13 +131,17 @@ function animate() {
         if(keys['a'] == KeyStates.SINGLE_PRESS || keys['a'] == KeyStates.LONG_PRESS){
             newPos.z += perpendicularToCamLookAt.z * finalMoveSpeed;
             newPos.x += perpendicularToCamLookAt.x * finalMoveSpeed;   
-            testDoor.open()      
+            //testDoor.open()      
             //testDoor.doorMesh.scale.set(20,20,1)   
         }
         else if(keys['d'] == KeyStates.SINGLE_PRESS || keys['d'] == KeyStates.LONG_PRESS){
             newPos.z -= perpendicularToCamLookAt.z * finalMoveSpeed;
             newPos.x -= perpendicularToCamLookAt.x * finalMoveSpeed;    
-            testDoor.close()          
+            //testDoor.close()          
+        }
+
+        if(keys['q'] == KeyStates.SINGLE_PRESS){
+          pointLight.intensity = ((pointLight.intensity == 0) ? 100 : 0);
         }
 
         //check for collision using newPos
@@ -139,7 +150,7 @@ function animate() {
         //     camera.position.copy(newPos);
         // }
         currState.modifyPosition(camera.position, newPos);
-
+        currState.modifyPosition(pointLight.position, newPos);
 
 
     }

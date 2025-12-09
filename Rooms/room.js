@@ -38,6 +38,14 @@ export class Room extends THREE.Object3D{
         this.add(this.door)
     }
 
+
+    getRoomDims(){
+        let box = new THREE.Box3();
+        let roomDims = new THREE.Vector3();
+        box.setFromObject(this).getSize(roomDims);
+        return roomDims;
+    }
+
     //didn't make it in constructor as room depth is sometimes calculated dynamically
     addWalls(roomWidth, roomHeight, roomDepth){
 
@@ -46,13 +54,14 @@ export class Room extends THREE.Object3D{
         const roofGeo = new THREE.PlaneGeometry(roomWidth, roomDepth)
         const WallTexture = new THREE.TextureLoader().load("../textures/Wall.jpg")
 
-        //WallTexture.wrapS = THREE.RepeatWrapping;
-        //WallTexture.wrapT = THREE.RepeatWrapping;
+        WallTexture.wrapS = THREE.RepeatWrapping;
+        WallTexture.wrapT = THREE.RepeatWrapping;
 
-        //WallTexture.repeat.set(4,4)
+        WallTexture.repeat.set(4,4)
+        WallTexture.colorSpace = THREE.SRGBColorSpace
 
 
-        let wallMat = new THREE.MeshStandardMaterial({color: 0xffffff, side: THREE.DoubleSide, map: WallTexture})
+        let wallMat = new THREE.MeshStandardMaterial({color: 0x0000ff, side: THREE.DoubleSide, map: WallTexture})
 
         this.wallGroup = new THREE.Group();
 
