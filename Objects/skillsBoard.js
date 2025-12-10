@@ -50,7 +50,8 @@ export class SkillsBoard extends THREE.Object3D{
                 let image = new Image({
                     width: imageDim,
                     height: imageDim,
-                    imageName: "../textures/skills/" + pplList[idx]
+                    imageName: "../textures/skills/" + pplList[idx],
+                    clippingPlanes: clippingPlanes
                 });
                 this.add(image)
                 image.position.copy(currPos);

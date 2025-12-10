@@ -1,0 +1,54 @@
+import * as THREE from 'three'
+import { Image } from './image';
+
+
+export class Collectible extends Image{
+
+
+
+
+    //collectile will have 
+    //1) plane with image
+    //2) particles
+    //3) hitbox
+    constructor(){
+
+        
+        super({
+            width: 3,
+            height: 1,
+            padding: 2,
+        });
+
+    //this.rotateX(- Math.PI / 2)
+    this.imageMesh.rotateX(- Math.PI / 2)
+
+    let vertices = []
+    for(let i = 0 ; i < 50 ; i++){
+
+        let randX = (Math.random() * this.width) - this.width / 2;
+        let randY = Math.random() * 3;
+        let randZ = (Math.random() * this.height) - this.height / 2;
+
+        vertices.push(randX, randY, randZ)    
+
+    }
+    const particles = new THREE.Points(
+    new THREE.BufferGeometry().setAttribute('position',
+            new THREE.Float32BufferAttribute(
+            vertices, 3
+            )
+    ),
+    new THREE.PointsMaterial({ color: 0xffffff, size: 0.08 })
+    );
+
+    this.particles = particles
+
+    //restore particles rotation
+    //particles.rotateX(Math.PI / 2)
+
+    this.add(particles)
+
+
+    }
+}

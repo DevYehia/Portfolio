@@ -11,7 +11,8 @@ export class Image extends THREE.Object3D{
         name = "Alo",
         profile = "404",
         imageName = "TheYous.jpg", //image in textures folder
-        padding = 1
+        padding = 1,
+        clippingPlanes = []
     } = {}){
 
         //necessary, don't know why
@@ -30,8 +31,12 @@ export class Image extends THREE.Object3D{
         const imageTexture = new THREE.TextureLoader().load("textures/" + imageName);
         imageTexture.colorSpace = THREE.SRGBColorSpace
         const imageGeo = new THREE.PlaneGeometry(width, height);
-        const imageMat = new THREE.MeshBasicMaterial({map: imageTexture, side: THREE.DoubleSide, transparent: true})
-        const imageMesh = new THREE.Mesh(imageGeo, imageMat); //no need to access it from outside, not an attribute
+        const imageMat = new THREE.MeshBasicMaterial({map: imageTexture, 
+            side: THREE.DoubleSide, 
+            transparent: true, 
+            clippingPlanes: clippingPlanes})
+        const imageMesh = new THREE.Mesh(imageGeo, imageMat); 
+        this.imageMesh = imageMesh
 
         //the hitbox, it will be the image dimensions + padding to each side
         let hitBoxWidth = width + 2 * padding;

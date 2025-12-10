@@ -12,6 +12,7 @@ import { CSS3DRenderer } from 'three/examples/jsm/Addons.js';
 import { setupPauseMenu } from './pauseMenu';
 import { loadStuff } from './loader';
 import { Torch } from './Objects/torch';
+import { Collectible } from './Objects/collectible';
 
 
 
@@ -59,6 +60,10 @@ addHOFRoom(scene)
 addMyRoom(scene)
 addStars(scene)
 
+let coll = new Collectible();
+coll.position.z -= 10
+scene.add(coll)
+
 const clipPlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 5);
 
 let testMat = new THREE.MeshBasicMaterial({color: 0xff0000, clippingPlanes: [clipPlane]})
@@ -92,10 +97,16 @@ function animate() {
   //particles.rotation.y += 0.001;
  //sphere.material.emissiveIntensity = 0.5 + 0.5 * Math.sin(Date.now() * 0.005);
  // console.log("In state " + JSON.stringify(currState))
-    mesh.position.z = (mesh.position.z - 0.1) 
-    if(mesh.position.z < -5){
-        mesh.position.z = 0;
+    const pos = coll.particles.geometry.attributes.position.array;
+
+    for(let i = 1 ; i < pos.length ; i+=3){
+      pos[i] += 0.01
+      if(pos[i] > 3){
+        pos[i] = 0;
+      }
     }
+    coll.particles.geometry.attributes.position.needsUpdate = true;
+
 
     processKeyboardInput()
 

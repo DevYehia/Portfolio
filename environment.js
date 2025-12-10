@@ -117,7 +117,7 @@ export function addHOFRoom(scene){
 
     let roomX = pathWidth / 2 + boundaryCuboidWidth;
     let roomY = 0;
-    let roomZ = -nearBoundaryCuboidDepth / 2 - pathWidth - 20; 
+    let roomZ = -nearBoundaryCuboidDepth / 2 - pathWidth; 
 
 
     hallOfFameRoom.position.set(roomX, roomY, roomZ);
