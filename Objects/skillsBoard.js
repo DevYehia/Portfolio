@@ -31,7 +31,7 @@ export class SkillsBoard extends THREE.Object3D{
         let imageSpacingVertical = (boardHeight - imageDim * numRows) / (numRows + 1);
 
         const baordGeo = new THREE.PlaneGeometry(boardWidth, boardHeight);
-        const boardMat = new THREE.MeshBasicMaterial({color: 0xff0000, side: THREE.DoubleSide, clippingPlanes: clippingPlanes});
+        const boardMat = new THREE.MeshBasicMaterial({color: 0x0000ff, side: THREE.DoubleSide, clippingPlanes: clippingPlanes});
         this.boardMesh = new THREE.Mesh(baordGeo, boardMat);
         this.add(this.boardMesh)
 
@@ -50,7 +50,7 @@ export class SkillsBoard extends THREE.Object3D{
                 let image = new Image({
                     width: imageDim,
                     height: imageDim,
-                    name: pplList[idx]
+                    imageName: "../textures/skills/" + pplList[idx]
                 });
                 this.add(image)
                 image.position.copy(currPos);

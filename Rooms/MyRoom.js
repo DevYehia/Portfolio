@@ -3,11 +3,14 @@ import * as CustomObjects from '../Objects/image'
 import { Board } from "../Objects/board";
 import * as THREE from 'three'
 import { SkillsBoard } from "../Objects/skillsBoard";
+import { skills } from "../Data/skills";
 
 export class MyRoom extends Room{
 
 
     nextSkillTransitionInterval;
+
+    prevSkillTransitionInterval;
 
     //my room will have an image of me
 
@@ -57,15 +60,17 @@ export class MyRoom extends Room{
         let imageDim = 3
 
 
-        for(let i = 0 ; i < 3 ; i++){
+        for(let key in skills){
+
+            console.log(key + " hey " + JSON.stringify(skills.key))
 
             let board = new SkillsBoard(
                     {
-                        id: i,
-                        boardName: "Num " + i,
-                        pplList: dummyList,
+                        id: key,
+                        boardName: key,
+                        pplList: skills[key].list,
                         imageDim: 3,
-                        numRows: 2,
+                        numRows: skills[key].numRows,
                         clippingPlanes: clippingPlanes
                     }
                 )
@@ -75,15 +80,21 @@ export class MyRoom extends Room{
         }
 
         //setup current board
+        this.prevBoardIdx = this.boardsList.length - 1;
         this.currBoardIdx = 0;
         this.nextBoardIdx = 1;
 
+        console.log(" ds" + this.prevBoardIdx)
+
         let boardWidth = this.boardsList[0].boardWidth;
 
+        //add current, next and previous boards to object
+        //next and previous should not appear due to clipping plane
         this.boardsList[0].position.z = -this.roomDepth / 2;
         this.boardsList[1].position.z = this.boardsList[0].position.z + boardWidth;
+        this.boardsList[this.prevBoardIdx].position.z = this.boardsList[0].position.z - boardWidth;
 
-        this.add(this.boardsList[0], this.boardsList[1])
+        this.add(this.boardsList[0], this.boardsList[1], this.boardsList[this.prevBoardIdx])
 
 
     }
@@ -108,18 +119,20 @@ export class MyRoom extends Room{
             //to handle offshooting
             nextBoard.position.z = -this.roomDepth / 2
 
-            this.remove(currBoard)
+            //remove original prev board
+            //curr is now prev
+            this.remove(this.boardsList[this.prevBoardIdx])
 
+            this.prevBoardIdx = this.currBoardIdx;
             this.currBoardIdx = this.nextBoardIdx;
             this.nextBoardIdx = (this.nextBoardIdx + 1) % this.boardsList.length;
 
 
             //add the waiting board
             this.boardsList[this.nextBoardIdx].position.z = this.boardsList[this.currBoardIdx].position.z + 10;
-
-
             this.add(this.boardsList[this.nextBoardIdx])
 
+            
 
             clearInterval(this.nextSkillTransitionInterval)
             this.nextSkillTransitionInterval = null;
@@ -130,5 +143,50 @@ export class MyRoom extends Room{
 
         currBoard.position.z -= 1 / 10;
         nextBoard.position.z -= 1 / 10;        
+    }
+
+    getPrevSkill(){
+        if(this.prevSkillTransitionInterval == null)
+            this.prevSkillTransitionInterval = setInterval(this.animatePrevSkill.bind(this), 1 / 100)
+    }
+
+    animatePrevSkill(){
+        let currBoard = this.boardsList[this.currBoardIdx]
+        let prevBoard = this.boardsList[this.prevBoardIdx]
+
+
+        //check have we reahced destination
+        if(prevBoard.position.z >= -this.roomDepth / 2){
+
+            let nextBoard = this.boardsList[this.nextBoardIdx]
+            //to handle offshooting
+            prevBoard.position.z = -this.roomDepth / 2
+
+            //remove next board
+            //curr board is now next board
+            this.remove(nextBoard)
+
+
+            this.nextBoardIdx = this.currBoardIdx;
+            this.currBoardIdx = this.prevBoardIdx;
+            this.prevBoardIdx = (this.prevBoardIdx - 1 + this.boardsList.length) % this.boardsList.length
+
+
+            //add the new prev board
+            this.boardsList[this.prevBoardIdx].position.z = this.boardsList[this.currBoardIdx].position.z - 10;
+
+
+            this.add(this.boardsList[this.prevBoardIdx])
+
+
+            clearInterval(this.prevSkillTransitionInterval)
+            this.prevSkillTransitionInterval = null;
+
+        }
+
+        //move both boards
+
+        currBoard.position.z += 1 / 10;
+        prevBoard.position.z += 1 / 10;        
     }
 }

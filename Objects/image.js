@@ -30,7 +30,7 @@ export class Image extends THREE.Object3D{
         const imageTexture = new THREE.TextureLoader().load("textures/" + imageName);
         imageTexture.colorSpace = THREE.SRGBColorSpace
         const imageGeo = new THREE.PlaneGeometry(width, height);
-        const imageMat = new THREE.MeshBasicMaterial({map: imageTexture, side: THREE.DoubleSide})
+        const imageMat = new THREE.MeshBasicMaterial({map: imageTexture, side: THREE.DoubleSide, transparent: true})
         const imageMesh = new THREE.Mesh(imageGeo, imageMat); //no need to access it from outside, not an attribute
 
         //the hitbox, it will be the image dimensions + padding to each side

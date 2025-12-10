@@ -39,8 +39,11 @@ export const projectsData = [
         imagePath : "KindQuest.jpg",
         github: "https://github.com/DevYehia/DIstributed_Image_Processing",
         video: "https://youtu.be/yUOk4aUAsx0?si=M3Gxyc-txp2hzi5g",
-        dialgoue : [
-            "ello"
+        dialogue : [
+            "This is an image processing application (using python) that modified selected images with various filters like: grayscale, rotation, etc..",
+            "This project was deployed on AWS EC2, It was my first ever interaction with AWS",
+            "We also built a custom load balancer that would distribute the load on 3 servers",
+            "This was one of the best projects i had worked on and it really benefitted me"
         ]
     },
     {
@@ -48,7 +51,9 @@ export const projectsData = [
         imagePath : "KindQuest.jpg",
         github: "https://github.com/DevYehia/DIstributed_Image_Processing",
         dialgoue : [
-            "ello"
+            "This was a side project where my goal was to visualize the N-Queens Problem",
+            "The Problem was to try to place N Queens on NxN board without anyone being able to attack each other",
+            "I built this visualization application using C++ QT to visualize how the solution algorithm works to find a solution",
         ]
     },
     {
@@ -56,7 +61,10 @@ export const projectsData = [
         imagePath : "KindQuest.jpg",
         github: "https://github.com/DevYehia/DIstributed_Image_Processing",
         dialgoue : [
-            "ello"
+            "This was a side project i built with my friend",
+            "I was interested in how system calls worked on linux so me and my friend tried to build something that uses these system calls in linux i.e.: our shell",
+            "This shell is able to execute some commands like pwd, ls and cat (we named it meow). It can also execute applications from it",
+            "I had so much fun working on it with my friend"
         ]
     },
     {

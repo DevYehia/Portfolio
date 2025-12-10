@@ -5,6 +5,7 @@ import {PlayerData, collisionMargin, changeState} from './common';
 import { ForkRoadState } from './forkRoadState';
 import { BaseState } from './baseState';
 import { myRoom } from '../environment';
+import { keys, KeyStates } from '../Utils/keyboardUtils'
 
 export class ForwardState extends BaseState{
 
@@ -34,13 +35,20 @@ export class ForwardState extends BaseState{
 */       
     checkAndUpdateState(playerData){
 
-        myRoom.getNextSkill()
+        //myRoom.getNextSkill()
         let playerPos = playerData.playerPos;
         //if player goes back
         let limitZ = -(env.nearBoundaryCuboidDepth / 2 + env.pathWidth);
 
         if(playerPos.z > limitZ){
             changeState(new ForkRoadState());
+        }
+
+        if(keys['p'] == KeyStates.SINGLE_PRESS){
+            myRoom.getNextSkill()
+        }
+        if(keys['l'] == KeyStates.SINGLE_PRESS){
+            myRoom.getPrevSkill()
         }
     }
 

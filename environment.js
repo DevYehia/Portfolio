@@ -137,7 +137,7 @@ export function addMyRoom(scene){
     myRoom = new MyRoom(pathWidth, roomPos);
 
 
-    //scene.add(myRoom)
+    scene.add(myRoom)
     
     myRoom.position.set(roomX, roomY, roomZ)
 }

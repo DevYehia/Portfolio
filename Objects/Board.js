@@ -38,7 +38,7 @@ export class Board extends THREE.Object3D{
 
         const boardTexture = new THREE.TextureLoader().load("textures/portrait.jpg");
         const baordGeo = new THREE.PlaneGeometry(boardWidth, boardHeight);
-        const boardMat = new THREE.MeshBasicMaterial({color: 0xff0000, side: THREE.DoubleSide});
+        const boardMat = new THREE.MeshBasicMaterial({color:  0xffd700, side: THREE.DoubleSide});
         this.boardMesh = new THREE.Mesh(baordGeo, boardMat);
         this.add(this.boardMesh)
 
