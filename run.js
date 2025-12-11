@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {addBoundaryCuboids, addHOFRoom, addMyRoom, addProjectsRoom,  addStars,  adjustCamera} from './environment';
+import {addAmbientLight, addBoundaryCuboids, addHOFRoom, addMyRoom, addProjectsRoom,  addStars,  adjustCamera} from './environment';
 import {animateText} from './Utils/textUtils'
 import { dialogues } from './Data/dialogues';
 import { PlayerData, changeState, currState } from './PlayerStates/common';
@@ -13,6 +13,9 @@ import { setupPauseMenu } from './pauseMenu';
 import { loadStuff } from './loader';
 import { Torch } from './Objects/torch';
 import { Collectible } from './Objects/collectible';
+
+import { gsap } from 'gsap/gsap-core';
+
 
 
 
@@ -59,27 +62,31 @@ addProjectsRoom(scene)
 addHOFRoom(scene)
 addMyRoom(scene)
 addStars(scene)
+addAmbientLight(scene)
 
 let coll = new Collectible();
 coll.position.z -= 10
+coll.rotateY(-Math.PI / 2)
 scene.add(coll)
 
 const clipPlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 5);
 
-let testMat = new THREE.MeshBasicMaterial({color: 0xff0000, clippingPlanes: [clipPlane]})
+let testMat = new THREE.MeshBasicMaterial({color: 0xff0000})
 let geo = new THREE.DodecahedronGeometry(8, 0);
 
 let mesh = new THREE.Mesh(geo, testMat);
+
+scene.add(mesh)
 //mesh.position.y = camera.position.y
 
 let torch = new Torch();
 //scene.add(torch)
 
 let pointLight = new THREE.PointLight(0xFFFFFF, 100, 0)
-scene.add(pointLight)
+//scene.add(pointLight)
 
-// let ambLight = new THREE.AmbientLight(0xffffff, 0.05)
-// scene.add(ambLight)
+ let ambLight = new THREE.AmbientLight(0xffffff, 1)
+ scene.add(ambLight)
 
 pointLight.position.copy(camera.position)
 
@@ -94,6 +101,8 @@ const sphere = new THREE.Mesh(
 
 
 function animate() {
+
+
   //particles.rotation.y += 0.001;
  //sphere.material.emissiveIntensity = 0.5 + 0.5 * Math.sin(Date.now() * 0.005);
  // console.log("In state " + JSON.stringify(currState))
@@ -111,6 +120,16 @@ function animate() {
     processKeyboardInput()
 
     const delta = clock.getDelta();
+
+    if( keys['z'] == KeyStates.SINGLE_PRESS){
+      gsap.to(
+        mesh.position,
+        {
+          z : mesh.position.z == -30 ? 0 : - 30,
+          duration: 1
+        }
+      )
+    }
 
    //console.log("oh delta is " + delta)
 

@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import {Door} from '../Objects/door'
+import { Vector3 } from 'three/webgpu';
 
 export class Room extends THREE.Object3D{
 
@@ -9,22 +10,20 @@ export class Room extends THREE.Object3D{
      */
     door = new Door(true);
 
-    //the ambient light of the room
-    /**
-     * @type {THREE.AmbientLight}
-     */    
-    ambLight = new THREE.AmbientLight(0xffffff, 0);
     //ambLight = new THREE.HemisphereLight()
 
     //not included in constructor will be calculated after child's constructor
     roomDepth;
 
+    roomLight = new THREE.PointLight(0xffffff, 1000)
+
+
 
     constructor(startIntensity, roomWidth){
         super()
-        this.ambLight.intensity = startIntensity
         this.roomWidth = roomWidth
-        this.add(this.ambLight);
+        //this.roomLight.intensity = startIntensity
+        //this.add(this.roomLight)
         this.addDoor()
 
     }
@@ -44,6 +43,18 @@ export class Room extends THREE.Object3D{
         let roomDims = new THREE.Vector3();
         box.setFromObject(this).getSize(roomDims);
         return roomDims;
+    }
+
+    addLight(){
+        let roomDims = this.getRoomDims();
+
+        //top of the room
+        this.roomLight.position.set(
+            roomDims.x / 2,
+            roomDims.y / 2,
+            -roomDims.z / 2
+        )
+        this.add(this.roomLight)
     }
 
     //didn't make it in constructor as room depth is sometimes calculated dynamically

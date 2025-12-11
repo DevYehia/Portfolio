@@ -24,7 +24,7 @@ export class HOFState extends BaseState{
 
     constructor(){
         super()
-        this.lightInterval = setInterval(this.incLight.bind(this), 1 / 1000);
+        //this.lightInterval = setInterval(this.incLight.bind(this), 1 / 1000);
     }
 
 

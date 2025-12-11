@@ -36,6 +36,9 @@ export let myRoom = null;
 export let theaterRoom = null;
 
 
+export let ambLight = new THREE.AmbientLight(0xffffff, 0);
+
+
 
 
 
@@ -91,7 +94,8 @@ export function addProjectsRoom(scene){
     const size = new THREE.Vector3();
     box.getSize(size);
     console.log(JSON.stringify(size))
-    projectsRoom.addWalls(pathWidth + 20, boundaryCuboidHeight + 20, size.z + 10);
+    projectsRoom.addWalls(pathWidth + 20, boundaryCuboidHeight + 20, size.z);
+    projectsRoom.addLight()
     //scene.add(projectsRoom.wallGroup)
 
     projectsRoom.rotateY(Math.PI / 2)
@@ -150,7 +154,7 @@ export function addStars(scene){
     let vertices = [];
 
     for(let i = 0 ; i < 1500 ; i++){
-        vertices.push((Math.random() * 3000) - 500 , 300 , (Math.random() * 3000) - 2000);
+        vertices.push((Math.random() * 3000) - 1000 , 300 , (Math.random() * 3000) - 2000);
     }
 
     console.log(vertices)
@@ -168,6 +172,10 @@ export function addStars(scene){
     stars = particles
 }
 
+
+export function addAmbientLight(scene){
+    scene.add(ambLight)
+}
 // module.exports = {
 //     addBoundaryCuboids
 // }

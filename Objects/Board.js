@@ -41,7 +41,7 @@ export class Board extends THREE.Object3D{
         boardTexture.wrapS = THREE.RepeatWrapping;
         boardTexture.wrapT = THREE.RepeatWrapping;
 
-        boardTexture.repeat.set(4,2)
+        boardTexture.repeat.set(4,1)
 
         const baordGeo = new THREE.PlaneGeometry(boardWidth, boardHeight);
         const boardMat = new THREE.MeshBasicMaterial({color:  0xffd700, side: THREE.DoubleSide, map: boardTexture});

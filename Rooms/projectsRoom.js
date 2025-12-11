@@ -19,6 +19,8 @@ export class ProjectsRoom extends Room{
         super(0, roomWidth)
         this.addSigns()
         this.addCollectible()
+        
+
     }
 
     //will add one of my certificates on the floor
@@ -54,7 +56,7 @@ export class ProjectsRoom extends Room{
             padding: this.signSpacing / 2});
 
             this.addSignAt(sign, leftSignsPos)
-            sign.rotateSign()
+            sign.rotateY(Math.PI / 2)
             leftSignsPos.z -= this.signSpacing;
             currProjectKeyIdx = (currProjectKeyIdx + 1) % projectKeys.length;
             currProjectKey = projectKeys[currProjectKeyIdx]
@@ -72,7 +74,7 @@ export class ProjectsRoom extends Room{
             padding: this.signSpacing / 2});
 
             this.addSignAt(sign, rightSignsPos)
-            sign.rotateSign()
+            sign.rotateY(-Math.PI / 2)
             rightSignsPos.z -= this.signSpacing;
             currProjectKeyIdx = (currProjectKeyIdx + 1) % projectKeys.length;
             currProjectKey = projectKeys[currProjectKeyIdx]

@@ -20,13 +20,34 @@ export const skills = {
         ]
     },
 
-    "Web Languages 2" : {
+    "DataBase Stuff" : {
         numRows: 2,
         list: [
-            "HTML.png",
-            "CSS.png",
+            "SQL.png",
+            "MySQL.png",
             "Javascript.png",
             "PHP.png"
         ]
+    },
+
+    "Version Control" : {
+        numRows : 1,
+        list: [
+            "Git.png",
+            "Github.png"
+        ]
+    },
+
+    "Mobile Stuff" : {
+        numRows : 1,
+        list : [
+            "Flutter",
+            "Dart"
+        ]
+    },
+
+    "OS" : {
+       numRows: 1,
+       list: [ "Linux" ]
     }
 }

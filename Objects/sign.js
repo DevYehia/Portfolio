@@ -40,8 +40,8 @@ export class Sign extends THREE.Object3D{
         this.signID = signID
 
 
-        const baseGeometry = new THREE.BoxGeometry( signBaseWidth, signBaseHeight , 0);
-        const mainGeometry = new THREE.BoxGeometry( signMainWidth, this.signMainHeight , 0);
+        const baseGeometry = new THREE.PlaneGeometry( signBaseWidth, signBaseHeight);
+        const mainGeometry = new THREE.PlaneGeometry( signMainWidth, this.signMainHeight);
 
         let hitBoxWidth = signMainWidth + 2 * padding;
         let hitBoxHeight = signMainHeight + signBaseHeight + 2 * padding;
@@ -66,6 +66,7 @@ export class Sign extends THREE.Object3D{
         this.base.position.y += this.signBaseHeight / 2;
         this.main.position.y += this.signBaseHeight + this.signMainHeight / 2;
         this.textSprite.position.y += this.signBaseHeight + this.signMainHeight + 2
+
 
         //add sign components to object
         this.add(this.base, this.main, this.textSprite, this.hitBox)

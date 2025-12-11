@@ -4,6 +4,7 @@ import { Board } from "../Objects/board";
 import * as THREE from 'three'
 import { SkillsBoard } from "../Objects/skillsBoard";
 import { skills } from "../Data/skills";
+import { TimelineBoard } from "../Objects/myTimeline";
 
 export class MyRoom extends Room{
 
@@ -18,20 +19,27 @@ export class MyRoom extends Room{
     constructor(roomWidth, pos){
         super(0, roomWidth)
         this.position.copy(pos)
-        let myImage = new CustomObjects.Image({
-            width: 10,
-            height: 10,
-            padding: 5,
-            name: "Yehia"
-        });
-        myImage.position.set(roomWidth / 2, 10 / 2, -50)
-        this.add(myImage)
+
+
+        this.addTimelineBoard()
 
         this.setDepth();
 
+    
+
         this.addSkillsBoards()
+
+
     }
 
+
+    addTimelineBoard(){
+        this.timeLineBoard = new TimelineBoard();
+        this.timeLineBoard.position.x = this.roomWidth / 2
+        this.timeLineBoard.position.y = 5
+        this.timeLineBoard.position.z -= 30;
+        this.add(this.timeLineBoard)
+    }
 
     //will be two skill boards at a time
     addSkillsBoards(){

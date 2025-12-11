@@ -54,16 +54,16 @@ export class ProjectsState extends BaseState{
         //start lighting animation
         this.projectsRoom = env.projectsRoom;
         //console.log(JSON.stringify(this.ambLight))
-        this.lightInterval = setInterval(this.incLight.bind(this), 1 / 1000);
+        //this.lightInterval = setInterval(this.incLight.bind(this), 1 / 1000);
 
     }
 
 
     incLight(){
 
-        this.projectsRoom.ambLight.intensity += 1 / 1000;
+        this.projectsRoom.roomLight.intensity += 1 / 1000;
        // console.log("Light is " + this.ambLight.intensity)
-        if(this.projectsRoom.ambLight.intensity >= 1){
+        if(this.projectsRoom.roomLight.intensity >= 1){
             clearInterval(this.lightInterval)
         }
     }
@@ -89,7 +89,7 @@ export class ProjectsState extends BaseState{
         playerPos.x = newPlayerPos.x;
 
         //collision, don't modify
-        if(0 && (newPlayerPos.z < fowardLimitZ || newPlayerPos.z > backLimitZ)){
+        if(newPlayerPos.z < fowardLimitZ || newPlayerPos.z > backLimitZ){
             return;
         }
         //no collision
