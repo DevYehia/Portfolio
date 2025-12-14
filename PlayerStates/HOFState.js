@@ -108,8 +108,10 @@ export class HOFState extends BaseState{
         let boardPlayerDist = Math.abs(playerPos.x - hallOfFameRoom.board.getPosition().x)
         if(this.currImage != null){
             if(!this.checkForTrigger(boardPlayerDist, this.boardTriggerDist, camera, this.currImage.hitBoxMesh)){
+                this.currImage.hitBoxMesh.visible = false
                 this.currImage = null;
                 controlsDiv.hidden = true;
+
             }
             else{ //still triggering sign, handle interactions
                 this.handleInput(keys)
@@ -125,6 +127,8 @@ export class HOFState extends BaseState{
                 if(this.checkForTrigger(boardPlayerDist, this.boardTriggerDist, camera, currImage.hitBoxMesh)){
 
                     this.currImage = currImage
+
+                    currImage.hitBoxMesh.visible = true
 
                     controlsDiv.innerHTML = currImage.friendName + "<br>P - Show Profile";
                     controlsDiv.hidden = false;

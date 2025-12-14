@@ -5,6 +5,7 @@ import * as THREE from 'three'
 import { SkillsBoard } from "../Objects/skillsBoard";
 import { skills } from "../Data/skills";
 import { TimelineBoard } from "../Objects/myTimeline";
+import { CV } from "../Objects/CV";
 
 export class MyRoom extends Room{
 
@@ -28,6 +29,25 @@ export class MyRoom extends Room{
     
 
         this.addSkillsBoards()
+
+        this.addCV()
+
+
+    }
+
+    addCV(){
+
+        //just a regular plane
+
+        this.CVPaper = new CV();
+
+        this.CVPaper.rotateY(Math.PI / 2);
+        this.CVPaper.position.x += this.roomWidth;
+        this.CVPaper.position.y += 5;
+        this.CVPaper.position.z -= 10
+
+        this.add(this.CVPaper)
+
 
 
     }

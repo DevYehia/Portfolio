@@ -54,7 +54,7 @@ export class Board extends THREE.Object3D{
         let currPos = new THREE.Vector3(
             imageSpacing + imageDim / 2,
             -(imageSpacing + imageDim / 2),
-            0.1).add(boardTopLeft);
+            0.2).add(boardTopLeft);
 
         let isOddNum = (pplList.length % 2 != 0);
 

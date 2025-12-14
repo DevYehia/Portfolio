@@ -42,8 +42,10 @@ export class Image extends THREE.Object3D{
         let hitBoxWidth = width + 2 * padding;
         let hitBoxHeight = height + 2 * padding
         const hitBoxGeo = new THREE.PlaneGeometry(hitBoxWidth, hitBoxHeight);
-        const hitBoxMat = new THREE.MeshBasicMaterial({visible: false});
+        const hitBoxMat = new THREE.MeshBasicMaterial({color: 0x99ff99});
         this.hitBoxMesh = new THREE.Mesh(hitBoxGeo, hitBoxMat); //will be an attribute, needed for collision detection
+        this.hitBoxMesh.visible = false;
+        this.hitBoxMesh.position.z -= 0.1
 
         this.add(imageMesh, this.hitBoxMesh)
 

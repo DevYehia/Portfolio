@@ -50,6 +50,18 @@ export class ForwardState extends BaseState{
         if(keys['l'] == KeyStates.SINGLE_PRESS){
             myRoom.getPrevSkill()
         }
+        if(keys['c'] == KeyStates.SINGLE_PRESS){
+            myRoom.timeLineBoard.skip(true)
+        }
+        if(keys['u'] == KeyStates.SINGLE_PRESS){
+            myRoom.timeLineBoard.skip(false)
+        }
+        if(keys['v'] == KeyStates.SINGLE_PRESS){
+            //get local pos respective to room
+            // let localPos = playerData.camera.position.clone();
+            // myRoom.worldToLocal(localPos)
+            // myRoom.CVPaper.read(localPos)
+        }
     }
 
 

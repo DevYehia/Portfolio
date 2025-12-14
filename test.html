@@ -4,35 +4,13 @@
 
 <div id="container"></div>
 
-<script>
-    // --- Scene ---
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 1000);
-    camera.position.set(0, 0, 5);
-
-    // --- CSS3D Renderer ---
-    const renderer = new THREE.CSS3DRenderer();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement);
-
-    // --- Create YouTube iframe ---
-    const iframe = document.createElement('iframe');
-    iframe.src = "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1";
-    iframe.style.width = "480px";
-    iframe.style.height = "270px";
-    iframe.style.border = "0";
-
-    // Wrap iframe into a CSS3DObject
-    const cssObject = new THREE.CSS3DObject(iframe);
-    cssObject.position.set(0, 0, 0);
-    cssObject.rotation.y = Math.PI * 0.2;  // rotate slightly
-    scene.add(cssObject);
-
-    // Render loop
-    function animate() {
-        requestAnimationFrame(animate);
-        renderer.render(scene, camera);
-    }
-    animate();
-</script>
+<iframe src = "Data/CV.pdf" id = "pdf" style = "
+    position: fixed;        /* overlay on screen */
+    top: 0;               /* center vertically */
+    left: 0;              /* center horizontally */
+    height: 100vh;           /* full viewport height */
+    width: 100vw;
+    border: none;
+    overflow: auto;
+"></iframe>
 </body>
