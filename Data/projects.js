@@ -13,6 +13,7 @@ export const projectsData = [
         name : "Hazard Detection",
         imagePath : "TheYous.jpg",
         github: "https://github.com/DevYehia/Hazard-Detection-System",
+        tech: "C",
         dialogue : [
             "This was my embedded systems course project",
             "We built a Hazard detection system using Tiva-C, ultrasonic sensor and smoke sensor",
@@ -25,6 +26,7 @@ export const projectsData = [
     {
         name: "Kind Quest",
         imagePath : "KindQuest.jpg",
+        tech: "PHP/MySQL",
         github: "https://github.com/Moisis/KindQuest",
         dialogue : [
             "This is a charity website, we built for the Design Patterns Course",
@@ -37,6 +39,7 @@ export const projectsData = [
     {
         name: "Distributed Image\nProcessing",
         imagePath : "KindQuest.jpg",
+        tech: "Python/AWS",
         github: "https://github.com/DevYehia/DIstributed_Image_Processing",
         video: "https://youtu.be/yUOk4aUAsx0?si=M3Gxyc-txp2hzi5g",
         dialogue : [
@@ -49,6 +52,7 @@ export const projectsData = [
     {
         name: "N-Queens\nVisualizer",
         imagePath : "KindQuest.jpg",
+        tech: "C++/Qt",
         github: "https://github.com/DevYehia/DIstributed_Image_Processing",
         dialgoue : [
             "This was a side project where my goal was to visualize the N-Queens Problem",
@@ -59,6 +63,7 @@ export const projectsData = [
     {
         name: "Custom Linux\nShell",
         imagePath : "KindQuest.jpg",
+        tech: "C/Linux",
         github: "https://github.com/DevYehia/DIstributed_Image_Processing",
         dialgoue : [
             "This was a side project i built with my friend",
@@ -70,6 +75,7 @@ export const projectsData = [
     {
         name: "Hediaty",
         imagePath : "KindQuest.jpg",
+        tech: "Flutter/Firebase",
         github: "https://github.com/DevYehia/DIstributed_Image_Processing",
         dialgoue : [
             "ello"

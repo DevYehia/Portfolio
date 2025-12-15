@@ -43,8 +43,11 @@ export class ProjectsRoom extends Room{
         let projectKeys = Object.keys(projectsData); 
         let currProjectKeyIdx = 0;
         let currProjectKey = projectKeys[currProjectKeyIdx];
+
+        let signsWallOffset = 1.5
+
         //place left signs
-        let leftSignsPos = new THREE.Vector3(4, 0, -this.signSpacing);
+        let leftSignsPos = new THREE.Vector3(signsWallOffset, 0, -this.signSpacing);
 
         const leftSideSignsNum = 3
         const rightSideSignsNum = 3;
@@ -53,6 +56,7 @@ export class ProjectsRoom extends Room{
             let sign = new Sign({signID: currProjectKey,
             signPic: projectsData[currProjectKey].imagePath,
             signName: projectsData[currProjectKey].name,
+            signBaseText: projectsData[currProjectKey].tech,
             padding: this.signSpacing / 2});
 
             this.addSignAt(sign, leftSignsPos)
@@ -63,7 +67,7 @@ export class ProjectsRoom extends Room{
         }
 
 
-        let rightSignsX = this.roomWidth - 4
+        let rightSignsX = this.roomWidth - signsWallOffset
         let rightSignsPos = new THREE.Vector3(rightSignsX, 0, -this.signSpacing);
 
         //place right signs
@@ -71,6 +75,7 @@ export class ProjectsRoom extends Room{
             let sign = new Sign({signID: currProjectKey,
             signPic: projectsData[currProjectKey].imagePath,
             signName: projectsData[currProjectKey].name,
+            signBaseText: projectsData[currProjectKey].tech,
             padding: this.signSpacing / 2});
 
             this.addSignAt(sign, rightSignsPos)
@@ -86,6 +91,7 @@ export class ProjectsRoom extends Room{
         let sign = new Sign({signID: currProjectKey,
             signPic: projectsData[currProjectKey].imagePath,
             signName: projectsData[currProjectKey].name,
+            signBaseText: projectsData[currProjectKey].tech,
             signBaseHeight: 5,
             signBaseWidth: 2,
             signMainWidth: 10,

@@ -1,6 +1,8 @@
 //here will be the base for displayed signs in our scene
 
 import * as THREE from 'three';
+import { TextGeometry } from 'three/examples/jsm/Addons.js';
+import { HOFTitlefont } from '../loader';
 
 
 export class Sign extends THREE.Object3D{
@@ -28,6 +30,7 @@ export class Sign extends THREE.Object3D{
         signName = "Mohamed", 
         signBaseHeight = 2, 
         signBaseWidth = 0.5, 
+        signBaseText = "Alo",
         signMainWidth = 5, 
         signMainHeight = 5,
         padding = 4} = {}){
@@ -35,12 +38,17 @@ export class Sign extends THREE.Object3D{
         super()
         this.signBaseHeight = signBaseHeight;
         this.signBaseWidth = signBaseWidth;
+        this.signBaseText = signBaseText;
         this.signMainHeight = signMainHeight;
         this.signMainWidth = signMainWidth;
         this.signID = signID
 
 
-        const baseGeometry = new THREE.PlaneGeometry( signBaseWidth, signBaseHeight);
+        const baseGeometry = new TextGeometry(signBaseText, {
+            font: HOFTitlefont,
+            size: 1,
+            depth: 0.2
+        })//new THREE.PlaneGeometry( signBaseWidth, signBaseHeight);
         const mainGeometry = new THREE.PlaneGeometry( signMainWidth, this.signMainHeight);
 
         let hitBoxWidth = signMainWidth + 2 * padding;
@@ -49,7 +57,7 @@ export class Sign extends THREE.Object3D{
         const hitBoxMat = new THREE.MeshBasicMaterial({visible: false});
         this.hitBox = new THREE.Mesh(hitBoxGeo, hitBoxMat); //will be an attribute, needed for collision detection        
 
-        const baseMaterial = new THREE.MeshStandardMaterial( { color: 0x00ffff} );
+        const baseMaterial = new THREE.MeshStandardMaterial( );
 
         const texture = new THREE.TextureLoader().load( "textures/" + signPic );
         texture.colorSpace = THREE.SRGBColorSpace
@@ -63,9 +71,23 @@ export class Sign extends THREE.Object3D{
         this.textSprite.visible = false;
 
         //setup positions
-        this.base.position.y += this.signBaseHeight / 2;
-        this.main.position.y += this.signBaseHeight + this.signMainHeight / 2;
-        this.textSprite.position.y += this.signBaseHeight + this.signMainHeight + 2
+
+        //base
+        let baseSize = new THREE.Vector3()
+        this.base.geometry.computeBoundingBox()
+        this.base.position.x -= this.base.geometry.boundingBox.getSize(baseSize).x / 2
+        this.base.position.y += baseSize.y / 2;
+        //this.base.position.z += 1;
+
+
+
+        //main
+        let mainBaseOffset = 2;
+        this.main.position.y += baseSize.y + this.signMainHeight / 2 + mainBaseOffset;
+
+        //name
+        this.textSprite.position.y += baseSize.y + this.signMainHeight + mainBaseOffset + 2
+        this.textSprite.position.z += 0.5
 
 
         //add sign components to object

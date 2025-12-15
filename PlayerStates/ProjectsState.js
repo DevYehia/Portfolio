@@ -87,6 +87,8 @@ export class ProjectsState extends BaseState{
 
         //x will be updated regardless
         playerPos.x = newPlayerPos.x;
+        playerPos.z = newPlayerPos.z;
+        return;
 
         //collision, don't modify
         if(newPlayerPos.z < fowardLimitZ || newPlayerPos.z > backLimitZ){
