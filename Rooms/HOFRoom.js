@@ -19,7 +19,7 @@ export class HOFRoom extends Room{
         super(0, roomWidth)
 
 
-        let textGeo = new TextGeometry("HALL OF FAME", {font: HOFTitlefont, size: 5, depth: 0.2})
+        let textGeo = new TextGeometry("BOARD OF FAME", {font: HOFTitlefont, size: 5, depth: 0.2})
         let textMat = new THREE.MeshBasicMaterial({color: 0xffd700});
         this.title = new THREE.Mesh(textGeo, textMat)
 

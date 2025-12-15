@@ -114,6 +114,7 @@ export function addProjectsRoom(scene){
 export function addHOFRoom(scene){
     hallOfFameRoom = new HOFRoom(pathWidth, friends);
 
+
     scene.add(hallOfFameRoom);
 
     hallOfFameRoom.rotateY(-Math.PI / 2)

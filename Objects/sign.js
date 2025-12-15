@@ -33,6 +33,7 @@ export class Sign extends THREE.Object3D{
         signBaseText = "Alo",
         signMainWidth = 5, 
         signMainHeight = 5,
+        signScale = 1,
         padding = 4} = {}){
 
         super()
@@ -87,11 +88,13 @@ export class Sign extends THREE.Object3D{
 
         //name
         this.textSprite.position.y += baseSize.y + this.signMainHeight + mainBaseOffset + 2
-        this.textSprite.position.z += 0.5
+        this.textSprite.position.z += 1.2
 
 
         //add sign components to object
         this.add(this.base, this.main, this.textSprite, this.hitBox)
+
+        this.scale.set(signScale, signScale, signScale)
 
     }
 

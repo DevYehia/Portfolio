@@ -5,8 +5,6 @@ import { Image } from './image';
 export class Collectible extends Image{
 
 
-
-
     //collectile will have 
     //1) plane with image
     //2) particles
@@ -50,5 +48,17 @@ export class Collectible extends Image{
     this.add(particles)
 
 
+    }
+
+    animate(){
+            const pos = this.particles.geometry.attributes.position.array;
+
+            for(let i = 1 ; i < pos.length ; i+=3){
+            pos[i] += 0.01
+            if(pos[i] > 3){
+                pos[i] = 0;
+            }
+            }
+            this.particles.geometry.attributes.position.needsUpdate = true;
     }
 }

@@ -3,6 +3,7 @@ import { Room } from "./room";
 import { projectsData } from '../Data/projects';
 import { Sign } from '../Objects/sign';
 import { Image } from '../Objects/image';
+import { Collectible } from '../Objects/collectible';
 
 export class ProjectsRoom extends Room{
 
@@ -11,7 +12,9 @@ export class ProjectsRoom extends Room{
     signsList = [];
 
 
-    signSpacing = 10;
+    signSpacing = 13;
+
+    certificate = null;
 
 
 
@@ -25,12 +28,11 @@ export class ProjectsRoom extends Room{
 
     //will add one of my certificates on the floor
     addCollectible(){
-        this.certificate = new Image({
+        this.certificate = new Collectible({
             width: 2,
             height: 4,
             padding: 1
         });
-        this.certificate.rotateX(Math.PI / 2);
         this.add(this.certificate)
 
         //put it at random position in the room
@@ -54,10 +56,11 @@ export class ProjectsRoom extends Room{
 
         for(let i = 0 ; i < leftSideSignsNum ; i++){
             let sign = new Sign({signID: currProjectKey,
-            signPic: projectsData[currProjectKey].imagePath,
+            signPic: "../textures/Projects/" + projectsData[currProjectKey].imagePath,
             signName: projectsData[currProjectKey].name,
             signBaseText: projectsData[currProjectKey].tech,
-            padding: this.signSpacing / 2});
+            padding: this.signSpacing / 2,
+            signScale: 1.2});
 
             this.addSignAt(sign, leftSignsPos)
             sign.rotateY(Math.PI / 2)
@@ -73,10 +76,11 @@ export class ProjectsRoom extends Room{
         //place right signs
         for(let i = 0 ; i < rightSideSignsNum ; i++){
             let sign = new Sign({signID: currProjectKey,
-            signPic: projectsData[currProjectKey].imagePath,
+            signPic: "../textures/Projects/" + projectsData[currProjectKey].imagePath,
             signName: projectsData[currProjectKey].name,
             signBaseText: projectsData[currProjectKey].tech,
-            padding: this.signSpacing / 2});
+            padding: this.signSpacing / 2,
+            signScale: 1.2});
 
             this.addSignAt(sign, rightSignsPos)
             sign.rotateY(-Math.PI / 2)
@@ -89,13 +93,10 @@ export class ProjectsRoom extends Room{
         let centralSignPos = new THREE.Vector3().copy(rightSignsPos) //get last x
         centralSignPos.x = this.roomWidth / 2;
         let sign = new Sign({signID: currProjectKey,
-            signPic: projectsData[currProjectKey].imagePath,
+            //signPic:  projectsData[currProjectKey].imagePath,
             signName: projectsData[currProjectKey].name,
             signBaseText: projectsData[currProjectKey].tech,
-            signBaseHeight: 5,
-            signBaseWidth: 2,
-            signMainWidth: 10,
-            signMainHeight: 10});
+            signScale: 3});
 
         this.addSignAt(sign, centralSignPos)
     }

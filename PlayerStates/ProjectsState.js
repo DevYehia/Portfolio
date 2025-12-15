@@ -106,6 +106,12 @@ export class ProjectsState extends BaseState{
 */       
     checkAndUpdateState(playerData){
 
+        //animate collectible particles
+        if(env.projectsRoom.certificate != null){
+            env.projectsRoom.certificate.animate()
+        }
+
+
 
         let usedKeys = keys;
 
@@ -121,6 +127,9 @@ export class ProjectsState extends BaseState{
         this.rayCaster.set(playerPos, this.camLookAt);
 
         let dist = getDistanceXZ(playerPos, this.door.doorMesh)
+
+
+
 
         //check for door collision
         //see the door and be at good distance

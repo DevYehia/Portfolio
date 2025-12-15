@@ -11,9 +11,9 @@
 export const projectsData = [
     {
         name : "Hazard Detection",
-        imagePath : "TheYous.jpg",
+        imagePath : "Hazard.png",
         github: "https://github.com/DevYehia/Hazard-Detection-System",
-        tech: "C",
+        tech: "Embedded C",
         dialogue : [
             "This was my embedded systems course project",
             "We built a Hazard detection system using Tiva-C, ultrasonic sensor and smoke sensor",
@@ -38,7 +38,7 @@ export const projectsData = [
     },
     {
         name: "Distributed Image\nProcessing",
-        imagePath : "KindQuest.jpg",
+        imagePath : "Distributed.png",
         tech: "Python/AWS",
         github: "https://github.com/DevYehia/DIstributed_Image_Processing",
         video: "https://youtu.be/yUOk4aUAsx0?si=M3Gxyc-txp2hzi5g",
@@ -51,7 +51,7 @@ export const projectsData = [
     },
     {
         name: "N-Queens\nVisualizer",
-        imagePath : "KindQuest.jpg",
+        imagePath : "NQueens.svg",
         tech: "C++/Qt",
         github: "https://github.com/DevYehia/DIstributed_Image_Processing",
         dialgoue : [
@@ -62,7 +62,7 @@ export const projectsData = [
     },
     {
         name: "Custom Linux\nShell",
-        imagePath : "KindQuest.jpg",
+        imagePath : "Shell.png",
         tech: "C/Linux",
         github: "https://github.com/DevYehia/DIstributed_Image_Processing",
         dialgoue : [
@@ -74,7 +74,7 @@ export const projectsData = [
     },
     {
         name: "Hediaty",
-        imagePath : "KindQuest.jpg",
+        imagePath : "Gift.jpg",
         tech: "Flutter/Firebase",
         github: "https://github.com/DevYehia/DIstributed_Image_Processing",
         dialgoue : [

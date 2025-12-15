@@ -1,3 +1,11 @@
+
+//ppl that need image adjustments
+//Ayman
+//Youssef(Both) ?
+//Mina
+//Hamza
+//
+
 export let friends = [
 
     //shabab domesto
@@ -9,13 +17,13 @@ export let friends = [
 
     {
         "name" : "Ahmed Khaled",
-        "image" : "AKhaled.jpg",
+        "image" : "AKhaled2.jpg",
         "profile" : "https://www.linkedin.com/in/ahmed-khaled-b80aa8271"
     },
 
     {
         "name" : "Mahmoud Talaat",
-        "image" : "MTalaat.jpg",
+        "image" : "MTalaat3.jpg",
         "profile" : "https://www.linkedin.com/in/mahmoud-talaat-b1b555219/"
     },
 
@@ -94,7 +102,7 @@ export let friends = [
 
     //end of shabab wael
 
-    //rizk and hamza
+    //rizk and hamza and mosaad
 
     {
         "name" : "Kirollos Rizk",
@@ -108,7 +116,13 @@ export let friends = [
         "profile" : "https://www.linkedin.com/in/hamza-mazen-8aab3b274/"
     },
 
-    //end of rizk and hamza (lol)
+    {
+        "name" : "Omar Diab",
+        "image" : "Mosaad.jpg",
+        "profile" : "https://www.linkedin.com/in/omarmdiab/"
+    },
+
+    //end of rizk and hamza and mosaad (lol)
 
     //Misc
     {
