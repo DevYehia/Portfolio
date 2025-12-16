@@ -17,8 +17,12 @@ export class MyRoom extends Room{
     //my room will have an image of me
 
     //need position early for clipping planes
-    constructor(roomWidth, pos){
-        super(0, roomWidth)
+    constructor(width, height, depth, pos){
+        super({
+            width: width,
+            height: height,
+            depth: depth
+        })
         this.position.copy(pos)
 
 
@@ -32,6 +36,8 @@ export class MyRoom extends Room{
 
         this.addCV()
 
+        this.addWalls()
+
 
     }
 
@@ -42,7 +48,7 @@ export class MyRoom extends Room{
         this.CVPaper = new CV();
 
         this.CVPaper.rotateY(Math.PI / 2);
-        this.CVPaper.position.x += this.roomWidth;
+        this.CVPaper.position.x += this.width;
         this.CVPaper.position.y += 5;
         this.CVPaper.position.z -= 10
 
@@ -55,9 +61,9 @@ export class MyRoom extends Room{
 
     addTimelineBoard(){
         this.timeLineBoard = new TimelineBoard();
-        this.timeLineBoard.position.x = this.roomWidth / 2
+        this.timeLineBoard.position.x = this.width / 2
         this.timeLineBoard.position.y = 5
-        this.timeLineBoard.position.z -= 30;
+        this.timeLineBoard.position.z -= this.depth - 1;
         this.add(this.timeLineBoard)
     }
 
@@ -75,11 +81,11 @@ export class MyRoom extends Room{
 
         //add clipping planes for the animation
         console.log("World pos is " + JSON.stringify(roomWorldPos));
-        console.log("plane at " + roomWorldPos.z -this.roomDepth / 2 + 5)
+        console.log("plane at " + roomWorldPos.z -this.depth / 2 + 5)
 
         let clippingPlanes = [
-           new THREE.Plane(new THREE.Vector3(0, 0, -1), roomWorldPos.z - this.roomDepth / 2 + 5), 
-           new THREE.Plane(new THREE.Vector3(0, 0, 1), -(roomWorldPos.z -this.roomDepth / 2 - 5)),
+           new THREE.Plane(new THREE.Vector3(0, 0, -1), roomWorldPos.z - this.depth/ 2 + 5), 
+           new THREE.Plane(new THREE.Vector3(0, 0, 1), -(roomWorldPos.z -this.depth / 2 - 5)),
         ]
 
         //let boardWidth = 10;
@@ -103,6 +109,7 @@ export class MyRoom extends Room{
                     }
                 )
             board.position.y += board.boardHeight / 2
+            board.position.x += 1
             board.rotateY(Math.PI / 2)
             this.boardsList.push(board)
         }
@@ -118,7 +125,7 @@ export class MyRoom extends Room{
 
         //add current, next and previous boards to object
         //next and previous should not appear due to clipping plane
-        this.boardsList[0].position.z = -this.roomDepth / 2;
+        this.boardsList[0].position.z = -this.depth / 2;
         this.boardsList[1].position.z = this.boardsList[0].position.z + boardWidth;
         this.boardsList[this.prevBoardIdx].position.z = this.boardsList[0].position.z - boardWidth;
 
@@ -141,11 +148,11 @@ export class MyRoom extends Room{
         //console.log("pos is " + JSON.stringify(nextBoard.position))
 
         //check have we reahced destination
-        if(nextBoard.position.z <= -this.roomDepth / 2){
+        if(nextBoard.position.z <= -this.depth / 2){
 
 
             //to handle offshooting
-            nextBoard.position.z = -this.roomDepth / 2
+            nextBoard.position.z = -this.depth / 2
 
             //remove original prev board
             //curr is now prev
@@ -184,11 +191,11 @@ export class MyRoom extends Room{
 
 
         //check have we reahced destination
-        if(prevBoard.position.z >= -this.roomDepth / 2){
+        if(prevBoard.position.z >= -this.depth / 2){
 
             let nextBoard = this.boardsList[this.nextBoardIdx]
             //to handle offshooting
-            prevBoard.position.z = -this.roomDepth / 2
+            prevBoard.position.z = -this.depth / 2
 
             //remove next board
             //curr board is now next board

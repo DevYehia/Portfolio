@@ -59,7 +59,7 @@ export class Sign extends THREE.Object3D{
         const hitBoxMat = new THREE.MeshBasicMaterial({visible: false});
         this.hitBox = new THREE.Mesh(hitBoxGeo, hitBoxMat); //will be an attribute, needed for collision detection        
 
-        const baseMaterial = new THREE.MeshStandardMaterial( );
+        const baseMaterial = new THREE.MeshStandardMaterial({color: 0x00ff00});
 
         const texture = new THREE.TextureLoader().load( "textures/" + signPic );
         texture.colorSpace = THREE.SRGBColorSpace
@@ -72,6 +72,9 @@ export class Sign extends THREE.Object3D{
         this.textSprite = this.addText(signName)
         this.textSprite.visible = false;
 
+
+        //add scale
+        this.scale.set(signScale, signScale, signScale)
         //setup positions
 
         //base
@@ -95,7 +98,7 @@ export class Sign extends THREE.Object3D{
         //add sign components to object
         this.add(this.base, this.main, this.textSprite, this.hitBox)
 
-        this.scale.set(signScale, signScale, signScale)
+
 
     }
 

@@ -15,8 +15,10 @@ export class HOFRoom extends Room{
 
     imageSpacing = 0.5;
 
-    constructor(roomWidth, pplList){
-        super(0, roomWidth)
+    constructor(boardOffset, depth, pplList){
+        super({
+            depth: depth
+        })
 
 
         let textGeo = new TextGeometry("BOARD OF FAME", {font: HOFTitlefont, size: 5, depth: 0.2})
@@ -30,10 +32,14 @@ export class HOFRoom extends Room{
             numRows: 2
         })
 
+        //set width and add door
+        this.width = this.board.boardWidth + 2 * boardOffset
+        this.addDoor()
 
-        this.board.position.x += roomWidth / 2;
+
+        this.board.position.x += this.width / 2;
         this.board.position.y += this.board.boardHeight / 2
-        this.board.position.z -= 30;
+        this.board.position.z -= this.depth - 1;
 
         this.title.position.copy(this.board.position)
         let ttlSize = new THREE.Vector3()
@@ -42,14 +48,14 @@ export class HOFRoom extends Room{
         this.title.position.x -= this.title.geometry.boundingBox.getSize(ttlSize).x / 2
         this.title.position.y += this.board.boardHeight + 1;
 
+        //set height
+        this.height = this.title.position.y + 10
+
         console.log("tt" + JSON.stringify(this.title.position))
 
         this.add(this.board, this.title)
 
-
-        //let roomDims = this.getRoomDims();
-
-        //this.addWalls(roomDims.x + 20, roomDims.y + 20, roomDims.z + 20)
+        this.addWalls()
 
     }
 }

@@ -54,7 +54,7 @@ export const projectsData = [
         imagePath : "NQueens.svg",
         tech: "C++/Qt",
         github: "https://github.com/DevYehia/NQueensVisualizer",
-        dialgoue : [
+        dialogue : [
             "This was a side project where my goal was to visualize the N-Queens Problem",
             "The Problem was to try to place N Queens on NxN board without anyone being able to attack each other",
             "I built this visualization application using C++ QT to visualize how the solution algorithm works to find a solution",
@@ -65,11 +65,10 @@ export const projectsData = [
         imagePath : "Shell.png",
         tech: "C/Linux",
         github: "https://github.com/DevYehia/Custom_Linux_Shell",
-        dialgoue : [
+        dialogue : [
             "This was a side project i built with my friend",
             "I was interested in how system calls worked on linux so me and my friend tried to build something that uses these system calls in linux i.e.: our shell",
-            "This shell is able to execute some commands like pwd, ls and cat (we named it meow). It can also execute applications from it",
-            "I had so much fun working on it with my friend"
+            "This shell is able to execute some commands like pwd, ls and cat (we named it meow). It can also execute applications from it"
         ]
     },
     {
@@ -77,8 +76,19 @@ export const projectsData = [
         imagePath : "Gift.jpg",
         tech: "Flutter/Firebase",
         github: "https://github.com/DevYehia/Hediaty-Gifter",
-        dialgoue : [
+        dialogue : [
             "ello"
+        ]
+    },
+    {
+        name: "This",
+        imagePath : "Gift.jpg",
+        tech: "JavaScript",
+        github: "https://github.com/DevYehia/Hediaty-Gifter",
+        dialogue : [
+            "And the most important project of them all is ...",
+            "This one, the one you are currently in",
+            "It was a really fun project and made me understand more on how three js works"
         ]
     },
 ]

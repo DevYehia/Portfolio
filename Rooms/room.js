@@ -10,26 +10,41 @@ export class Room extends THREE.Object3D{
      */
     door = new Door(true);
 
-    //ambLight = new THREE.HemisphereLight()
+    width;
 
-    //not included in constructor will be calculated after child's constructor
-    roomDepth;
+    height;
+
+    depth;
 
     roomLight = new THREE.PointLight(0xffffff, 1000)
 
 
-
-    constructor(startIntensity, roomWidth){
+    constructor({
+        width = null,
+        height = null,
+        depth = null
+    } = {}){
         super()
-        this.roomWidth = roomWidth
-        //this.roomLight.intensity = startIntensity
-        //this.add(this.roomLight)
-        this.addDoor()
+        this.width = width;
+        this.height = height;
+        this.depth = depth;
+
+        console.log("In Room Const " + width, " " + height , " " + depth)
+
+        //if width is predefined
+        if(width != null)
+            this.addDoor()
 
     }
 
+    setDims(width, height, depth){
+        this.width = width;
+        this.height = height;
+        this.depth = depth;
+    }
+
     addDoor(){
-        let doorX = (this.roomWidth / 2 - this.door.doorWidth / 2);
+        let doorX = (this.width / 2 - this.door.doorWidth / 2);
         let doorY = 0;
         let doorZ = 0;
         this.door.position.copy(new THREE.Vector3(doorX, doorY, doorZ))
@@ -46,19 +61,26 @@ export class Room extends THREE.Object3D{
     }
 
     addLight(){
-        let roomDims = this.getRoomDims();
 
         //top of the room
         this.roomLight.position.set(
-            roomDims.x / 2,
-            roomDims.y / 2,
-            -roomDims.z / 2
+            this.width / 2,
+            this.height / 2,
+            -this.depth / 2
         )
+
+        this.roomLight.distance = this.depth
         this.add(this.roomLight)
     }
 
     //didn't make it in constructor as room depth is sometimes calculated dynamically
-    addWalls(roomWidth, roomHeight, roomDepth){
+    addWalls(){
+
+        let roomWidth = this.width
+        let roomHeight = this.height;
+        let roomDepth = this.depth
+
+        console.log("In Add Walls  " + roomWidth, " " + roomHeight , " " + roomDepth)
 
         const backWallGeo = new THREE.PlaneGeometry(roomWidth, roomHeight);
         const sideWallGeo = new THREE.PlaneGeometry(roomDepth, roomHeight);
@@ -76,7 +98,7 @@ export class Room extends THREE.Object3D{
 
         this.wallGroup = new THREE.Group();
 
-        let frontWall = this.addFrontWall(roomWidth, roomHeight);
+        let frontWall = this.addFrontWall(roomWidth, roomHeight, wallMat);
         let rightWall = new THREE.Mesh(sideWallGeo, wallMat);
         let leftWall = new THREE.Mesh(sideWallGeo, wallMat);        
         let backWall = new THREE.Mesh(backWallGeo, wallMat);
@@ -102,12 +124,13 @@ export class Room extends THREE.Object3D{
 
         this.wallGroup.add(frontWall, rightWall, leftWall, backWall, roof)
 
+
         this.add(this.wallGroup);
 
 
     }
 
-    addFrontWall(roomWidth, roomHeight){
+    addFrontWall(roomWidth, roomHeight, wallMat){
         let shape = new THREE.Shape();
         shape.setFromPoints(
             [new THREE.Vector2(0,0),
@@ -128,7 +151,7 @@ export class Room extends THREE.Object3D{
         shape.holes.push(hole);
 
         let frontWallGeo = new THREE.ExtrudeGeometry(shape);
-        let frontWallMat = new THREE.MeshBasicMaterial({color: 0xff0000, side: THREE.DoubleSide}); //will not be affected by lighting
+        let frontWallMat = wallMat
 
         return new THREE.Mesh(frontWallGeo, frontWallMat)
     }

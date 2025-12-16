@@ -18,11 +18,23 @@ export class ProjectsRoom extends Room{
 
 
 
-    constructor(roomWidth){
-        super(0, roomWidth)
+    constructor({
+        width = null,
+        height = null
+    } = {}){
+        super({
+            width: width,
+            height: height
+        })
         this.addSigns()
         this.addCollectible()
-        
+        let currRoomDims = this.getRoomDims();
+        //this.setDims(this.width, this.height, currRoomDims.z + 1)
+        console.log("room dims is " + JSON.stringify(currRoomDims))
+        this.depth = currRoomDims.z + 1;
+        this.addWalls()
+
+        this.addLight()
 
     }
 
@@ -36,7 +48,7 @@ export class ProjectsRoom extends Room{
         this.add(this.certificate)
 
         //put it at random position in the room
-        this.certificate.position.x = this.roomWidth / 2;
+        this.certificate.position.x = this.width / 2;
         this.certificate.position.z = -20
 
     }
@@ -70,7 +82,7 @@ export class ProjectsRoom extends Room{
         }
 
 
-        let rightSignsX = this.roomWidth - signsWallOffset
+        let rightSignsX = this.width - signsWallOffset
         let rightSignsPos = new THREE.Vector3(rightSignsX, 0, -this.signSpacing);
 
         //place right signs
@@ -91,7 +103,7 @@ export class ProjectsRoom extends Room{
 
         //place central sign
         let centralSignPos = new THREE.Vector3().copy(rightSignsPos) //get last x
-        centralSignPos.x = this.roomWidth / 2;
+        centralSignPos.x = this.width / 2;
         let sign = new Sign({signID: currProjectKey,
             //signPic:  projectsData[currProjectKey].imagePath,
             signName: projectsData[currProjectKey].name,

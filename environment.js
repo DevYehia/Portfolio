@@ -11,7 +11,7 @@ import { MyRoom } from './Rooms/MyRoom';
 
 
 export const boundaryCuboidHeight = 12;
-export const boundaryCuboidWidth = 50;
+export const boundaryCuboidWidth = 60;
 export const nearBoundaryCuboidDepth = boundaryCuboidWidth * 2;
 export let pathWidth = 25;
 export let stars;
@@ -88,15 +88,10 @@ export function addBoundaryCuboids(scene, inputPathWidth){
 
 export function addProjectsRoom(scene){
 
-    projectsRoom = new ProjectsRoom(pathWidth + 20)
-
-    const box = new THREE.Box3().setFromObject(projectsRoom);
-    const size = new THREE.Vector3();
-    box.getSize(size);
-    console.log(JSON.stringify(size))
-    projectsRoom.addWalls(pathWidth + 20, boundaryCuboidHeight + 20, size.z);
-    projectsRoom.addLight()
-    //scene.add(projectsRoom.wallGroup)
+    projectsRoom = new ProjectsRoom({
+        width: pathWidth + 20,
+        height: boundaryCuboidHeight + 20}
+    )
 
     projectsRoom.rotateY(Math.PI / 2)
 
@@ -112,7 +107,10 @@ export function addProjectsRoom(scene){
 }
 
 export function addHOFRoom(scene){
-    hallOfFameRoom = new HOFRoom(pathWidth, friends);
+
+    let boardOffset = 20;
+
+    hallOfFameRoom = new HOFRoom(boardOffset, 50, friends);
 
 
     scene.add(hallOfFameRoom);
@@ -122,7 +120,7 @@ export function addHOFRoom(scene){
 
     let roomX = pathWidth / 2 + boundaryCuboidWidth;
     let roomY = 0;
-    let roomZ = -nearBoundaryCuboidDepth / 2 - pathWidth; 
+    let roomZ = -nearBoundaryCuboidDepth / 2 - pathWidth / 2 - hallOfFameRoom.width / 2; 
 
 
     hallOfFameRoom.position.set(roomX, roomY, roomZ);
@@ -139,7 +137,7 @@ export function addMyRoom(scene){
 
     let roomPos = new THREE.Vector3(roomX, roomY, roomZ);
 
-    myRoom = new MyRoom(pathWidth, roomPos);
+    myRoom = new MyRoom(pathWidth, 30, 30, roomPos);
 
 
     scene.add(myRoom)

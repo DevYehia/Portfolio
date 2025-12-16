@@ -57,7 +57,7 @@ export class Door extends THREE.Object3D{
         hole.lineTo(holeRightOffset + this.holeWidth, holeBottomOffset + this.holeHeight);
         hole.lineTo(holeRightOffset + this.holeWidth, holeBottomOffset);
         hole.lineTo(holeRightOffset, holeBottomOffset);
-        shape.holes.push(hole);
+        //shape.holes.push(hole);
 
         const extrudeSettings = {
             depth: 0.2,  
