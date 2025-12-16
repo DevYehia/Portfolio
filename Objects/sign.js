@@ -43,6 +43,7 @@ export class Sign extends THREE.Object3D{
         this.signMainHeight = signMainHeight;
         this.signMainWidth = signMainWidth;
         this.signID = signID
+        this.signName = signName
 
 
         const baseGeometry = new TextGeometry(signBaseText, {
@@ -126,7 +127,7 @@ export class Sign extends THREE.Object3D{
 
         const fontSize = 60
 
-        ctx.font = fontSize + "px Arial";
+        ctx.font = fontSize + "px Open Sans";
         ctx.textBaseline = "top"
 
         const lines = signName.split("\n");
@@ -145,7 +146,7 @@ export class Sign extends THREE.Object3D{
         canvas.height = fontSize * numLines;
 
         // Redraw because changing canvas size clears it
-        ctx.font = fontSize + "px Arial";
+        ctx.font = fontSize + "px Open Sans";
         ctx.fillStyle = "rgba(0,0,0,0)";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = "#ffffff";

@@ -106,7 +106,7 @@ export class ProjectsState extends BaseState{
 */       
     checkAndUpdateState(playerData){
 
-        //animate collectible particles
+        //animate  collectible particles
         if(env.projectsRoom.certificate != null){
             env.projectsRoom.certificate.animate()
         }
@@ -149,6 +149,22 @@ export class ProjectsState extends BaseState{
         }        
 
 
+        dist = getDistanceXZ(playerPos, env.projectsRoom.certificate.hitBoxMesh)
+        //check for collectible 
+        if(env.projectsRoom.certificate != null &&
+           this.checkForTrigger(dist, 10, camera, env.projectsRoom.certificate.hitBoxMesh)
+        ){
+            controlsDiv.innerHTML = "Certificate<br>E - Collect";
+            controlsDiv.hidden = false;
+
+            //now check for keyboard input
+            if(keys["e"] == KeyStates.SINGLE_PRESS || keys["e"] == KeyStates.LONG_PRESS){
+                env.projectsRoom.remove(env.projectsRoom.certificate);
+            }
+            return //don't continue to sign checking , no need
+        }
+
+
         //according to player's position we find the nearest sign
 
         //check current triggered sign
@@ -181,7 +197,7 @@ export class ProjectsState extends BaseState{
                         this.currTriggeredSign = currSign;
 
                         //show the controlsDiv
-                        controlsDiv.innerHTML = "Sign<br>V - Show Video<br>E - Interact<br>G - Github";
+                        controlsDiv.innerHTML = currSign.signName.replace("\n", " ") + "<br><br>V - Show Video<br>E - Interact<br>G - Github";
                         controlsDiv.hidden = false;
 
                         foundSign = true;

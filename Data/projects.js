@@ -53,7 +53,7 @@ export const projectsData = [
         name: "N-Queens\nVisualizer",
         imagePath : "NQueens.svg",
         tech: "C++/Qt",
-        github: "https://github.com/DevYehia/DIstributed_Image_Processing",
+        github: "https://github.com/DevYehia/NQueensVisualizer",
         dialgoue : [
             "This was a side project where my goal was to visualize the N-Queens Problem",
             "The Problem was to try to place N Queens on NxN board without anyone being able to attack each other",
@@ -64,7 +64,7 @@ export const projectsData = [
         name: "Custom Linux\nShell",
         imagePath : "Shell.png",
         tech: "C/Linux",
-        github: "https://github.com/DevYehia/DIstributed_Image_Processing",
+        github: "https://github.com/DevYehia/Custom_Linux_Shell",
         dialgoue : [
             "This was a side project i built with my friend",
             "I was interested in how system calls worked on linux so me and my friend tried to build something that uses these system calls in linux i.e.: our shell",
@@ -76,7 +76,7 @@ export const projectsData = [
         name: "Hediaty",
         imagePath : "Gift.jpg",
         tech: "Flutter/Firebase",
-        github: "https://github.com/DevYehia/DIstributed_Image_Processing",
+        github: "https://github.com/DevYehia/Hediaty-Gifter",
         dialgoue : [
             "ello"
         ]

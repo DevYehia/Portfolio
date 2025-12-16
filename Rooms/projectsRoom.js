@@ -96,7 +96,7 @@ export class ProjectsRoom extends Room{
             //signPic:  projectsData[currProjectKey].imagePath,
             signName: projectsData[currProjectKey].name,
             signBaseText: projectsData[currProjectKey].tech,
-            signScale: 3});
+            signScale: 2.5});
 
         this.addSignAt(sign, centralSignPos)
     }
