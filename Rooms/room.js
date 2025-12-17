@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import {Door} from '../Objects/door'
-import { Vector3 } from 'three/webgpu';
+import { MeshPhongMaterial, PlaneGeometry, Vector3 } from 'three/webgpu';
 
 export class Room extends THREE.Object3D{
 
@@ -95,14 +95,16 @@ export class Room extends THREE.Object3D{
 
 
         let wallMat = new THREE.MeshStandardMaterial({color: 0x0000ff, side: THREE.DoubleSide, map: WallTexture})
-
+        let roofMat = new THREE.MeshStandardMaterial({color: 0xffffff, side: THREE.DoubleSide, map: WallTexture})
+        
         this.wallGroup = new THREE.Group();
 
         let frontWall = this.addFrontWall(roomWidth, roomHeight, wallMat);
         let rightWall = new THREE.Mesh(sideWallGeo, wallMat);
         let leftWall = new THREE.Mesh(sideWallGeo, wallMat);        
         let backWall = new THREE.Mesh(backWallGeo, wallMat);
-        let roof = new THREE.Mesh(roofGeo, wallMat);
+        let roof = new THREE.Mesh(roofGeo, roofMat);
+
 
 
         //walls will be positioned around the origin of the group at the bottom left corner of da room
@@ -128,6 +130,26 @@ export class Room extends THREE.Object3D{
         this.add(this.wallGroup);
 
 
+    }
+
+    addFloor(floorTexturePath){
+        const floorGeo = new PlaneGeometry(this.width, this.depth);
+        let floorTexture = new THREE.TextureLoader().load(floorTexturePath)
+
+        floorTexture.colorSpace = THREE.SRGBColorSpace;
+        floorTexture.wrapS = THREE.RepeatWrapping;
+        floorTexture.wrapT = THREE.RepeatWrapping;
+
+        floorTexture.repeat.set(4,4)
+
+        const floorMat = new THREE.MeshPhongMaterial({map: floorTexture, side: THREE.DoubleSide});
+
+        const floorMesh = new THREE.Mesh(floorGeo, floorMat);
+
+        floorMesh.rotateX(Math.PI / 2);
+        floorMesh.position.set(this.width / 2, 0, -this.depth / 2);
+
+        this.add(floorMesh)
     }
 
     addFrontWall(roomWidth, roomHeight, wallMat){

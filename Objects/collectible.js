@@ -9,13 +9,18 @@ export class Collectible extends Image{
     //1) plane with image
     //2) particles
     //3) hitbox
-    constructor(){
+    constructor({
+        width = 3,
+        height = 1,
+        padding = 2,
+        particlesColor = 0xffffff
+    } = {}){
 
         
         super({
-            width: 3,
-            height: 1,
-            padding: 2,
+            width: width,
+            height: height,
+            padding: padding
         });
 
     //this.rotateX(- Math.PI / 2)
@@ -37,7 +42,7 @@ export class Collectible extends Image{
             vertices, 3
             )
     ),
-    new THREE.PointsMaterial({ color: 0xffffff, size: 0.08 })
+    new THREE.PointsMaterial({ color: particlesColor, size: 0.08 })
     );
 
     this.particles = particles

@@ -82,13 +82,14 @@ export const projectsData = [
     },
     {
         name: "This",
-        imagePath : "Gift.jpg",
-        tech: "JavaScript",
+        imagePath : "this.png",
+        tech: "JavaScript/Three.js",
         github: "https://github.com/DevYehia/Hediaty-Gifter",
         dialogue : [
             "And the most important project of them all is ...",
             "This one, the one you are currently in",
-            "It was a really fun project and made me understand more on how three js works"
+            "It was a really fun project and made me understand more on how three js works",
+            "And it made me think of fun ways to express myself"
         ]
     },
 ]

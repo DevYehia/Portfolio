@@ -73,32 +73,32 @@ export class Sign extends THREE.Object3D{
         this.textSprite.visible = false;
 
 
-        //add scale
-        this.scale.set(signScale, signScale, signScale)
+  
         //setup positions
 
         //base
         let baseSize = new THREE.Vector3()
         this.base.geometry.computeBoundingBox()
         this.base.position.x -= this.base.geometry.boundingBox.getSize(baseSize).x / 2
-        this.base.position.y += baseSize.y / 2;
+        this.base.position.y += baseSize.y / (2);
         //this.base.position.z += 1;
 
 
 
         //main
-        let mainBaseOffset = 2;
+        let mainBaseOffset = 2 / signScale;
         this.main.position.y += baseSize.y + this.signMainHeight / 2 + mainBaseOffset;
 
         //name
-        this.textSprite.position.y += baseSize.y + this.signMainHeight + mainBaseOffset + 2
+        this.textSprite.position.y += baseSize.y + this.signMainHeight + mainBaseOffset + 2 / signScale
         this.textSprite.position.z += 1.2
 
 
         //add sign components to object
         this.add(this.base, this.main, this.textSprite, this.hitBox)
 
-
+        //add scale
+        this.scale.set(signScale, signScale, signScale)
 
     }
 

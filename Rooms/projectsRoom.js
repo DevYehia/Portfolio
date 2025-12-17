@@ -34,6 +34,8 @@ export class ProjectsRoom extends Room{
         this.depth = currRoomDims.z + 1;
         this.addWalls()
 
+        this.addFloor("../textures/floor.jpg")
+
         this.addLight()
 
     }
@@ -41,15 +43,17 @@ export class ProjectsRoom extends Room{
     //will add one of my certificates on the floor
     addCollectible(){
         this.certificate = new Collectible({
-            width: 2,
-            height: 4,
-            padding: 1
+            width: 4,
+            height: 2,
+            padding: 5,
+            particlesColor: 0x000000
         });
         this.add(this.certificate)
 
         //put it at random position in the room
         this.certificate.position.x = this.width / 2;
         this.certificate.position.z = -20
+        this.certificate.position.y += 0.1
 
     }
 
@@ -105,10 +109,10 @@ export class ProjectsRoom extends Room{
         let centralSignPos = new THREE.Vector3().copy(rightSignsPos) //get last x
         centralSignPos.x = this.width / 2;
         let sign = new Sign({signID: currProjectKey,
-            //signPic:  projectsData[currProjectKey].imagePath,
+            signPic: "../textures/Projects/" +  projectsData[currProjectKey].imagePath,
             signName: projectsData[currProjectKey].name,
             signBaseText: projectsData[currProjectKey].tech,
-            signScale: 2.5});
+            signScale: 3});
 
         this.addSignAt(sign, centralSignPos)
     }
@@ -116,6 +120,6 @@ export class ProjectsRoom extends Room{
     addSignAt(sign, pos){
         this.add(sign)
         this.signsList.push(sign)
-        sign.setPosition(pos);
+        sign.position.copy(pos);
     }
 }
