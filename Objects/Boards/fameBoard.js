@@ -1,8 +1,9 @@
 import * as THREE from 'three'
-import { Image } from './image'
+import { SquareImage } from '../squareImage'
+import { VarLengthBoard } from './varLengthBoard';
 
 
-export class Board extends THREE.Object3D{
+export class Board extends VarLengthBoard{
 
     worldPos = new THREE.Vector3()
 
@@ -18,23 +19,13 @@ export class Board extends THREE.Object3D{
         heightOffset = 0,
         numRows = 2
     } = {}){
-        super();
+        super({
+            imageDim: imageDim,
+            imageSpacing: imageSpacing,
+            numRows: numRows,
+            numImages: pplList.length
+        });
 
-        console.log("ppl list is " + JSON.stringify(pplList))
-
-        this.imageDim = imageDim
-        this.imageSpacing = imageSpacing;
-        this.heightOffset = heightOffset;
-        this.numRows = numRows;
-        this.imageList = []
-
-        //add the board
-        let numImagePerRow = Math.ceil(pplList.length / numRows)
-        let boardWidth = (imageDim * numImagePerRow) + (imageSpacing * (numImagePerRow + 1));
-        this.boardWidth = boardWidth
-        console.log("width is " + boardWidth)
-        let boardHeight = (imageDim * numRows) + (imageSpacing * (numRows + 1));
-        this.boardHeight = boardHeight
 
         const boardTexture = new THREE.TextureLoader().load("textures/gold.jpg");
         boardTexture.colorSpace = THREE.SRGBColorSpace
@@ -43,14 +34,14 @@ export class Board extends THREE.Object3D{
 
         boardTexture.repeat.set(4,1)
 
-        const baordGeo = new THREE.PlaneGeometry(boardWidth, boardHeight);
+        const baordGeo = new THREE.PlaneGeometry(this.boardWidth, this.boardHeight);
         const boardMat = new THREE.MeshBasicMaterial({color:  0xffd700, side: THREE.DoubleSide, map: boardTexture});
         this.boardMesh = new THREE.Mesh(baordGeo, boardMat);
         this.add(this.boardMesh)
 
         //add the images
-        let origImageX = - boardWidth / 2 + imageDim / 2 + imageSpacing; 
-        let boardTopLeft = new THREE.Vector3(-boardWidth/ 2, boardHeight / 2, 0)
+        let origImageX = - this.boardWidth / 2 + imageDim / 2 + imageSpacing; 
+        let boardTopLeft = new THREE.Vector3(-this.boardWidth/ 2, this.boardHeight / 2, 0)
         let currPos = new THREE.Vector3(
             imageSpacing + imageDim / 2,
             -(imageSpacing + imageDim / 2),
@@ -63,19 +54,19 @@ export class Board extends THREE.Object3D{
 
             if(isOddNum && row == numRows - 1){ //last row
                 //center last row
-                let numImageInLastRow = numImagePerRow - 1;
-                let lastRowX =  (boardWidth - (numImageInLastRow * imageDim + (numImageInLastRow - 1) * imageSpacing)) / 2;
-                currPos.x = -boardWidth / 2 + lastRowX + imageDim / 2 
+                let numImageInLastRow = this.numImagePerRow - 1;
+                let lastRowX =  (this.boardWidth - (numImageInLastRow * imageDim + (numImageInLastRow - 1) * imageSpacing)) / 2;
+                currPos.x = -this.boardWidth / 2 + lastRowX + imageDim / 2 
             }
 
-            for(let col = 0 ; col < numImagePerRow ; col++){
-                let idx = col + row * numImagePerRow
+            for(let col = 0 ; col < this.numImagePerRow ; col++){
+                let idx = col + row * this.numImagePerRow
 
                 if(idx >= pplList.length){
                     break;
                 }
 
-                let image = new Image({
+                let image = new SquareImage({
                     width: imageDim,
                     height: imageDim,
                     padding: imageSpacing / 2,
@@ -93,6 +84,8 @@ export class Board extends THREE.Object3D{
             currPos.y -= (imageSpacing + imageDim)
             currPos.x = origImageX
         }
+
+        console.log("iiiii" + this.imageList.length)
 
 
     }

@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import { Room } from './room'
-import { Board } from '../Objects/board';
+import { Board } from '../Objects/Boards/fameBoard';
 import { TextGeometry } from 'three/examples/jsm/Addons.js';
 import { FontLoader } from 'three/examples/jsm/Addons.js';
 import { HOFTitlefont } from '../loader';

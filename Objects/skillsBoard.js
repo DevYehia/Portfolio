@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { Image } from './image'
+import { SquareImage } from './squareImage'
 
 
 export class SkillsBoard extends THREE.Object3D{
@@ -47,7 +47,7 @@ export class SkillsBoard extends THREE.Object3D{
             for(let col = 0 ; col < numImagePerRow ; col++){
                 let idx = col + row * numImagePerRow
 
-                let image = new Image({
+                let image = new SquareImage({
                     width: imageDim,
                     height: imageDim,
                     imageName: "../textures/skills/" + pplList[idx],

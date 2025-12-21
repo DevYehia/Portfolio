@@ -1,0 +1,17 @@
+export const profiles = [
+    {
+        "name" : "Linkedin",
+        "image" : "linkedin.png",
+        "profile" : "www.linkedin.com/in/yehia-hassan-817ab222b"
+    },
+    {
+        "name" : "Github",
+        "image" : "github.png",
+        "profile" : "https://github.com/DevYehia"
+    },
+    {
+        "name" : "Gmail",
+        "image" : "gmail.png",
+        "profile" : "alo"
+    }
+]

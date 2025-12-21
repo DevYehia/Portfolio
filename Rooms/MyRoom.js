@@ -1,11 +1,13 @@
 import { Room } from "./room";
-import * as CustomObjects from '../Objects/image'
-import { Board } from "../Objects/board";
+import * as CustomObjects from '../Objects/squareImage'
+import { Board } from "../Objects/Boards/fameBoard";
 import * as THREE from 'three'
 import { SkillsBoard } from "../Objects/skillsBoard";
 import { skills } from "../Data/skills";
 import { TimelineBoard } from "../Objects/myTimeline";
 import { CV } from "../Objects/CV";
+import { ProfilesBoard } from "../Objects/profilesBoard";
+import { profiles } from "../Data/profiles";
 
 export class MyRoom extends Room{
 
@@ -34,26 +36,34 @@ export class MyRoom extends Room{
 
         this.addSkillsBoards()
 
-        this.addCV()
+        this.addContact()
 
         this.addWalls()
 
 
     }
 
-    addCV(){
+    addContact(){
 
         //just a regular plane
 
-        this.CVPaper = new CV();
+        this.contactBoard = new ProfilesBoard({
+            profilesList: profiles,
+            imageDim: 5,
+            boardWidth: 20,
+            boardHeight: 10,
+            numRows: 2,
 
-        this.CVPaper.rotateY(Math.PI / 2);
-        this.CVPaper.position.x += this.width;
-        this.CVPaper.position.y += 5;
-        this.CVPaper.position.z -= 10
+        })
 
-        this.add(this.CVPaper)
+        console.log("this width is " + this.width)
 
+        this.contactBoard.rotateY(-Math.PI / 2);
+        this.contactBoard.position.x += this.width - 0.1;
+        this.contactBoard.position.z = -this.depth / 2
+        this.contactBoard.position.y += this.contactBoard.boardHeight / 2
+
+        this.add(this.contactBoard)
 
 
     }

@@ -6,6 +6,7 @@ import { StartState } from './startState';
 import { RightState } from './rightState';
 import { ForwardState } from './forwardState'
 import { BaseState } from './baseState';
+import { BoxCollision } from '../CollisionHandlers/BoxCollision';
 
 
 
@@ -16,9 +17,15 @@ export class ForkRoadState extends BaseState{
     leftLimitX = -(env.pathWidth / 2);
     rightLimitX = env.pathWidth / 2;
 
+    collider;
+
     constructor(){
         //Here will be the logic to shift camera up
         super();
+
+        this.collider = new BoxCollision(this.leftLimitX, this.rightLimitX, this.backwardLimitZ, this.forwardLimitZ)
+
+
     }
 
 
@@ -33,24 +40,11 @@ export class ForkRoadState extends BaseState{
         const leftLimitXWithMargin = this.leftLimitX + collisionMargin;
         const rightLimitXWithMargin = this.rightLimitX - collisionMargin;
 
-        //there is a restiction if player goes diagonally
-        //restriction happens if both x and z exceed limit
 
-        // console.log("f limit is " + forwardLimitZ + " back limit is " + backwardLimitZ)
-
-        // let cond1 = (newPlayerPos.x < leftLimitX && newPlayerPos.z > backwardLimitZ);
-        // let cond2 = (newPlayerPos.x > rightLimitX && newPlayerPos.z > backwardLimitZ);
-        // let cond3 = (newPlayerPos.x < leftLimitX && newPlayerPos.z < forwardLimitZ);
-        // let cond4 = (newPlayerPos.x > rightLimitX && newPlayerPos.z < forwardLimitZ);
-
-        // console.log("cond1: "+ cond1 + "\ncond2: " + cond2 +  "\ncond3: " + cond3  +  "\ncond4: " + cond4)
 
         
-        let isMovementRestricted = (newPlayerPos.x < leftLimitXWithMargin && newPlayerPos.z > backwardLimitZWithMargin) ||  //bottom left
-                                   (newPlayerPos.x > rightLimitXWithMargin && newPlayerPos.z > backwardLimitZWithMargin) ||  //bottom right
-                                   (newPlayerPos.x < leftLimitXWithMargin && newPlayerPos.z < forwardLimitZWithMargin) ||  //top left
-                                   (newPlayerPos.x > rightLimitXWithMargin && newPlayerPos.z < forwardLimitZWithMargin);    //top right
-        if(!isMovementRestricted)
+
+        if(1 ||  !this.collider.doesCollide(newPlayerPos))
             playerPos.copy(newPlayerPos);
         else{
             //console.log("Stop right there")

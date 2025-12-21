@@ -2,15 +2,15 @@
 import * as THREE from 'three'
 
 
-export class Image extends THREE.Object3D{
+export class CircleImage extends THREE.Object3D{
 
 
     constructor({
-        width = 5,
-        height = 5,
-        name = "Alo",
+
+        imageName = "Alo",
         profile = "404",
-        imageName = "TheYous.jpg", //image in textures folder
+        imagePath = "TheYous.jpg", //image in textures folder
+        radius = 2,
         padding = 1,
         clippingPlanes = []
     } = {}){
@@ -19,18 +19,17 @@ export class Image extends THREE.Object3D{
         super();
 
         //set params
-        this.width = width;
-        this.height = height;
-        this.friendName = name;
+        this.radius = radius
+        this.imageName = imageName
         this.profile = profile;
         this.padding = padding
 
         //add two meshes, the image and the hitbox
 
         //the image
-        const imageTexture = new THREE.TextureLoader().load("textures/" + imageName);
+        const imageTexture = new THREE.TextureLoader().load(imagePath);
         imageTexture.colorSpace = THREE.SRGBColorSpace
-        const imageGeo = new THREE.PlaneGeometry(width, height);
+        const imageGeo = new THREE.CircleGeometry(radius);
         const imageMat = new THREE.MeshBasicMaterial({map: imageTexture, 
             side: THREE.DoubleSide, 
             transparent: true, 
@@ -39,8 +38,8 @@ export class Image extends THREE.Object3D{
         this.imageMesh = imageMesh
 
         //the hitbox, it will be the image dimensions + padding to each side
-        let hitBoxWidth = width + 2 * padding;
-        let hitBoxHeight = height + 2 * padding
+        let hitBoxWidth = radius + 2 * padding;
+        let hitBoxHeight = radius + 2 * padding
         const hitBoxGeo = new THREE.PlaneGeometry(hitBoxWidth, hitBoxHeight);
         const hitBoxMat = new THREE.MeshBasicMaterial({color: 0x99ff99});
         this.hitBoxMesh = new THREE.Mesh(hitBoxGeo, hitBoxMat); //will be an attribute, needed for collision detection

@@ -1,8 +1,8 @@
 import * as THREE from 'three'
-import { Image } from './image';
+import { SquareImage } from './squareImage';
 
 
-export class Collectible extends Image{
+export class Collectible extends SquareImage{
 
 
     //collectile will have 
@@ -23,34 +23,35 @@ export class Collectible extends Image{
             padding: padding
         });
 
-    //this.rotateX(- Math.PI / 2)
-    this.imageMesh.rotateX(- Math.PI / 2)
+    this.ready.then( () => {
+        this.imageMesh.rotateX(- Math.PI / 2)
+    })
 
-    let vertices = []
-    for(let i = 0 ; i < 50 ; i++){
+        let vertices = []
+        for(let i = 0 ; i < 50 ; i++){
 
-        let randX = (Math.random() * this.width) - this.width / 2;
-        let randY = Math.random() * 3;
-        let randZ = (Math.random() * this.height) - this.height / 2;
+            let randX = (Math.random() * this.width) - this.width / 2;
+            let randY = Math.random() * 3;
+            let randZ = (Math.random() * this.height) - this.height / 2;
 
-        vertices.push(randX, randY, randZ)    
+            vertices.push(randX, randY, randZ)    
 
-    }
-    const particles = new THREE.Points(
-    new THREE.BufferGeometry().setAttribute('position',
-            new THREE.Float32BufferAttribute(
-            vertices, 3
-            )
-    ),
-    new THREE.PointsMaterial({ color: particlesColor, size: 0.08 })
-    );
+        }
+        const particles = new THREE.Points(
+        new THREE.BufferGeometry().setAttribute('position',
+                new THREE.Float32BufferAttribute(
+                vertices, 3
+                )
+        ),
+        new THREE.PointsMaterial({ color: particlesColor, size: 0.08 })
+        );
 
-    this.particles = particles
+        this.particles = particles
 
-    //restore particles rotation
-    //particles.rotateX(Math.PI / 2)
+        //restore particles rotation
+        //particles.rotateX(Math.PI / 2)
 
-    this.add(particles)
+        this.add(particles)
 
 
     }

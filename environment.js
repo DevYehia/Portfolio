@@ -137,7 +137,7 @@ export function addMyRoom(scene){
 
     let roomPos = new THREE.Vector3(roomX, roomY, roomZ);
 
-    myRoom = new MyRoom(pathWidth, 30, 30, roomPos);
+    myRoom = new MyRoom(pathWidth, 30, 60, roomPos);
 
 
     scene.add(myRoom)

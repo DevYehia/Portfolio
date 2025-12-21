@@ -3,7 +3,6 @@ import { BaseState } from "./baseState";
 import { hallOfFameRoom, projectsRoom } from '../environment';
 import { keys, KeyStates } from '../Utils/keyboardUtils';
 import { getDistanceXZ } from '../Utils/MathUtils';
-import { Image } from '../Objects/image';
 import * as env from '../environment'
 import { RightState } from './rightState';
 import { changeState } from './common';
@@ -121,6 +120,7 @@ export class HOFState extends BaseState{
         else{
             let foundImage = false;
             let imageList = hallOfFameRoom.board.imageList
+            console.log("image list os " + imageList.length)
             for(let i = 0 ; i < imageList.length ; i++){
                 let currImage = imageList[i]
 
