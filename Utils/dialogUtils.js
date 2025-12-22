@@ -1,3 +1,4 @@
+import { currState } from "../PlayerStates/common";
 import { animateText } from "./textUtils";
 
 let currDialogList;
@@ -6,6 +7,10 @@ let controlsDiv = document.getElementById("controlsDiv")
 let talkDiv = document.getElementById("talkDiv");
 
 export function startDialogue(diagList){
+
+    //set dialog in currState
+    currState.isInDialog = true;
+
     currDialogList = diagList
     currDialogIdx = 0;
 
@@ -36,11 +41,13 @@ export function nextLine(){
     else{
         talkDiv.hidden = true;
         controlsDiv.hidden = true;
+        currState.isInDialog = false;  
         return false;
     }
 }
 
 export function endDialogue(){
     talkDiv.hidden = true;
-    controlsDiv.hidden = true;    
+    controlsDiv.hidden = true; 
+    currState.isInDialog = false;   
 }

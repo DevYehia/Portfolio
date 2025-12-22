@@ -55,6 +55,8 @@ export class ProjectsState extends BaseState{
         this.projectsRoom = env.projectsRoom;
         //console.log(JSON.stringify(this.ambLight))
         //this.lightInterval = setInterval(this.incLight.bind(this), 1 / 1000);
+        this.interactableList = [env.projectsRoom.door, ...env.projectsRoom.signsList]
+
 
     }
 
@@ -106,111 +108,17 @@ export class ProjectsState extends BaseState{
 */       
     checkAndUpdateState(playerData){
 
+        let playerPos = playerData.playerPos
+
         //animate  collectible particles
         if(env.projectsRoom.certificate != null){
             env.projectsRoom.certificate.animate()
         }
 
+        this.handleDialog()
 
-
-        let usedKeys = keys;
-
-        let playerPos = playerData.playerPos;
-        let camera = playerData.camera;
-
-        let controlsDiv = document.getElementById("controlsDiv");
-
-        let signsList = this.projectsRoom.signsList;
-
-        playerData.camera.getWorldDirection(this.camLookAt);
-        
-        this.rayCaster.set(playerPos, this.camLookAt);
-
-        let dist = getDistanceXZ(playerPos, this.door.doorMesh)
-
-
-
-
-        //check for door collision
-        //see the door and be at good distance
-        if (this.checkForTrigger(dist, this.doorTriggerDistance, camera, this.door.hitBox)){
-            controlsDiv.innerHTML = "Door<br>E - Open/Close";
-            controlsDiv.hidden = false;
-
-            //now check for keyboard input
-            if(keys["e"] == KeyStates.SINGLE_PRESS || keys["e"] == KeyStates.LONG_PRESS){
-                this.door.trigger();
-            }
-            return //don't continue to sign checking , no need
-
-        }
-        else{
-            //controlsDiv.hidden = true;
-        }        
-
-
-        dist = getDistanceXZ(playerPos, env.projectsRoom.certificate.hitBoxMesh)
-        //check for collectible 
-        if(env.projectsRoom.certificate != null &&
-           this.checkForTrigger(dist, 10, camera, env.projectsRoom.certificate.hitBoxMesh)
-        ){
-            controlsDiv.innerHTML = "Certificate<br>E - Collect";
-            controlsDiv.hidden = false;
-
-            //now check for keyboard input
-            if(keys["e"] == KeyStates.SINGLE_PRESS || keys["e"] == KeyStates.LONG_PRESS){
-                env.projectsRoom.remove(env.projectsRoom.certificate);
-            }
-            return //don't continue to sign checking , no need
-        }
-
-
-        //according to player's position we find the nearest sign
-
-        //check current triggered sign
-    
-        if(this.currTriggeredSign != null){
-           //console.log("Entered currSign check")
-            let dist = this.getPlayerAndSignDistance(playerPos, this.currTriggeredSign)
-            //if distance is exceeded or sign is no longer looked at
-            if(!this.checkForTrigger(dist, this.signTriggerDistance, camera, this.currTriggeredSign.hitBox)){
-                this.currTriggeredSign.revert();
-                this.currTriggeredSign = null;
-                controlsDiv.hidden = true;
-            }
-            else{ //still triggering sign, handle interactions
-                this.handleInput(usedKeys)
-            }
-        }
-
-        else{
-            let foundSign = false;
-            for(let i = 0 ; i < signsList.length ; i++){
-                let currSign = signsList[i];
-
-                let dist = getDistanceXZ(playerPos, currSign.main)
-                //console.log("dist is " + dist)
-                //check if i look at sign, it is lower than trigger distance
-                if(this.checkForTrigger(dist, this.signTriggerDistance, camera, currSign.hitBox)){
-
-                        currSign.trigger();
-                        this.currTriggeredSign = currSign;
-
-                        //show the controlsDiv
-                        controlsDiv.innerHTML = currSign.signName.replace("\n", " ") + "<br><br>V - Show Video<br>E - Interact<br>G - Github";
-                        controlsDiv.hidden = false;
-
-                        foundSign = true;
-
-                        break; //found a sign,end loop
-
-                }
-            }
-
-            if(!foundSign){
-                controlsDiv.hidden = true; //didn't trigger any door or sign
-            }
-        }
+        if(!this.isInDialog)
+            this.checkInteraction(playerPos, playerData.camera)
 
 
         //handle state change
@@ -246,19 +154,7 @@ export class ProjectsState extends BaseState{
             this.isInDialog = true;
             startDialogue(projectsData[signID].dialogue)
         }
-        else if(this.isInDialog && usedKeys["q"] == KeyStates.SINGLE_PRESS){
-            let areThereMoreLines = nextLine()
-            this.isInDialog = areThereMoreLines;
-        }
-        else if(usedKeys["g"] == KeyStates.SINGLE_PRESS){
-            console.log("aloalo")
-            window.open(projectsData[signID].github)
-        }
-        //end dialogue
-        else if(this.isInDialog && usedKeys["x"] == KeyStates.SINGLE_PRESS){
-            endDialogue()
-            this.isInDialog = false;
-        }
+
 
         else if(!this.isInDialog && usedKeys["v"] == KeyStates.SINGLE_PRESS){
             let video = projectsData[signID].video

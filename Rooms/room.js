@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import {Door} from '../Objects/door'
 import { MeshPhongMaterial, PlaneGeometry, Vector3 } from 'three/webgpu';
+import { handleInteraction } from '../Utils/interactionsUtils';
 
 export class Room extends THREE.Object3D{
 
@@ -49,6 +50,7 @@ export class Room extends THREE.Object3D{
         let doorZ = 0;
         this.door.position.copy(new THREE.Vector3(doorX, doorY, doorZ))
         this.door.name = "door";
+        this.door.interactions['e'] = (() => {handleInteraction(this.door, "DOOR")}).bind(this)
         this.add(this.door)
     }
 
@@ -182,7 +184,7 @@ export class Room extends THREE.Object3D{
         const box = new THREE.Box3().setFromObject(this);
         const size = new THREE.Vector3();
         box.getSize(size);   
-        this.roomDepth = size.z;     
+        this.depth = size.z;     
     }
     
 }

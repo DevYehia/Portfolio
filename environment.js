@@ -131,13 +131,15 @@ export function addHOFRoom(scene){
 
 export function addMyRoom(scene){
 
-    let roomX = - pathWidth / 2;
+    let roomWidth = pathWidth + 20;
+
+    let roomX = -roomWidth / 2;
     let roomY = 0;
     let roomZ = -(nearBoundaryCuboidDepth / 2 + pathWidth + boundaryCuboidWidth);
 
     let roomPos = new THREE.Vector3(roomX, roomY, roomZ);
 
-    myRoom = new MyRoom(pathWidth, 30, 60, roomPos);
+    myRoom = new MyRoom(roomWidth, 30, 60, roomPos);
 
 
     scene.add(myRoom)

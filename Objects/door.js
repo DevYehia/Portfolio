@@ -1,5 +1,6 @@
 //el baab
 import * as THREE from 'three'
+import { Interactable } from './interactable';
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -13,7 +14,7 @@ const DoorStates = {
 }
 
 
-export class Door extends THREE.Object3D{
+export class Door extends Interactable{
 
     doorHeight = 10;
     doorWidth = 5;
@@ -29,9 +30,12 @@ export class Door extends THREE.Object3D{
 
     worldPos = new THREE.Vector3()
 
+
     constructor(isClockWiseOpen){
 
         super()
+
+        this.controls = "Door<br>E - Open/Close"
 
         if(isClockWiseOpen){
             this.rotationSign = -1;
@@ -124,7 +128,7 @@ export class Door extends THREE.Object3D{
     }
 
     //this function will move the door according to its current state
-    async trigger(){
+    async toggle(){
         if(this.state == DoorStates.CLOSED){
             this.open();
         }

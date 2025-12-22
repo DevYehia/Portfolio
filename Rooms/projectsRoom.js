@@ -3,6 +3,7 @@ import { Room } from "./room";
 import { projectsData } from '../Data/projects';
 import { Sign } from '../Objects/sign';
 import { Collectible } from '../Objects/collectible';
+import { handleInteraction } from '../Utils/interactionsUtils';
 
 export class ProjectsRoom extends Room{
 
@@ -57,9 +58,13 @@ export class ProjectsRoom extends Room{
     }
 
     addSigns(){
+
+
         let projectKeys = Object.keys(projectsData); 
         let currProjectKeyIdx = 0;
         let currProjectKey = projectKeys[currProjectKeyIdx];
+
+        let controls = "<br><br>V - Show Video<br>E - Interact<br>G - Github";
 
         let signsWallOffset = 1.5
 
@@ -75,7 +80,8 @@ export class ProjectsRoom extends Room{
             signName: projectsData[currProjectKey].name,
             signBaseText: projectsData[currProjectKey].tech,
             padding: this.signSpacing / 2,
-            signScale: 1.2});
+            signScale: 1.2,
+            controls: projectsData[currProjectKey].name.replace("\n", " ") +  controls});
 
             this.addSignAt(sign, leftSignsPos)
             sign.rotateY(Math.PI / 2)
@@ -95,7 +101,8 @@ export class ProjectsRoom extends Room{
             signName: projectsData[currProjectKey].name,
             signBaseText: projectsData[currProjectKey].tech,
             padding: this.signSpacing / 2,
-            signScale: 1.2});
+            signScale: 1.2,
+            controls: projectsData[currProjectKey].name.replace("\n", " ") +  controls});
 
             this.addSignAt(sign, rightSignsPos)
             sign.rotateY(-Math.PI / 2)
@@ -111,7 +118,8 @@ export class ProjectsRoom extends Room{
             signPic: "../textures/Projects/" +  projectsData[currProjectKey].imagePath,
             signName: projectsData[currProjectKey].name,
             signBaseText: projectsData[currProjectKey].tech,
-            signScale: 3});
+            signScale: 3,
+            controls: projectsData[currProjectKey].name.replace("\n", " ") +  controls});
 
         this.addSignAt(sign, centralSignPos)
     }
@@ -120,5 +128,19 @@ export class ProjectsRoom extends Room{
         this.add(sign)
         this.signsList.push(sign)
         sign.position.copy(pos);
+
+        //setup sign interactions
+        //setup interactions
+        sign.interactions['v'] = () => {
+            handleInteraction(projectsData[sign.signID].video, "OPEN_VIDEO")
+        }
+
+        sign.interactions['g'] = () => {
+            handleInteraction(projectsData[sign.signID].github, "OPEN_LINK")
+        }
+
+        sign.interactions['e'] = () => {
+            handleInteraction(projectsData[sign.signID].dialogue, "START_DIAG")
+        }
     }
 }

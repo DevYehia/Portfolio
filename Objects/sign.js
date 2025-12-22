@@ -3,9 +3,15 @@
 import * as THREE from 'three';
 import { TextGeometry } from 'three/examples/jsm/Addons.js';
 import { HOFTitlefont } from '../loader';
+import { Interactable } from './interactable';
+import { startDialogue } from '../Utils/dialogUtils';
+import { handleInteraction } from '../Utils/interactionsUtils';
+import { projectsData } from '../Data/projects';
 
 
-export class Sign extends THREE.Object3D{
+export class Sign extends Interactable{
+
+  controlsDiv =  document.getElementById("controlsDiv")
 
     /**
    * @type {THREE.Mesh}
@@ -21,6 +27,7 @@ export class Sign extends THREE.Object3D{
 
   textSprite;
 
+
     //the sign is composed of two pieces
     //the base which is the bottom part
     //and the main which is the top part having the image
@@ -34,7 +41,9 @@ export class Sign extends THREE.Object3D{
         signMainWidth = 5, 
         signMainHeight = 5,
         signScale = 1,
-        padding = 4} = {}){
+        padding = 4,
+        triggerDistance = 15,
+        controls = "asd"} = {}){
 
         super()
         this.signBaseHeight = signBaseHeight;
@@ -44,6 +53,10 @@ export class Sign extends THREE.Object3D{
         this.signMainWidth = signMainWidth;
         this.signID = signID
         this.signName = signName
+        this.triggerDistance = triggerDistance
+        this.controls = controls
+
+
 
 
         const baseGeometry = new TextGeometry(signBaseText, {
@@ -53,12 +66,13 @@ export class Sign extends THREE.Object3D{
         })//new THREE.PlaneGeometry( signBaseWidth, signBaseHeight);
         const mainGeometry = new THREE.PlaneGeometry( signMainWidth, this.signMainHeight);
 
-        let hitBoxWidth = signMainWidth + 2 * padding;
+        console.log("sign " + signName + " width " + signMainWidth, " pad" + padding)
+        let hitBoxWidth = signMainWidth + padding; //not affected by scale
         let hitBoxHeight = signMainHeight + signBaseHeight + 2 * padding;
         const hitBoxGeo = new THREE.BoxGeometry(hitBoxWidth, hitBoxHeight, 0);
-        const hitBoxMat = new THREE.MeshBasicMaterial({visible: false});
+        const hitBoxMat = new THREE.MeshBasicMaterial({color: 0xff0000});
         this.hitBox = new THREE.Mesh(hitBoxGeo, hitBoxMat); //will be an attribute, needed for collision detection        
-
+        this.hitBox.visible = false;
         const baseMaterial = new THREE.MeshStandardMaterial({color: 0x00ff00});
 
         const texture = new THREE.TextureLoader().load( "textures/" + signPic );
@@ -177,11 +191,15 @@ export class Sign extends THREE.Object3D{
     }
 
     trigger(){
+        super.trigger()
         this.textSprite.visible = true;
+        //this.hitBox.visible = true;
     }
 
     revert(){
+        super.revert()
         this.textSprite.visible = false;
+        //this.hitBox.visible = false;
     }
 
 

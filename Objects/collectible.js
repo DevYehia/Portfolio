@@ -20,12 +20,12 @@ export class Collectible extends SquareImage{
         super({
             width: width,
             height: height,
-            padding: padding
+            padding: padding,
+            maintainAspectRatio: false
         });
 
-    this.ready.then( () => {
-        this.imageMesh.rotateX(- Math.PI / 2)
-    })
+        this.imageMesh.rotateX(-Math.PI / 2)
+
 
         let vertices = []
         for(let i = 0 ; i < 50 ; i++){

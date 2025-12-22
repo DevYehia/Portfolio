@@ -23,6 +23,8 @@ export class HOFState extends BaseState{
 
     constructor(){
         super()
+
+        this.interactableList = [hallOfFameRoom.door, ...hallOfFameRoom.board.imageList]
         //this.lightInterval = setInterval(this.incLight.bind(this), 1 / 1000);
     }
 
@@ -80,71 +82,10 @@ export class HOFState extends BaseState{
         let playerPos = playerData.playerPos;
         let camera = playerData.camera
 
-        let controlsDiv = document.getElementById("controlsDiv");
+        this.handleDialog()
 
-        let doorDist = getDistanceXZ(playerPos, hallOfFameRoom.door.doorMesh)
-
-        //check for door collision
-        //see the door and be at good distance
-        if (this.checkForTrigger(doorDist, this.doorTriggerDistance, camera, hallOfFameRoom.door.hitBox)){
-            controlsDiv.innerHTML = "Door<br>E - Open/Close";
-            controlsDiv.hidden = false;
-
-            //now check for keyboard input
-            if(keys["e"] == KeyStates.SINGLE_PRESS || keys["e"] == KeyStates.LONG_PRESS){
-                hallOfFameRoom.door.trigger();
-            }
-            return //don't continue to image checking , no need
-
-        }
-        else{
-            //controlsDiv.hidden = true;
-        }        
-
-        //according to player look at and position find image
-    
-        //check if still looking at curr image
-        let boardPlayerDist = Math.abs(playerPos.x - hallOfFameRoom.board.getPosition().x)
-        if(this.currImage != null){
-            if(!this.checkForTrigger(boardPlayerDist, this.boardTriggerDist, camera, this.currImage.hitBoxMesh)){
-                this.currImage.hitBoxMesh.visible = false
-                this.currImage = null;
-                controlsDiv.hidden = true;
-
-            }
-            else{ //still triggering sign, handle interactions
-                this.handleInput(keys)
-            }
-        }
-
-        else{
-            let foundImage = false;
-            let imageList = hallOfFameRoom.board.imageList
-            console.log("image list os " + imageList.length)
-            for(let i = 0 ; i < imageList.length ; i++){
-                let currImage = imageList[i]
-
-                if(this.checkForTrigger(boardPlayerDist, this.boardTriggerDist, camera, currImage.hitBoxMesh)){
-
-                    this.currImage = currImage
-
-                    currImage.hitBoxMesh.visible = true
-
-                    controlsDiv.innerHTML = currImage.friendName + "<br>P - Show Profile";
-                    controlsDiv.hidden = false;
-
-                    foundImage = true;
-
-                    break; //found a sign,end loop
-
-                }
-            }
-
-            if(!foundImage){
-                controlsDiv.hidden = true; //didn't trigger any door or sign
-            }
-        }
-
+        if(!this.isInDialog)
+            this.checkInteraction(playerPos, playerData.camera)
 
         //handle state change
 

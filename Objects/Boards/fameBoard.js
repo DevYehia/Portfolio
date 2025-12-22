@@ -72,7 +72,8 @@ export class Board extends VarLengthBoard{
                     padding: imageSpacing / 2,
                     name: pplList[idx].name,
                     profile: pplList[idx].profile,
-                    imageName: "../textures/friends/" + pplList[idx].image
+                    imageName: "../textures/friends/" + pplList[idx].image,
+                    controls: pplList[idx].name + "<br>E - Show Profile"
                 });
                 this.add(image)
                 image.position.copy(currPos);

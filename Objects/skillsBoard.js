@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import { SquareImage } from './squareImage'
+import { PlaneGeometry } from 'three/webgpu';
 
 
 export class SkillsBoard extends THREE.Object3D{
@@ -51,8 +52,10 @@ export class SkillsBoard extends THREE.Object3D{
                     width: imageDim,
                     height: imageDim,
                     imageName: "../textures/skills/" + pplList[idx],
+                    noHitbox: true,
                     clippingPlanes: clippingPlanes
                 });
+
                 this.add(image)
                 image.position.copy(currPos);
                 this.imageList.push(image)
