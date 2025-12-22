@@ -37,6 +37,7 @@ export class Board extends VarLengthBoard{
         const baordGeo = new THREE.PlaneGeometry(this.boardWidth, this.boardHeight);
         const boardMat = new THREE.MeshBasicMaterial({color:  0xffd700, side: THREE.DoubleSide, map: boardTexture});
         this.boardMesh = new THREE.Mesh(baordGeo, boardMat);
+        this.boardMesh.position.y += heightOffset
         this.add(this.boardMesh)
 
         //add the images
@@ -44,7 +45,7 @@ export class Board extends VarLengthBoard{
         let boardTopLeft = new THREE.Vector3(-this.boardWidth/ 2, this.boardHeight / 2, 0)
         let currPos = new THREE.Vector3(
             imageSpacing + imageDim / 2,
-            -(imageSpacing + imageDim / 2),
+            -(imageSpacing + imageDim / 2) + heightOffset,
             0.2).add(boardTopLeft);
 
         let isOddNum = (pplList.length % 2 != 0);

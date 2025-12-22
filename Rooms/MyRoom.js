@@ -35,7 +35,7 @@ export class MyRoom extends Room{
         this.addSkillsBoards()
 
 
-        this.addWalls()
+        //this.addWalls()
 
 
     }

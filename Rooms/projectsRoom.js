@@ -32,7 +32,7 @@ export class ProjectsRoom extends Room{
         //this.setDims(this.width, this.height, currRoomDims.z + 1)
         console.log("room dims is " + JSON.stringify(currRoomDims))
         this.depth = currRoomDims.z + 1;
-        this.addWalls()
+        this.addWalls("../textures/Wall.jpg", 0x0000ff)
 
         this.addFloor("../textures/floor.jpg")
 

@@ -62,7 +62,11 @@ export class HOFRoom extends Room{
 
         this.add(this.board, this.title)
 
-        this.addWalls()
+        this.addWalls("../textures/fancyWall2.jpg")
+
+        this.addLight()
+
+        this.addFloor("../textures/fancyFloor.jpg")
 
     }
 }
