@@ -13,10 +13,10 @@ export const skills = {
     "Web Languages" : {
         numRows: 2,
         list: [
-            "HTML.png",
-            "CSS.png",
-            "Javascript.png",
-            "PHP.png"
+            "html.png",
+            "css.png",
+            "js.webp",
+            "php.png"
         ]
     },
 
@@ -25,29 +25,28 @@ export const skills = {
         list: [
             "SQL.png",
             "MySQL.png",
-            "Javascript.png",
-            "PHP.png"
+            "NOSql.png"
         ]
     },
 
     "Version Control" : {
         numRows : 1,
         list: [
-            "Git.png",
-            "Github.png"
+            "git.webp",
+            "github.webp"
         ]
     },
 
     "Mobile Stuff" : {
         numRows : 1,
         list : [
-            "Flutter",
-            "Dart"
+            "flutter.png",
+            "dart.png"
         ]
     },
 
     "OS" : {
        numRows: 1,
-       list: [ "Linux" ]
+       list: [ "linux.png" ]
     }
 }

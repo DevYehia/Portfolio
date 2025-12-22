@@ -20,6 +20,8 @@ export class SkillsBoardsGroup extends THREE.Object3D{
 
             super()
 
+            this.boardWidth = boardWidth
+
             let imageSpacing = 1;
 
             for(let key in skills){
@@ -29,9 +31,11 @@ export class SkillsBoardsGroup extends THREE.Object3D{
                 let board = new SkillsBoard(
                         {
                             id: key,
+                            boardWidth: boardWidth,
+                            boardHeight: boardHeight,
                             boardName: key,
                             pplList: skills[key].list,
-                            imageDim: 3,
+                            imageDim: 6 / skills[key].numRows,
                             numRows: skills[key].numRows,
                             clippingPlanes: clippingPlanes
                         }
@@ -66,7 +70,7 @@ export class SkillsBoardsGroup extends THREE.Object3D{
         let currBoard = this.boardsList[this.currBoardIdx]
         let nextBoard = this.boardsList[this.nextBoardIdx]
 
-        console.log("next pos is " + JSON.stringify(nextBoard.position.z))
+       // console.log("next pos is " + JSON.stringify(nextBoard.position.z))
 
         //console.log("curr is " + currBoardIdx + " next is " + nextBoardIdx)
         //console.log()
@@ -75,7 +79,7 @@ export class SkillsBoardsGroup extends THREE.Object3D{
         //check have we reahced destination
         if(nextBoard.position.z <= 0){
 
-            console.log("How are we here")
+           // console.log("How are we here")
             //to handle offshooting
             nextBoard.position.z = 0
 
@@ -89,7 +93,7 @@ export class SkillsBoardsGroup extends THREE.Object3D{
 
 
             //add the waiting board
-            this.boardsList[this.nextBoardIdx].position.z = this.boardsList[this.currBoardIdx].position.z + 10;
+            this.boardsList[this.nextBoardIdx].position.z = this.boardsList[this.currBoardIdx].position.z + this.boardWidth;
             this.add(this.boardsList[this.nextBoardIdx])
 
             

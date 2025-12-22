@@ -92,16 +92,14 @@ export class MyRoom extends Room{
         let roomWorldPos = new THREE.Vector3();
         this.getWorldPosition(roomWorldPos)
 
-        //add clipping planes for the animation
-        console.log("World pos is " + JSON.stringify(roomWorldPos));
-        console.log("plane at " + roomWorldPos.z -this.depth / 2 + 5)
+        let boardWidth = 15;
 
         let clippingPlanes = [
-        new THREE.Plane(new THREE.Vector3(0, 0, -1), roomWorldPos.z - this.depth/ 2 + 5), 
-        new THREE.Plane(new THREE.Vector3(0, 0, 1), -(roomWorldPos.z -this.depth / 2 - 5)),
+        new THREE.Plane(new THREE.Vector3(0, 0, -1), roomWorldPos.z - this.depth/ 2 + boardWidth / 2), 
+        new THREE.Plane(new THREE.Vector3(0, 0, 1), -(roomWorldPos.z -this.depth / 2 - boardWidth / 2)),
         ]
 
-        let skillsBoardGroup = new SkillsBoardsGroup({clippingPlanes: clippingPlanes});
+        let skillsBoardGroup = new SkillsBoardsGroup({boardWidth: boardWidth, clippingPlanes: clippingPlanes});
         skillsBoardGroup.position.set(1, 5, -this.depth / 2)
 
         this.add(skillsBoardGroup)
