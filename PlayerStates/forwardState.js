@@ -3,6 +3,7 @@ import * as env from '../environment';
 import {PlayerData, collisionMargin, changeState} from './common';
 
 import { ForkRoadState } from './forkRoadState';
+import { MyRoomState } from './MyRoomState';
 import { BaseState } from './baseState';
 import { myRoom } from '../environment';
 import { keys, KeyStates } from '../Utils/keyboardUtils'
@@ -38,10 +39,14 @@ export class ForwardState extends BaseState{
         //myRoom.getNextSkill()
         let playerPos = playerData.playerPos;
         //if player goes back
-        let limitZ = -(env.nearBoundaryCuboidDepth / 2 + env.pathWidth);
-
-        if(playerPos.z > limitZ){
+        let backLimitZ = -(env.nearBoundaryCuboidDepth / 2 + env.pathWidth);
+        let forwardLimitZ = backLimitZ - env.boundaryCuboidWidth;
+        if(playerPos.z > backLimitZ){
             changeState(new ForkRoadState());
+        }
+
+        if(playerPos.z < forwardLimitZ){
+            changeState(new MyRoomState())
         }
 
         if(keys['p'] == KeyStates.SINGLE_PRESS){

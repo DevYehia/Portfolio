@@ -191,6 +191,7 @@ export class Sign extends Interactable{
     }
 
     trigger(){
+        console.log("Anna btrigger aho")
         super.trigger()
         this.textSprite.visible = true;
         //this.hitBox.visible = true;

@@ -5,6 +5,8 @@ import { skills } from "../Data/skills";
 import { TimelineBoard } from "../Objects/myTimeline";
 import { profiles } from "../Data/profiles";
 import { Sign } from '../Objects/sign'
+import { handleInteraction } from "../Utils/interactionsUtils";
+import { SkillsBoardsGroup } from "../Objects/skillsBoardGroup";
 
 export class MyRoom extends Room{
 
@@ -12,6 +14,8 @@ export class MyRoom extends Room{
     nextSkillTransitionInterval;
 
     prevSkillTransitionInterval;
+
+    signsList = []
 
     //my room will have an image of me
 
@@ -47,16 +51,20 @@ export class MyRoom extends Room{
         let signsPos = new THREE.Vector3(this.width - signsWallOffset, 0, -signSpacing);
 
 
+
         for(let i = 0 ; i < profiles.length ; i++){
             let sign = new Sign({
                 signID: i,
                 signPic: "../textures/profiles/" + profiles[i].image,
                 signName: profiles[i].name,
                 signBaseText: profiles[i].name,
-                padding: this.signSpacing / 2,
-                signScale: 1.2});
+                padding: signSpacing / 2,
+                signScale: 1.2,
+                controls: profiles[i].name + "<br>E - Show"});
 
+            sign.interactions['e'] = () => {handleInteraction(profiles[i].profile, "OPEN_LINK")}
             this.add(sign)
+            this.signsList.push(sign)
             sign.position.copy(signsPos)
             sign.rotateY(-Math.PI / 2)
             signsPos.z -= signSpacing;
@@ -80,12 +88,6 @@ export class MyRoom extends Room{
 
     //will be two skill boards at a time
     addSkillsBoards(){
-        this.boardsList = [];
-        let dummyList = [
-            "Yaya",
-            "mohamed",
-            "Ismail"
-        ]
 
         let roomWorldPos = new THREE.Vector3();
         this.getWorldPosition(roomWorldPos)
@@ -95,144 +97,17 @@ export class MyRoom extends Room{
         console.log("plane at " + roomWorldPos.z -this.depth / 2 + 5)
 
         let clippingPlanes = [
-           new THREE.Plane(new THREE.Vector3(0, 0, -1), roomWorldPos.z - this.depth/ 2 + 5), 
-           new THREE.Plane(new THREE.Vector3(0, 0, 1), -(roomWorldPos.z -this.depth / 2 - 5)),
+        new THREE.Plane(new THREE.Vector3(0, 0, -1), roomWorldPos.z - this.depth/ 2 + 5), 
+        new THREE.Plane(new THREE.Vector3(0, 0, 1), -(roomWorldPos.z -this.depth / 2 - 5)),
         ]
 
-        //let boardWidth = 10;
-        let imageSpacing = 1;
+        let skillsBoardGroup = new SkillsBoardsGroup({clippingPlanes: clippingPlanes});
+        skillsBoardGroup.position.set(1, 5, -this.depth / 2)
 
-        let imageDim = 3
+        this.add(skillsBoardGroup)
 
-
-        for(let key in skills){
-
-            console.log(key + " hey " + JSON.stringify(skills.key))
-
-            let board = new SkillsBoard(
-                    {
-                        id: key,
-                        boardName: key,
-                        pplList: skills[key].list,
-                        imageDim: 3,
-                        numRows: skills[key].numRows,
-                        clippingPlanes: clippingPlanes
-                    }
-                )
-            board.position.y += board.boardHeight / 2
-            board.position.x += 1
-            board.rotateY(Math.PI / 2)
-            this.boardsList.push(board)
-        }
-
-        //setup current board
-        this.prevBoardIdx = this.boardsList.length - 1;
-        this.currBoardIdx = 0;
-        this.nextBoardIdx = 1;
-
-        console.log(" ds" + this.prevBoardIdx)
-
-        let boardWidth = this.boardsList[0].boardWidth;
-
-        //add current, next and previous boards to object
-        //next and previous should not appear due to clipping plane
-        this.boardsList[0].position.z = -this.depth / 2;
-        this.boardsList[1].position.z = this.boardsList[0].position.z + boardWidth;
-        this.boardsList[this.prevBoardIdx].position.z = this.boardsList[0].position.z - boardWidth;
-
-        this.add(this.boardsList[0], this.boardsList[1], this.boardsList[this.prevBoardIdx])
-
-
+        this.skillsBoardGroup = skillsBoardGroup
     }
 
-    getNextSkill(){
-        if(this.nextSkillTransitionInterval == null)
-            this.nextSkillTransitionInterval = setInterval(this.animateNextSkill.bind(this), 1 / 100)
-    }
-
-    animateNextSkill(){
-        let currBoard = this.boardsList[this.currBoardIdx]
-        let nextBoard = this.boardsList[this.nextBoardIdx]
-
-        //console.log("curr is " + currBoardIdx + " next is " + nextBoardIdx)
-        //console.log()
-        //console.log("pos is " + JSON.stringify(nextBoard.position))
-
-        //check have we reahced destination
-        if(nextBoard.position.z <= -this.depth / 2){
-
-
-            //to handle offshooting
-            nextBoard.position.z = -this.depth / 2
-
-            //remove original prev board
-            //curr is now prev
-            this.remove(this.boardsList[this.prevBoardIdx])
-
-            this.prevBoardIdx = this.currBoardIdx;
-            this.currBoardIdx = this.nextBoardIdx;
-            this.nextBoardIdx = (this.nextBoardIdx + 1) % this.boardsList.length;
-
-
-            //add the waiting board
-            this.boardsList[this.nextBoardIdx].position.z = this.boardsList[this.currBoardIdx].position.z + 10;
-            this.add(this.boardsList[this.nextBoardIdx])
-
-            
-
-            clearInterval(this.nextSkillTransitionInterval)
-            this.nextSkillTransitionInterval = null;
-
-        }
-
-        //move both boards
-
-        currBoard.position.z -= 1 / 10;
-        nextBoard.position.z -= 1 / 10;        
-    }
-
-    getPrevSkill(){
-        if(this.prevSkillTransitionInterval == null)
-            this.prevSkillTransitionInterval = setInterval(this.animatePrevSkill.bind(this), 1 / 100)
-    }
-
-    animatePrevSkill(){
-        let currBoard = this.boardsList[this.currBoardIdx]
-        let prevBoard = this.boardsList[this.prevBoardIdx]
-
-
-        //check have we reahced destination
-        if(prevBoard.position.z >= -this.depth / 2){
-
-            let nextBoard = this.boardsList[this.nextBoardIdx]
-            //to handle offshooting
-            prevBoard.position.z = -this.depth / 2
-
-            //remove next board
-            //curr board is now next board
-            this.remove(nextBoard)
-
-
-            this.nextBoardIdx = this.currBoardIdx;
-            this.currBoardIdx = this.prevBoardIdx;
-            this.prevBoardIdx = (this.prevBoardIdx - 1 + this.boardsList.length) % this.boardsList.length
-
-
-            //add the new prev board
-            this.boardsList[this.prevBoardIdx].position.z = this.boardsList[this.currBoardIdx].position.z - 10;
-
-
-            this.add(this.boardsList[this.prevBoardIdx])
-
-
-            clearInterval(this.prevSkillTransitionInterval)
-            this.prevSkillTransitionInterval = null;
-
-        }
-
-        //move both boards
-
-        currBoard.position.z += 1 / 10;
-        prevBoard.position.z += 1 / 10;        
-    }
+  
 }

@@ -2,7 +2,7 @@ export const profiles = [
     {
         "name" : "Linkedin",
         "image" : "linkedin.png",
-        "profile" : "www.linkedin.com/in/yehia-hassan-817ab222b"
+        "profile" : "https://www.linkedin.com/in/yehia-hassan-817ab222b"
     },
     {
         "name" : "Github",

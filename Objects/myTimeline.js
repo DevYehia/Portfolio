@@ -1,8 +1,9 @@
 import * as THREE from 'three';
 import { gsap } from 'gsap/gsap-core';
+import { Interactable } from './interactable';
 
 
-export class TimelineBoard extends THREE.Object3D {
+export class TimelineBoard extends Interactable {
 
 
 
