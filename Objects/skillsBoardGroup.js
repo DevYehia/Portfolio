@@ -24,13 +24,25 @@ export class SkillsBoardsGroup extends THREE.Object3D{
 
             let imageSpacing = 1;
 
+
+            const texture = new THREE.TextureLoader().load( "textures/border3.jpg" );
+            texture.colorSpace = THREE.SRGBColorSpace
+
+            //add the board
+            const baordGeo = new THREE.PlaneGeometry(boardWidth, boardHeight);
+            const boardMat = new THREE.MeshBasicMaterial({side: THREE.DoubleSide, map: texture});
+            this.boardMesh = new THREE.Mesh(baordGeo, boardMat);      
+            this.add(this.boardMesh)      
+            this.boardMesh.position.y += boardHeight / 2
+            this.boardMesh.rotateY(Math.PI / 2)
+
             for(let key in skills){
 
                 console.log(key + " hey " + JSON.stringify(skills.key))
 
                 let board = new SkillsBoard(
                         {
-                            id: key,
+                            boardName: key,
                             boardWidth: boardWidth,
                             boardHeight: boardHeight,
                             boardName: key,
@@ -40,6 +52,8 @@ export class SkillsBoardsGroup extends THREE.Object3D{
                             clippingPlanes: clippingPlanes
                         }
                     )
+                //set up interactions
+                board.controls = key + "<br>E - Show Brief"
                 board.position.y += board.boardHeight / 2
                 board.rotateY(Math.PI / 2)
                 this.boardsList.push(board)

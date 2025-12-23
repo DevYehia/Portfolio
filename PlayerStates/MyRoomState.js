@@ -23,7 +23,7 @@ export class MyRoomState extends BaseState{
 
         console.log("E7a hena")
 
-        this.interactableList = [myRoom.door, ...myRoom.signsList]
+        this.interactableList = [myRoom.door, ...myRoom.signsList, ...myRoom.skillsBoardGroup.boardsList]
 
 
     }

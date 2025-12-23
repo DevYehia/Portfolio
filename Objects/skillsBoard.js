@@ -1,14 +1,16 @@
 import * as THREE from 'three'
 import { SquareImage } from './squareImage'
 import { PlaneGeometry } from 'three/webgpu';
+import { Interactable } from './interactable';
 
 
-export class SkillsBoard extends THREE.Object3D{
+export class SkillsBoard extends Interactable{
 
     worldPos = new THREE.Vector3()
 
 
     constructor({
+        boardName,
         pplList = [],
         imageDim = 3,
         boardWidth = 10,
@@ -24,17 +26,22 @@ export class SkillsBoard extends THREE.Object3D{
         this.boardWidth = boardWidth;
         this.boardHeight = boardHeight;
         this.numRows = numRows;
+        this.boardName = boardName
         this.imageList = []
+
+
+
+        //add the board
+        const baordGeo = new THREE.PlaneGeometry(boardWidth, boardHeight);
+        const boardMat = new THREE.MeshBasicMaterial({color: 0x0000ff, side: THREE.DoubleSide, visible: false});
+        this.hitBox = new THREE.Mesh(baordGeo, boardMat);    
+        this.add(this.hitBox)
 
         //add the board
         let numImagePerRow = Math.ceil(pplList.length / numRows)
         let imageSpacingHorizontal = (boardWidth - imageDim * numImagePerRow) / (numImagePerRow + 1);
         let imageSpacingVertical = (boardHeight - imageDim * numRows) / (numRows + 1);
 
-        const baordGeo = new THREE.PlaneGeometry(boardWidth, boardHeight);
-        const boardMat = new THREE.MeshBasicMaterial({color: 0x0000ff, side: THREE.DoubleSide, clippingPlanes: clippingPlanes});
-        this.boardMesh = new THREE.Mesh(baordGeo, boardMat);
-        this.add(this.boardMesh)
 
         //add the images
         let origImageX = - boardWidth / 2 + imageDim / 2 + imageSpacingHorizontal; 
@@ -89,6 +96,14 @@ export class SkillsBoard extends THREE.Object3D{
     getPosition(){
         this.getWorldPosition(this.worldPos)
         return this.worldPos
+    }
+
+    trigger(){
+        super.trigger()
+    }
+
+    revert(){
+        super.revert()
     }
 
 

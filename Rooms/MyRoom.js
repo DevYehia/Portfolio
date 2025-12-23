@@ -99,8 +99,16 @@ export class MyRoom extends Room{
         new THREE.Plane(new THREE.Vector3(0, 0, 1), -(roomWorldPos.z -this.depth / 2 - boardWidth / 2)),
         ]
 
-        let skillsBoardGroup = new SkillsBoardsGroup({boardWidth: boardWidth, clippingPlanes: clippingPlanes});
+        let skillsBoardGroup = new SkillsBoardsGroup({boardWidth: boardWidth, clippingPlanes: clippingPlanes, boardHeight: 12});
         skillsBoardGroup.position.set(1, 5, -this.depth / 2)
+
+        //set up interactions
+        for(let boardIdx in skillsBoardGroup.boardsList){
+            let board = skillsBoardGroup.boardsList[boardIdx]
+            board.interactions['e'] = () => {
+                handleInteraction(skills[board.boardName], "START_DIAG")
+            }
+        }
 
         this.add(skillsBoardGroup)
 

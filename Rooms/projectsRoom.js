@@ -34,7 +34,7 @@ export class ProjectsRoom extends Room{
         this.depth = currRoomDims.z + 1;
         this.addWalls("../textures/Wall.jpg", 0x0000ff)
 
-        this.addFloor("../textures/floor.jpg")
+        this.addFloor("../textures/floor.jpg", 4)
 
         this.addLight()
 

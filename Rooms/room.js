@@ -87,13 +87,12 @@ export class Room extends THREE.Object3D{
         const backWallGeo = new THREE.PlaneGeometry(roomWidth, roomHeight);
         const sideWallGeo = new THREE.PlaneGeometry(roomDepth, roomHeight);
         const roofGeo = new THREE.PlaneGeometry(roomWidth, roomDepth)
-        const WallTexture = new THREE.TextureLoader().load(texturePath)
 
+        //wall texture
+        const WallTexture = new THREE.TextureLoader().load(texturePath)
         WallTexture.wrapS = THREE.RepeatWrapping;
         WallTexture.wrapT = THREE.RepeatWrapping;
-
         let rep = 2
-
         WallTexture.repeat.set(rep * (Math.ceil(this.width / this.height)),rep)
         WallTexture.colorSpace = THREE.SRGBColorSpace
 
@@ -101,10 +100,16 @@ export class Room extends THREE.Object3D{
         sideWallTexture.repeat.set(rep * (Math.ceil(this.depth / this.height)), rep)
         let sideWallMat = new THREE.MeshStandardMaterial({color: wallColor, side: THREE.DoubleSide, map: sideWallTexture})
         
-
+        //ceiling texture
+        const ceilTexture = new THREE.TextureLoader().load(texturePath)
+        ceilTexture.wrapS = THREE.RepeatWrapping;
+        ceilTexture.wrapT = THREE.RepeatWrapping;
+        rep = 3
+        ceilTexture.repeat.set(rep * (Math.ceil(this.width / this.depth)),rep)
+        ceilTexture.colorSpace = THREE.SRGBColorSpace
 
         let wallMat = new THREE.MeshStandardMaterial({color: wallColor, side: THREE.DoubleSide, map: WallTexture})
-        let roofMat = new THREE.MeshStandardMaterial({color: 0xffffff, side: THREE.DoubleSide})
+        let roofMat = new THREE.MeshStandardMaterial({color: 0xffffff, side: THREE.DoubleSide, map: ceilTexture})
         
         this.wallGroup = new THREE.Group();
 
@@ -119,7 +124,6 @@ export class Room extends THREE.Object3D{
         //walls will be positioned around the origin of the group at the bottom left corner of da room
 
         //this wall is the only wall that has its origin at bottom left because it is made from a shape
-        frontWall.position.set(0, 0, 0)
 
         //set-up walls position
         rightWall.rotateY(Math.PI / 2);
@@ -141,7 +145,7 @@ export class Room extends THREE.Object3D{
 
     }
 
-    addFloor(floorTexturePath){
+    addFloor(floorTexturePath, rep = 4){
         const floorGeo = new PlaneGeometry(this.width, this.depth);
         let floorTexture = new THREE.TextureLoader().load(floorTexturePath)
 
@@ -149,7 +153,7 @@ export class Room extends THREE.Object3D{
         floorTexture.wrapS = THREE.RepeatWrapping;
         floorTexture.wrapT = THREE.RepeatWrapping;
 
-        floorTexture.repeat.set(4 * (Math.ceil(this.width / this.depth)),4)
+        floorTexture.repeat.set(rep * (Math.ceil(this.width / this.depth)), rep)
 
         const floorMat = new THREE.MeshPhongMaterial({map: floorTexture, side: THREE.DoubleSide});
 
@@ -162,30 +166,57 @@ export class Room extends THREE.Object3D{
     }
 
     addFrontWall(roomWidth, roomHeight, texturePath){
-        let shape = new THREE.Shape();
-        shape.setFromPoints(
-            [new THREE.Vector2(0,0),
-            new THREE.Vector2(0,roomHeight),
-            new THREE.Vector2(roomWidth,roomHeight),
-            new THREE.Vector2(roomWidth,0)
-            ]
-        );
+        // let shape = new THREE.Shape();
+        // shape.setFromPoints(
+        //     [new THREE.Vector2(0,0),
+        //     new THREE.Vector2(0,roomHeight),
+        //     new THREE.Vector2(roomWidth,roomHeight),
+        //     new THREE.Vector2(roomWidth,0)
+        //     ]
+        // );
 
-        let holeStartX = (roomWidth - this.door.doorWidth) / 2;
-        const hole = new THREE.Path();
-        hole.moveTo(holeStartX, 0); //bottom left corner of da door
-        hole.lineTo(holeStartX, this.door.doorHeight);
-        hole.lineTo(holeStartX + this.door.doorWidth, this.door.doorHeight);
-        hole.lineTo(holeStartX + this.door.doorWidth, 0);
-        hole.lineTo(holeStartX, 0);
+        // let holeStartX = (roomWidth - this.door.doorWidth) / 2;
+        // const hole = new THREE.Path();
+        // hole.moveTo(holeStartX, 0); //bottom left corner of da door
+        // hole.lineTo(holeStartX, this.door.doorHeight);
+        // hole.lineTo(holeStartX + this.door.doorWidth, this.door.doorHeight);
+        // hole.lineTo(holeStartX + this.door.doorWidth, 0);
+        // hole.lineTo(holeStartX, 0);
 
-        shape.holes.push(hole);
+        // shape.holes.push(hole);
+        const WallTexture = new THREE.TextureLoader().load(texturePath)
+        let rep = 2
+        //WallTexture.repeat.set(rep * (Math.ceil(this.width / this.height)),rep)
+        WallTexture.colorSpace = THREE.SRGBColorSpace
 
-        let frontWallGeo = new THREE.ExtrudeGeometry(shape);
+        let frontWallMat = new THREE.MeshPhongMaterial({side: THREE.DoubleSide, map: WallTexture})
 
-        let frontWallMat = new THREE.MeshPhongMaterial({side: THREE.DoubleSide})
-        return new THREE.Mesh(frontWallGeo, frontWallMat)
+        //three planes approach
+        let sideWidth = (roomWidth - this.door.doorWidth) / 2
+        let topHeight = roomHeight - this.door.doorHeight
+        let sidePlanesGeo = new THREE.BoxGeometry(sideWidth, roomHeight, 0.2)
+        let topPlaneGeo = new THREE.BoxGeometry(this.door.doorWidth, topHeight, 0.2)
+
+        //left mesh
+        let leftMesh = new THREE.Mesh(sidePlanesGeo, frontWallMat)
+        leftMesh.position.x += sideWidth / 2;
+        leftMesh.position.y += roomHeight / 2;
+        //right mesh
+        let rightMesh = new THREE.Mesh(sidePlanesGeo, frontWallMat)
+        rightMesh.position.x += roomWidth - sideWidth / 2;
+        rightMesh.position.y += roomHeight / 2
+
+        //top mesh
+        let topMesh = new THREE.Mesh(topPlaneGeo, frontWallMat)
+        topMesh.position.y += this.door.doorHeight + topHeight / 2;
+        topMesh.position.x += roomWidth / 2
+
+        let elGroup = new THREE.Group()
+        elGroup.add(rightMesh, leftMesh, topMesh)
+
+        return elGroup
     }
+
 
     setDepth(){
         const box = new THREE.Box3().setFromObject(this);

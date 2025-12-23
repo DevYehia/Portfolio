@@ -32,8 +32,9 @@ const moveSpeed = 20
 
 
 
-const renderer = new THREE.WebGLRenderer();
+const renderer = new THREE.WebGLRenderer({antialias: true});
 renderer.setSize( window.innerWidth, window.innerHeight );
+renderer.setPixelRatio(window.devicePixelRatio)
 document.body.appendChild( renderer.domElement );
 renderer.localClippingEnabled = true;
 
@@ -87,7 +88,7 @@ let torch = new Torch();
 let pointLight = new THREE.PointLight(0xFFFFFF, 100, 0)
 //scene.add(pointLight)
 
- let ambLight = new THREE.AmbientLight(0xffffff, 0.1)
+ let ambLight = new THREE.AmbientLight(0xffffff, 1)
  scene.add(ambLight)
 
 pointLight.position.copy(camera.position)
