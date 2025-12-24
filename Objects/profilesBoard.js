@@ -53,7 +53,6 @@ export class ProfilesBoard extends VarLengthBoard{
                 currPos.x = firstRowX                
             }
 
-            console.log("curr pos is " + JSON.stringify(currPos))
 
             for(let col = 0 ;  col < numImagePerRow ; col++){
                 let idx = currImgIdx
@@ -62,7 +61,6 @@ export class ProfilesBoard extends VarLengthBoard{
                     continue
                 }
 
-                console.log("profiel is " + profilesList[idx])
 
                 let image = new CircleImage({
                     radius: imageRadius,

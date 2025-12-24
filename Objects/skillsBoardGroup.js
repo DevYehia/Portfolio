@@ -22,7 +22,7 @@ export class SkillsBoardsGroup extends Interactable{
             super()
 
 
-
+            this.clippingPlanes = clippingPlanes
             this.boardWidth = boardWidth
 
             let imageSpacing = 1;

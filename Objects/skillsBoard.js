@@ -83,7 +83,6 @@ export class SkillsBoard extends Interactable{
                 this.add(image)
                 image.position.copy(currPos);
                 this.imageList.push(image)
-                console.log("horiz is " + JSON.stringify(currPos))
 
                 currPos.x += imageDim + imageSpacingHorizontal
             }

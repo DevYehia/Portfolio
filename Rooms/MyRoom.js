@@ -7,6 +7,7 @@ import { profiles } from "../Data/profiles";
 import { Sign } from '../Objects/sign'
 import { handleInteraction } from "../Utils/interactionsUtils";
 import { SkillsBoardsGroup } from "../Objects/skillsBoardGroup";
+import { timelineData } from "../Data/timeline";
 
 export class MyRoom extends Room{
 
@@ -22,13 +23,14 @@ export class MyRoom extends Room{
     //need position early for clipping planes
     constructor(width, height, depth, pos){
         super({
-            width: width,
             height: height,
+            depth: depth
         })
-        this.position.copy(pos)
+        //this.position.copy(pos)
 
         this.addContact()
 
+        this.addDoor()
 
         this.addTimelineBoard()
 
@@ -48,7 +50,7 @@ export class MyRoom extends Room{
         let signSpacing = 13
 
         //place left signs
-        let signsPos = new THREE.Vector3(this.width - signsWallOffset, 0, -signSpacing);
+        let signsPos = new THREE.Vector3(signsWallOffset + signSpacing, 0, -this.depth + 0.1);
 
 
 
@@ -61,17 +63,20 @@ export class MyRoom extends Room{
                 padding: signSpacing / 2,
                 signScale: 1.2,
                 controls: profiles[i].name + "<br>E - Show"});
+            
+            console.log("at " + signsPos.x)
 
             sign.interactions['e'] = () => {handleInteraction(profiles[i].profile, "OPEN_LINK")}
             this.add(sign)
             this.signsList.push(sign)
             sign.position.copy(signsPos)
-            sign.rotateY(-Math.PI / 2)
-            signsPos.z -= signSpacing;
+            signsPos.x += signSpacing;
         }        
 
         //set depth
-        this.depth = -signsPos.z
+        this.width = 2 * signsWallOffset + (profiles.length + 1) * signSpacing
+
+        console.log("width is ", this.width)
 
 
     }
@@ -79,24 +84,41 @@ export class MyRoom extends Room{
 
     addTimelineBoard(){
         console.log("depth is at " + this.depth)
-        this.timeLineBoard = new TimelineBoard();
-        this.timeLineBoard.position.x = this.width / 2
+        this.timeLineBoard = new TimelineBoard({
+            width: 15,
+            height: 10,
+            timeLineList: timelineData,
+            clipPlanes : [
+                new THREE.Plane(new THREE.Vector3(0, 0, -1), -this.depth / 2 + 15 / 2),
+                new THREE.Plane(new THREE.Vector3(0, 0, 1), this.depth / 2 + 15 / 2),                
+            ]
+        });
+        this.timeLineBoard.rotateY(-Math.PI / 2)
+        this.timeLineBoard.position.x = this.width - 0.5
         this.timeLineBoard.position.y = 5
-        this.timeLineBoard.position.z -= this.depth - 1;
+        this.timeLineBoard.position.z -= this.depth / 2;
         this.add(this.timeLineBoard)
+
+        //set up interactions
+        this.timeLineBoard.interactions['n'] = () => {
+            handleInteraction(this.timeLineBoard, "NEXT")
+        }
+
+        this.timeLineBoard.interactions['p'] = () => {
+            handleInteraction(this.timeLineBoard, "PREV")
+        }
     }
 
     //will be two skill boards at a time
     addSkillsBoards(){
 
-        let roomWorldPos = new THREE.Vector3();
-        this.getWorldPosition(roomWorldPos)
+
 
         let boardWidth = 15;
 
         let clippingPlanes = [
-        new THREE.Plane(new THREE.Vector3(0, 0, -1), roomWorldPos.z - this.depth/ 2 + boardWidth / 2), 
-        new THREE.Plane(new THREE.Vector3(0, 0, 1), -(roomWorldPos.z -this.depth / 2 - boardWidth / 2)),
+        new THREE.Plane(new THREE.Vector3(0, 0, -1), -this.depth/ 2 + boardWidth / 2),
+        new THREE.Plane(new THREE.Vector3(0, 0, 1), -(-this.depth / 2 - boardWidth / 2)),
         ]
 
         let skillsBoardGroup = new SkillsBoardsGroup({boardWidth: boardWidth, clippingPlanes: clippingPlanes, boardHeight: 12});
@@ -121,6 +143,16 @@ export class MyRoom extends Room{
         this.add(skillsBoardGroup)
 
         this.skillsBoardGroup = skillsBoardGroup
+    }
+
+    updateClippingPlanes(){
+        let roomWorldPos = new THREE.Vector3();
+        this.getWorldPosition(roomWorldPos)
+        this.skillsBoardGroup.clippingPlanes[0].constant += roomWorldPos.z
+        this.skillsBoardGroup.clippingPlanes[1].constant -= roomWorldPos.z
+
+        this.timeLineBoard.clipPlanes[0].constant += roomWorldPos.z
+        this.timeLineBoard.clipPlanes[1].constant -= roomWorldPos.z
     }
 
   

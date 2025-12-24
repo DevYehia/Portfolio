@@ -6,59 +6,63 @@ import { Interactable } from './interactable';
 export class TimelineBoard extends Interactable {
 
 
+    isAnimating = false;
+    origAvatarY;
 
-    clipPlanes = [
-        new THREE.Plane(new THREE.Vector3(1, 0, 0), 4),
-        new THREE.Plane(new THREE.Vector3(-1, 0, 0), 4)
-    ]
+
 
     imgList = []
     dateList = []
 
-    skipIntervalHandle = null;
 
-
-    constructor(){
+    constructor({
+        width = 15,
+        height = 10,
+        timeLineList = [],
+        clipPlanes = []
+    } = {}){
         super();
 
-        this.timeLineList = [
-            { img: "../textures/Timeline/ASU.png", date: "2022" },
-            { img: "../textures/Timeline/ejada.png", date: "2023" }
-        ];
+        this.width = width
+        this.height = height
+
+
+        //modify clipping planes
+        this.clipPlanes = clipPlanes
 
         this.avatarTexturePath = "../textures/TheYous.jpg";
 
-        this.createBoard();
+        this.createBoard(width, height);
 
         //the current viewed image
         this.currImageIdx = 0
 
-        for(let i = 0; i < this.timeLineList.length; i++){
-            this.addImage(this.timeLineList[i], i);
-        }
+        timeLineList.forEach((item, idx) => {console.log("police");this.addImage(item, idx)});
 
     }
 
     /* ================= BOARD ================= */
 
-    createBoard(){
-        const boardGeo = new THREE.PlaneGeometry(30, 12);
-        const boardMat = new THREE.MeshStandardMaterial({
-            color: 0x111111,
-            roughness: 0.6,
-            metalness: 0.1,
-            clippingPlanes: this.clipPlanes
-        });
+    createBoard(width, height){
+
+
+        const texture = new THREE.TextureLoader().load( "textures/border.jpg" );
+        texture.colorSpace = THREE.SRGBColorSpace
+
+
+        const boardGeo = new THREE.PlaneGeometry(width, height);
+        const boardMat = new THREE.MeshStandardMaterial({map: texture});
 
         const board = new THREE.Mesh(boardGeo, boardMat);
         board.position.z = -0.1; // behind everything
         this.add(board);
+        this.hitBox = board
     }
 
     /* ================= IMAGES ================= */
 
     addImage(data, idx){
-        new THREE.TextureLoader().load(data.img, texture => {
+        new THREE.TextureLoader().load("../textures/Timeline/" + data.image, texture => {
             this.onImageLoad(texture, data.date, idx);
         });
     }
@@ -76,14 +80,14 @@ export class TimelineBoard extends Interactable {
 
         const imageMesh = new THREE.Mesh(imageGeo, imageMat);
         this.imgList.push(imageMesh)
-        imageMesh.position.set(idx * 8, 0, 0);
+        imageMesh.position.set(idx * this.width, 0, 0);
 
         /* ===== Connecting Line ===== */
         if(idx > 0){
-            const lineGeo = new THREE.PlaneGeometry(2, 0.08);
+            const lineGeo = new THREE.PlaneGeometry( this.width - 8, 0.08);
             const lineMat = new THREE.MeshBasicMaterial({ color: 0xffffff, clippingPlanes: this.clipPlanes });
             const line = new THREE.Mesh(lineGeo, lineMat);
-            line.position.set(imageMesh.position.x - 4, 0, 0);
+            line.position.set(imageMesh.position.x - this.width / 2, 0, 0);
             this.line = line
             this.add(line);
         }
@@ -115,8 +119,8 @@ export class TimelineBoard extends Interactable {
             );
 
             this.avatar = avatar
+            this.origAvatarY = this.avatar.position.y
 
-            console.log("this is " + this)
             this.add(avatar);
         });
     }
@@ -130,7 +134,7 @@ export class TimelineBoard extends Interactable {
 
         const ctx = canvas.getContext('2d');
         ctx.fillStyle = "#ffffff";
-        ctx.font = "28px Arial";
+        ctx.font = "46px Arial";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         ctx.fillText(text, 128, 32);
@@ -155,8 +159,13 @@ export class TimelineBoard extends Interactable {
     }
 
 
-    animCntr = 0;
-    skipForward = true
+    next(){
+        this.skip(true)
+    }
+
+    prev(){
+        this.skip(false)
+    }
 
     skip(isForward){
         if(isForward && this.currImageIdx >= this.imgList.length){
@@ -168,74 +177,41 @@ export class TimelineBoard extends Interactable {
         }
 
 
-        if(this.skipIntervalHandle == null){
-            this.origAvatarY = this.avatar.position.y;
-            this.animCntr = 0;
-            this.skipForward = isForward
-            this.skipIntervalHandle = setInterval(this.skipHandler.bind(this), 1 / 50)
+        if(this.isAnimating == false){
+            this.skipHandler(isForward)
         }
         //this.otherSkipForward()
     }
 
-    
-    skipHandler(){
-        let sign = this.skipForward ? -1 : 1;
 
-        let currImage = this.imgList[this.currImageIdx];
-        let nextImage = this.skipForward ? this.imgList[this.currImageIdx + 1] : this.imgList[this.currImageIdx - 1];
-        
-
-        //console.log("alo" + JSON.stringify(nextImage.position))
-        //reached destination
-        if((this.skipForward && nextImage.position.x <= 0) || (!this.skipForward && nextImage.position.x >= 0)){
-            this.currImageIdx -= sign;
-            this.avatar.position.y = this.origAvatarY //prevent offshooting
-            clearInterval(this.skipIntervalHandle);
-            this.skipIntervalHandle = null;
-            return;
-        }
-
-        //move board items to left except for avatar
-        for(let imgIdx in this.imgList){
-            this.imgList[imgIdx].position.x += 1/50 * sign;
-        }
-
-        for(let dateIdx in this.dateList){
-            this.dateList[dateIdx].position.x += 1/50 * sign;
-        }
-        this.line.position.x += 1 / 50 * sign;
-        this.animCntr += 1/50;
-        //jumping animation of avatar
-        let diff = Math.abs(nextImage.position.x - currImage.position.x);
-
-        this.avatar.position.y = this.origAvatarY + 2 * Math.sin((Math.PI / diff) * this.animCntr)
-
-    }
-
-    otherSkipForward(){
+    skipHandler(isForward){
         if (this.isAnimating) return;
         this.isAnimating = true;
 
         const currImage = this.imgList[this.currImageIdx];
-        const nextImage = this.imgList[this.currImageIdx + 1];
+        const nextImage = isForward ? this.imgList[this.currImageIdx + 1] : this.imgList[this.currImageIdx - 1];
 
         // How far to move everything so next image reaches x = 0
         const deltaX = nextImage.position.x;
+        let inc = (isForward) ? 1 : -1
 
         const tl = gsap.timeline({
             onComplete: () => {
-                this.currImageIdx++;
+                this.currImageIdx+=inc;
                 this.isAnimating = false;
             }
         });
 
         /* === Move timeline items left === */
         tl.to(
-            [...this.imgList.map(img => img.position), this.line.position],
+            [...this.imgList.map(img => img.position),
+             ...this.dateList.map(date => date.position),
+             this.line.position
+            ],
             {
                 x: `-=${deltaX}`,
                 duration: 1,
-                ease: "power2.inOut"
+                ease: "none"
             },
             0
         );
@@ -246,7 +222,7 @@ export class TimelineBoard extends Interactable {
             {
                 y: this.origAvatarY + 2,
                 duration: 0.5,
-                ease: "sine.inOut"
+                ease: "sine.out"
             },
             0
         ).to(
@@ -254,9 +230,9 @@ export class TimelineBoard extends Interactable {
             {
                 y: this.origAvatarY,
                 duration: 0.5,
-                ease: "sine.inOut"
+                ease: "sine.in"
             },
-            0.4
+            0.5
         );
     }
 

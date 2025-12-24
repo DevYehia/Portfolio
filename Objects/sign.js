@@ -66,7 +66,6 @@ export class Sign extends Interactable{
         })//new THREE.PlaneGeometry( signBaseWidth, signBaseHeight);
         const mainGeometry = new THREE.PlaneGeometry( signMainWidth, this.signMainHeight);
 
-        console.log("sign " + signName + " width " + signMainWidth, " pad" + padding)
         let hitBoxWidth = signMainWidth + padding; //not affected by scale
         let hitBoxHeight = signMainHeight + signBaseHeight + 2 * padding;
         const hitBoxGeo = new THREE.BoxGeometry(hitBoxWidth, hitBoxHeight, 0);
@@ -191,7 +190,6 @@ export class Sign extends Interactable{
     }
 
     trigger(){
-        console.log("Anna btrigger aho")
         super.trigger()
         this.textSprite.visible = true;
         //this.hitBox.visible = true;

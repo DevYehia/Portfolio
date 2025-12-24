@@ -31,7 +31,6 @@ export class SquareImage extends Interactable{
         this.clippingPlanes = clippingPlanes
         this.controls = controls
 
-        console.log("Controls is " + this.controls)
 
         //add promise to wait for loading
 
@@ -75,7 +74,6 @@ export class SquareImage extends Interactable{
 
     //modify geometry
     onLoad(texture){
-        console.log("D5lna hna")
         texture.colorSpace = THREE.SRGBColorSpace
         const aspectRatio = texture.image.width / texture.image.height;
         const imageGeo = new THREE.PlaneGeometry(this.height * aspectRatio, this.height);

@@ -133,18 +133,20 @@ export function addMyRoom(scene){
 
     let roomWidth = pathWidth + 20;
 
-    let roomX = -roomWidth / 2;
-    let roomY = 0;
-    let roomZ = -(nearBoundaryCuboidDepth / 2 + pathWidth + boundaryCuboidWidth);
+    let roomPos = new THREE.Vector3()
 
-    let roomPos = new THREE.Vector3(roomX, roomY, roomZ);
-
-    myRoom = new MyRoom(roomWidth, 30, 60, roomPos);
+    myRoom = new MyRoom(roomWidth, 30, 50, roomPos);
 
 
     scene.add(myRoom)
+
+    let roomX = -myRoom.width / 2;
+    let roomY = 0;
+    let roomZ = -(nearBoundaryCuboidDepth / 2 + pathWidth + boundaryCuboidWidth);
     
     myRoom.position.set(roomX, roomY, roomZ)
+
+    myRoom.updateClippingPlanes()
 }
 
 
@@ -157,8 +159,6 @@ export function addStars(scene){
     for(let i = 0 ; i < 1500 ; i++){
         vertices.push((Math.random() * 3000) - 1000 , 300 , (Math.random() * 3000) - 2000);
     }
-
-    console.log(vertices)
 
     //scene.add(mesh)
     const particles = new THREE.Points(

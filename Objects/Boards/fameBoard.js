@@ -87,7 +87,6 @@ export class Board extends VarLengthBoard{
             currPos.x = origImageX
         }
 
-        console.log("iiiii" + this.imageList.length)
 
 
     }

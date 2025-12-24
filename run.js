@@ -35,6 +35,7 @@ const moveSpeed = 20
 const renderer = new THREE.WebGLRenderer({antialias: true});
 renderer.setSize( window.innerWidth, window.innerHeight );
 renderer.setPixelRatio(window.devicePixelRatio)
+renderer.localClippingEnabled = true
 document.body.appendChild( renderer.domElement );
 renderer.localClippingEnabled = true;
 
