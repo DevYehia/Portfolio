@@ -23,7 +23,7 @@ export class MyRoomState extends BaseState{
 
         console.log("E7a hena")
 
-        this.interactableList = [myRoom.door, ...myRoom.signsList, ...myRoom.skillsBoardGroup.boardsList]
+        this.interactableList = [myRoom.door, ...myRoom.signsList, myRoom.skillsBoardGroup]
 
 
     }
@@ -88,50 +88,12 @@ export class MyRoomState extends BaseState{
         if(!this.isInDialog)
             this.checkInteraction(playerPos, playerData.camera)
 
-        if(keys['b'] == KeyStates.SINGLE_PRESS){
-            myRoom.skillsBoardGroup.getNextSkill()
-        }
 
 
 
 
     }
 
-    //for optimization
-    tmpSignPos = new THREE.Vector3();
-
-    /** 
-    *@param  {Sign} sign
-    */       
-    //here we calulate distance based on x and z, y doesnt matter
-    getPlayerAndSignDistance(playerPos, sign){
-        sign.main.getWorldPosition(this.tmpSignPos)
-        let zDiff = playerPos.z - this.tmpSignPos.z;
-        let xDiff = playerPos.x - this.tmpSignPos.x;
-        let dist = Math.sqrt(zDiff*zDiff + xDiff*xDiff);
-        return dist;
-    }
-
-    handleInput(usedKeys){
-        let controlsDiv = document.getElementById("controlsDiv");
-        let signID = this.currTriggeredSign.signID;
-        if(!this.isInDialog && usedKeys["e"] == KeyStates.SINGLE_PRESS){
-            this.isInDialog = true;
-            startDialogue(projectsData[signID].dialogue)
-        }
-
-
-        else if(!this.isInDialog && usedKeys["v"] == KeyStates.SINGLE_PRESS){
-            let video = projectsData[signID].video
-            if(video != null){
-                window.open(video)
-            }
-            else{
-                this.isInDialog = true
-                startDialogue(["No video here bud"])
-            }
-        }
-    }
 
 
 }

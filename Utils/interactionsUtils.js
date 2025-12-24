@@ -37,6 +37,14 @@ export const interactions = {
     "DOOR" : (target) => {
         console.log("called you")
         target.toggle()
+    },
+
+    "NEXT" : (target) => {
+        target.next()
+    },
+
+    "PREV" : (target) => {
+        target.prev()
     }
 
 

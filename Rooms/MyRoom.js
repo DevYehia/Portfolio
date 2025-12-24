@@ -35,7 +35,7 @@ export class MyRoom extends Room{
         this.addSkillsBoards()
 
 
-        //this.addWalls()
+        this.addWalls("../textures/Wall.jpg", 0xFFD700)
 
 
     }
@@ -102,13 +102,21 @@ export class MyRoom extends Room{
         let skillsBoardGroup = new SkillsBoardsGroup({boardWidth: boardWidth, clippingPlanes: clippingPlanes, boardHeight: 12});
         skillsBoardGroup.position.set(1, 5, -this.depth / 2)
 
-        //set up interactions
-        for(let boardIdx in skillsBoardGroup.boardsList){
-            let board = skillsBoardGroup.boardsList[boardIdx]
-            board.interactions['e'] = () => {
-                handleInteraction(skills[board.boardName], "START_DIAG")
-            }
+        skillsBoardGroup.interactions['n'] = () => {
+            handleInteraction(skillsBoardGroup, "NEXT")
         }
+
+        skillsBoardGroup.interactions['p'] = () => {
+            handleInteraction(skillsBoardGroup, "PREV")
+        }
+
+        skillsBoardGroup.boardsList.forEach(board => {
+            board.interactions ??= {};
+
+            board.interactions['e'] = () => {
+                handleInteraction(skills[board.boardName].dialogue, "START_DIAG");
+            };
+        });
 
         this.add(skillsBoardGroup)
 

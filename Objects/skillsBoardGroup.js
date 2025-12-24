@@ -1,8 +1,9 @@
 import * as THREE from 'three'
 import { SkillsBoard } from './skillsBoard';
 import { skills } from '../Data/skills';
+import { Interactable } from './interactable';
 
-export class SkillsBoardsGroup extends THREE.Object3D{
+export class SkillsBoardsGroup extends Interactable{
 
     boardsList = []
 
@@ -20,6 +21,8 @@ export class SkillsBoardsGroup extends THREE.Object3D{
 
             super()
 
+
+
             this.boardWidth = boardWidth
 
             let imageSpacing = 1;
@@ -33,6 +36,7 @@ export class SkillsBoardsGroup extends THREE.Object3D{
             const boardMat = new THREE.MeshBasicMaterial({side: THREE.DoubleSide, map: texture});
             this.boardMesh = new THREE.Mesh(baordGeo, boardMat);      
             this.add(this.boardMesh)      
+            this.hitBox = this.boardMesh
             this.boardMesh.position.y += boardHeight / 2
             this.boardMesh.rotateY(Math.PI / 2)
 
@@ -53,7 +57,6 @@ export class SkillsBoardsGroup extends THREE.Object3D{
                         }
                     )
                 //set up interactions
-                board.controls = key + "<br>E - Show Brief"
                 board.position.y += board.boardHeight / 2
                 board.rotateY(Math.PI / 2)
                 this.boardsList.push(board)
@@ -72,11 +75,20 @@ export class SkillsBoardsGroup extends THREE.Object3D{
             this.boardsList[this.prevBoardIdx].position.z = this.boardsList[0].position.z - boardWidth;
 
             this.add(this.boardsList[0], this.boardsList[1], this.boardsList[this.prevBoardIdx])
+
+            //set up controls
+            this.controls = this.boardsList[0].boardName + "<br>E - Show Brief<br>N - Next<br>P - Prev"
+
+            this.interactions['e'] = () => {
+                this.boardsList[this.currBoardIdx].interactions['e']()
+            }
+
         }
+    
 
 
-    getNextSkill(){
-        if(this.nextSkillTransitionInterval == null)
+    next(){
+        if(this.nextSkillTransitionInterval == null && this.prevSkillTransitionInterval == null)
             this.nextSkillTransitionInterval = setInterval(this.animateNextSkill.bind(this), 1 / 100)
     }
 
@@ -92,6 +104,10 @@ export class SkillsBoardsGroup extends THREE.Object3D{
 
         //check have we reahced destination
         if(nextBoard.position.z <= 0){
+
+            //update controls 
+            this.controls = nextBoard.boardName + "<br>E - Show Brief<br>N - Next<br>P - Prev"
+            this.updateDivContent() //to update controls div
 
            // console.log("How are we here")
             //to handle offshooting
@@ -123,8 +139,8 @@ export class SkillsBoardsGroup extends THREE.Object3D{
         nextBoard.position.z -= 1 / 10;        
     }
 
-    getPrevSkill(){
-        if(this.prevSkillTransitionInterval == null)
+    prev(){
+        if(this.nextSkillTransitionInterval == null && this.prevSkillTransitionInterval == null)
             this.prevSkillTransitionInterval = setInterval(this.animatePrevSkill.bind(this), 1 / 100)
     }
 
@@ -135,6 +151,10 @@ export class SkillsBoardsGroup extends THREE.Object3D{
 
         //check have we reahced destination
         if(prevBoard.position.z >= 0){
+
+            //update controls 
+            this.controls = prevBoard.boardName + "<br>E - Show Brief<br>N - Next<br>P - Prev"
+            this.updateDivContent() //to update controls div
 
             let nextBoard = this.boardsList[this.nextBoardIdx]
             //to handle offshooting
@@ -151,7 +171,7 @@ export class SkillsBoardsGroup extends THREE.Object3D{
 
 
             //add the new prev board
-            this.boardsList[this.prevBoardIdx].position.z = this.boardsList[this.currBoardIdx].position.z - 10;
+            this.boardsList[this.prevBoardIdx].position.z = this.boardsList[this.currBoardIdx].position.z - this.boardWidth;
 
 
             this.add(this.boardsList[this.prevBoardIdx])
@@ -167,6 +187,8 @@ export class SkillsBoardsGroup extends THREE.Object3D{
         currBoard.position.z += 1 / 10;
         prevBoard.position.z += 1 / 10;        
     }
+
+
 
 
 }

@@ -40,7 +40,7 @@ export function nextLine(){
     }
     else{
         talkDiv.hidden = true;
-        controlsDiv.hidden = true;
+        controlsDiv.innerHTML = currState.interactable.controls
         currState.isInDialog = false;  
         return false;
     }
@@ -48,6 +48,6 @@ export function nextLine(){
 
 export function endDialogue(){
     talkDiv.hidden = true;
-    controlsDiv.hidden = true; 
+    controlsDiv.innerHTML = currState.interactable.controls
     currState.isInDialog = false;   
 }

@@ -2,6 +2,8 @@ import * as THREE from 'three'
 import { SquareImage } from './squareImage'
 import { PlaneGeometry } from 'three/webgpu';
 import { Interactable } from './interactable';
+import { startDialogue } from '../Utils/dialogUtils';
+import { skills } from '../Data/skills';
 
 
 export class SkillsBoard extends Interactable{
@@ -98,12 +100,8 @@ export class SkillsBoard extends Interactable{
         return this.worldPos
     }
 
-    trigger(){
-        super.trigger()
-    }
-
-    revert(){
-        super.revert()
+    startSkillsDialog(){
+        startDialogue(skills[this.boardName])
     }
 
 

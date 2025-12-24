@@ -7,6 +7,10 @@ export const skills = {
             "Cpp.png",
             "Java.svg",
             "Python.png"
+        ],
+        dialogue: [
+            "la",
+            "ah"
         ]
     },
 
@@ -17,6 +21,10 @@ export const skills = {
             "css.png",
             "js.webp",
             "php.png"
+        ],
+        dialogue: [
+            "ala",
+            "alh"
         ]
     },
 

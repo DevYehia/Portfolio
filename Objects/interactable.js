@@ -27,6 +27,10 @@ export class Interactable extends THREE.Object3D{
         this.controlsDiv.hidden = true
     }
 
+    updateDivContent(){
+        this.controlsDiv.innerHTML = this.controls        
+    }
+
     interact(key){
         console.log("in key " + key)
         this.interactions[key]?.()
