@@ -30,6 +30,8 @@ export class MyRoom extends Room{
 
         this.addContact()
 
+        this.addMyImage()
+
         this.addDoor()
 
         this.addTimelineBoard()
@@ -83,19 +85,20 @@ export class MyRoom extends Room{
 
 
     addTimelineBoard(){
-        console.log("depth is at " + this.depth)
+        let tWidth = 20;
+        let margin = 1.5
         this.timeLineBoard = new TimelineBoard({
-            width: 15,
-            height: 10,
+            width: tWidth,
+            height: 15,
             timeLineList: timelineData,
             clipPlanes : [
-                new THREE.Plane(new THREE.Vector3(0, 0, -1), -this.depth / 2 + 15 / 2),
-                new THREE.Plane(new THREE.Vector3(0, 0, 1), this.depth / 2 + 15 / 2),                
+                new THREE.Plane(new THREE.Vector3(0, 0, -1), -this.depth / 2 + tWidth / 2 - margin),
+                new THREE.Plane(new THREE.Vector3(0, 0, 1), this.depth / 2 + tWidth / 2  - margin),                
             ]
         });
         this.timeLineBoard.rotateY(-Math.PI / 2)
         this.timeLineBoard.position.x = this.width - 0.5
-        this.timeLineBoard.position.y = 5
+        //this.timeLineBoard.position.y = 0
         this.timeLineBoard.position.z -= this.depth / 2;
         this.add(this.timeLineBoard)
 
@@ -107,22 +110,29 @@ export class MyRoom extends Room{
         this.timeLineBoard.interactions['p'] = () => {
             handleInteraction(this.timeLineBoard, "PREV")
         }
+
+        this.timeLineBoard.interactions['e'] = () => {
+            handleInteraction(timelineData[this.timeLineBoard.currImageIdx].dialogue, "START_DIAG")
+        }
+
+        this.timeLineBoard.controls = timelineData[0].name + "<br>E - Show Brief<br>N - Next<br>P - Previous"
     }
 
     //will be two skill boards at a time
     addSkillsBoards(){
 
 
-
-        let boardWidth = 15;
+        let margin = 1.5
+        let boardWidth = 20;
 
         let clippingPlanes = [
-        new THREE.Plane(new THREE.Vector3(0, 0, -1), -this.depth/ 2 + boardWidth / 2),
-        new THREE.Plane(new THREE.Vector3(0, 0, 1), -(-this.depth / 2 - boardWidth / 2)),
+        new THREE.Plane(new THREE.Vector3(0, 0, -1), -this.depth/ 2 + boardWidth / 2 - margin),
+        new THREE.Plane(new THREE.Vector3(0, 0, 1), -(-this.depth / 2 - boardWidth / 2 + margin)),
         ]
 
-        let skillsBoardGroup = new SkillsBoardsGroup({boardWidth: boardWidth, clippingPlanes: clippingPlanes, boardHeight: 12});
-        skillsBoardGroup.position.set(1, 5, -this.depth / 2)
+        let skillsBoardGroup = new SkillsBoardsGroup({boardWidth: boardWidth, clippingPlanes: clippingPlanes, boardHeight: 15});
+        skillsBoardGroup.position.set(1, 0, -this.depth / 2)
+        
 
         skillsBoardGroup.interactions['n'] = () => {
             handleInteraction(skillsBoardGroup, "NEXT")
@@ -143,6 +153,21 @@ export class MyRoom extends Room{
         this.add(skillsBoardGroup)
 
         this.skillsBoardGroup = skillsBoardGroup
+
+        skillsBoardGroup.rotateY(Math.PI / 2)
+    }
+
+    addMyImage(){
+        let myTexture = new THREE.TextureLoader().load("../textures/me.jpg")
+        myTexture.colorSpace = THREE.SRGBColorSpace
+        let myImageGeo = new THREE.PlaneGeometry(10,10)
+        let myImageMat = new THREE.MeshBasicMaterial({map: myTexture})
+
+        let myImage = new THREE.Mesh(myImageGeo, myImageMat)
+        this.myImage = myImage
+        this.add(myImage)
+
+        myImage.position.set(this.width / 2, 20, - this.depth + 0.1)
     }
 
     updateClippingPlanes(){

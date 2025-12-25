@@ -1,7 +1,8 @@
 import * as THREE from 'three';
 import { gsap } from 'gsap/gsap-core';
 import { Interactable } from './interactable';
-
+import { TextGeometry } from 'three/examples/jsm/Addons.js';
+import { HOFTitlefont } from '../loader';
 
 export class TimelineBoard extends Interactable {
 
@@ -12,6 +13,7 @@ export class TimelineBoard extends Interactable {
 
 
     imgList = []
+    namesList = []
     dateList = []
 
 
@@ -26,13 +28,17 @@ export class TimelineBoard extends Interactable {
         this.width = width
         this.height = height
 
+        this.position.y += height / 2
+
 
         //modify clipping planes
         this.clipPlanes = clipPlanes
 
-        this.avatarTexturePath = "../textures/TheYous.jpg";
+        this.avatarTexturePath = "../textures/me.jpg";
 
         this.createBoard(width, height);
+
+        this.addTitle()
 
         //the current viewed image
         this.currImageIdx = 0
@@ -41,17 +47,35 @@ export class TimelineBoard extends Interactable {
 
     }
 
+    addTitle(){
+        //set up title
+        const ttlGeometry = new TextGeometry("MY JOURNEY", {
+            font: HOFTitlefont,
+            size : 5,
+            depth: 0.2
+        })            
+        const ttlMat = new THREE.MeshBasicMaterial({color: 0xff0000})
+        let ttl = new THREE.Mesh(ttlGeometry, ttlMat);
+        ttl.position.y += this.height / 2
+        this.ttl = ttl
+        this.add(ttl)
+        let ttlSize = new THREE.Vector3()
+        this.ttl.geometry.computeBoundingBox()
+        this.ttl.position.x -= this.ttl.geometry.boundingBox.getSize(ttlSize).x / 2
+        this.ttl.position.y += ttlSize.y / (2) //+ 10;
+    }
+
     /* ================= BOARD ================= */
 
     createBoard(width, height){
 
 
-        const texture = new THREE.TextureLoader().load( "textures/border.jpg" );
+        const texture = new THREE.TextureLoader().load( "textures/border3.jpg" );
         texture.colorSpace = THREE.SRGBColorSpace
 
 
         const boardGeo = new THREE.PlaneGeometry(width, height);
-        const boardMat = new THREE.MeshStandardMaterial({map: texture});
+        const boardMat = new THREE.MeshBasicMaterial({map: texture});
 
         const board = new THREE.Mesh(boardGeo, boardMat);
         board.position.z = -0.1; // behind everything
@@ -63,6 +87,7 @@ export class TimelineBoard extends Interactable {
 
     addImage(data, idx){
         new THREE.TextureLoader().load("../textures/Timeline/" + data.image, texture => {
+            this.namesList.push(data.name)
             this.onImageLoad(texture, data.date, idx);
         });
     }
@@ -199,6 +224,8 @@ export class TimelineBoard extends Interactable {
             onComplete: () => {
                 this.currImageIdx+=inc;
                 this.isAnimating = false;
+                this.controls = this.namesList[this.currImageIdx] + "<br>E - Show Brief<br>N - Next<br>P - Previous"
+                this.updateDivContent()
             }
         });
 

@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {addAmbientLight, addBoundaryCuboids, addHOFRoom, addMyRoom, addProjectsRoom,  addStars,  adjustCamera} from './environment';
+import {addAmbientLight, addBoundaryCuboids, addGround, addHOFRoom, addMyRoom, addProjectsRoom,  addStars,  adjustCamera} from './environment';
 import {animateText} from './Utils/textUtils'
 import { dialogues } from './Data/dialogues';
 import { PlayerData, changeState, currState } from './PlayerStates/common';
@@ -51,6 +51,8 @@ changeState(new StartState());
 adjustCamera(camera);
 
 addBoundaryCuboids(scene, 30)
+
+addGround(scene)
 //addSigns(scene)
 
 let sign = new Sign(scene);

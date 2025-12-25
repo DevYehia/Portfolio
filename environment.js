@@ -177,6 +177,33 @@ export function addStars(scene){
 export function addAmbientLight(scene){
     scene.add(ambLight)
 }
+
+
+
+export function addGround(scene){
+    let groundTexture = new THREE.TextureLoader().load("textures/env/grass.avif")
+    groundTexture.colorSpace = THREE.SRGBColorSpace
+    groundTexture.wrapS = THREE.RepeatWrapping
+    groundTexture.wrapT = THREE.RepeatWrapping
+
+    groundTexture.repeat.set(24,24)
+
+    let groundWidth = 2 * boundaryCuboidWidth + pathWidth
+    let groundHeight = nearBoundaryCuboidDepth + boundaryCuboidWidth + pathWidth
+
+    let groundGeo = new THREE.PlaneGeometry(groundWidth, groundHeight)
+    let groundMat = new THREE.MeshStandardMaterial({map: groundTexture, side: THREE.DoubleSide})
+
+    let ground = new THREE.Mesh(groundGeo, groundMat)
+
+    //adjust its position
+    ground.rotateX(-Math.PI / 2)
+    ground.position.set(0, 0, -groundHeight / 2 + nearBoundaryCuboidDepth / 2)
+
+    scene.add(ground)
+
+
+}
 // module.exports = {
 //     addBoundaryCuboids
 // }

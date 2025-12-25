@@ -2,6 +2,8 @@ import * as THREE from 'three'
 import { SkillsBoard } from './skillsBoard';
 import { skills } from '../Data/skills';
 import { Interactable } from './interactable';
+import { TextGeometry } from 'three/examples/jsm/Addons.js';
+import { HOFTitlefont } from '../loader';
 
 export class SkillsBoardsGroup extends Interactable{
 
@@ -27,6 +29,13 @@ export class SkillsBoardsGroup extends Interactable{
 
             let imageSpacing = 1;
 
+            //set up title
+            const ttlGeometry = new TextGeometry("SKILLS", {
+                font: HOFTitlefont,
+                size : 5,
+                depth: 0.2
+            })            
+            const ttlMat = new THREE.MeshBasicMaterial({color: 0xff0000})
 
             const texture = new THREE.TextureLoader().load( "textures/border3.jpg" );
             texture.colorSpace = THREE.SRGBColorSpace
@@ -38,7 +47,7 @@ export class SkillsBoardsGroup extends Interactable{
             this.add(this.boardMesh)      
             this.hitBox = this.boardMesh
             this.boardMesh.position.y += boardHeight / 2
-            this.boardMesh.rotateY(Math.PI / 2)
+            //this.boardMesh.rotateY(Math.PI / 2)
 
             for(let key in skills){
 
@@ -58,7 +67,7 @@ export class SkillsBoardsGroup extends Interactable{
                     )
                 //set up interactions
                 board.position.y += board.boardHeight / 2
-                board.rotateY(Math.PI / 2)
+                //board.rotateY(Math.PI / 2)
                 this.boardsList.push(board)
             }
 
@@ -70,9 +79,9 @@ export class SkillsBoardsGroup extends Interactable{
             console.log(" ds" + this.prevBoardIdx)
             //add current, next and previous boards to object
             //next and previous should not appear due to clipping plane
-            this.boardsList[0].position.z = 0;
-            this.boardsList[1].position.z = this.boardsList[0].position.z + boardWidth;
-            this.boardsList[this.prevBoardIdx].position.z = this.boardsList[0].position.z - boardWidth;
+            this.boardsList[0].position.x = 0;
+            this.boardsList[1].position.x = this.boardsList[0].position.x + boardWidth;
+            this.boardsList[this.prevBoardIdx].position.x = this.boardsList[0].position.x - boardWidth;
 
             this.add(this.boardsList[0], this.boardsList[1], this.boardsList[this.prevBoardIdx])
 
@@ -82,6 +91,17 @@ export class SkillsBoardsGroup extends Interactable{
             this.interactions['e'] = () => {
                 this.boardsList[this.currBoardIdx].interactions['e']()
             }
+
+
+            //add title
+            let ttl = new THREE.Mesh(ttlGeometry, ttlMat);
+            ttl.position.y += boardHeight / 2
+            this.ttl = ttl
+            this.add(ttl)
+            let ttlSize = new THREE.Vector3()
+            this.ttl.geometry.computeBoundingBox()
+            this.ttl.position.x -= this.ttl.geometry.boundingBox.getSize(ttlSize).x / 2
+            this.ttl.position.y += ttlSize.y / (2) + 10;
 
         }
     
@@ -103,7 +123,7 @@ export class SkillsBoardsGroup extends Interactable{
         //console.log("pos is " + JSON.stringify(nextBoard.position))
 
         //check have we reahced destination
-        if(nextBoard.position.z <= 0){
+        if(nextBoard.position.x <= 0){
 
             //update controls 
             this.controls = nextBoard.boardName + "<br>E - Show Brief<br>N - Next<br>P - Prev"
@@ -111,7 +131,7 @@ export class SkillsBoardsGroup extends Interactable{
 
            // console.log("How are we here")
             //to handle offshooting
-            nextBoard.position.z = 0
+            nextBoard.position.x = 0
 
             //remove original prev board
             //curr is now prev
@@ -123,7 +143,7 @@ export class SkillsBoardsGroup extends Interactable{
 
 
             //add the waiting board
-            this.boardsList[this.nextBoardIdx].position.z = this.boardsList[this.currBoardIdx].position.z + this.boardWidth;
+            this.boardsList[this.nextBoardIdx].position.x = this.boardsList[this.currBoardIdx].position.x + this.boardWidth;
             this.add(this.boardsList[this.nextBoardIdx])
 
             
@@ -135,8 +155,8 @@ export class SkillsBoardsGroup extends Interactable{
 
         //move both boards
 
-        currBoard.position.z -= 1 / 10;
-        nextBoard.position.z -= 1 / 10;        
+        currBoard.position.x -= 1 / 10;
+        nextBoard.position.x -= 1 / 10;        
     }
 
     prev(){
@@ -150,7 +170,7 @@ export class SkillsBoardsGroup extends Interactable{
 
 
         //check have we reahced destination
-        if(prevBoard.position.z >= 0){
+        if(prevBoard.position.x >= 0){
 
             //update controls 
             this.controls = prevBoard.boardName + "<br>E - Show Brief<br>N - Next<br>P - Prev"
@@ -158,7 +178,7 @@ export class SkillsBoardsGroup extends Interactable{
 
             let nextBoard = this.boardsList[this.nextBoardIdx]
             //to handle offshooting
-            prevBoard.position.z = 0
+            prevBoard.position.x = 0
 
             //remove next board
             //curr board is now next board
@@ -171,7 +191,7 @@ export class SkillsBoardsGroup extends Interactable{
 
 
             //add the new prev board
-            this.boardsList[this.prevBoardIdx].position.z = this.boardsList[this.currBoardIdx].position.z - this.boardWidth;
+            this.boardsList[this.prevBoardIdx].position.x = this.boardsList[this.currBoardIdx].position.x - this.boardWidth;
 
 
             this.add(this.boardsList[this.prevBoardIdx])
@@ -184,8 +204,8 @@ export class SkillsBoardsGroup extends Interactable{
 
         //move both boards
 
-        currBoard.position.z += 1 / 10;
-        prevBoard.position.z += 1 / 10;        
+        currBoard.position.x += 1 / 10;
+        prevBoard.position.x += 1 / 10;        
     }
 
 
