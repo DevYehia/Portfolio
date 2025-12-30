@@ -91,7 +91,7 @@ let torch = new Torch();
 let pointLight = new THREE.PointLight(0xFFFFFF, 100, 0)
 //scene.add(pointLight)
 
- let ambLight = new THREE.AmbientLight(0xffffff, 1)
+ let ambLight = new THREE.AmbientLight(0xffffff, 0.1)
  scene.add(ambLight)
 
 pointLight.position.copy(camera.position)

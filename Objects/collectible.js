@@ -13,7 +13,8 @@ export class Collectible extends SquareImage{
         width = 3,
         height = 1,
         padding = 2,
-        particlesColor = 0xffffff
+        particlesColor = 0xffffff,
+        image = "No"
     } = {}){
 
         
@@ -21,7 +22,8 @@ export class Collectible extends SquareImage{
             width: width,
             height: height,
             padding: padding,
-            maintainAspectRatio: false
+            maintainAspectRatio: false,
+            imageName: image
         });
 
         this.imageMesh.rotateX(-Math.PI / 2)

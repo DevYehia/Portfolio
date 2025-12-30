@@ -2,7 +2,8 @@ import * as THREE from 'three'
 import {Door} from '../Objects/door'
 import { MeshPhongMaterial, PlaneGeometry, Vector3 } from 'three/webgpu';
 import { handleInteraction } from '../Utils/interactionsUtils';
-
+import { Collectible } from '../Objects/collectible';
+import { certificates } from '../Data/certificates';
 export class Room extends THREE.Object3D{
 
     //the door to enter the room
@@ -52,6 +53,22 @@ export class Room extends THREE.Object3D{
         this.door.name = "door";
         this.door.interactions['e'] = (() => {handleInteraction(this.door, "DOOR")}).bind(this)
         this.add(this.door)
+    }
+
+    addCollectible(certID){
+        this.certificate = new Collectible({
+            width: 4,
+            height: 2,
+            padding: 5,
+            particlesColor: 0x000000,
+            image: "../textures/Certificates/" + certificates[certID].image
+        });
+        this.add(this.certificate)
+
+        //put it at random position in the room
+        this.certificate.position.x = this.width / 2;
+        this.certificate.position.z = -20
+        this.certificate.position.y += 0.1        
     }
 
 

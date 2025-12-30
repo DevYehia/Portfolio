@@ -27,7 +27,7 @@ export class ProjectsRoom extends Room{
             height: height
         })
         this.addSigns()
-        this.addCollectible()
+        this.addCollectible("Linux")
         let currRoomDims = this.getRoomDims();
         //this.setDims(this.width, this.height, currRoomDims.z + 1)
         console.log("room dims is " + JSON.stringify(currRoomDims))
@@ -40,22 +40,7 @@ export class ProjectsRoom extends Room{
 
     }
 
-    //will add one of my certificates on the floor
-    addCollectible(){
-        this.certificate = new Collectible({
-            width: 4,
-            height: 2,
-            padding: 5,
-            particlesColor: 0x000000
-        });
-        this.add(this.certificate)
 
-        //put it at random position in the room
-        this.certificate.position.x = this.width / 2;
-        this.certificate.position.z = -20
-        this.certificate.position.y += 0.1
-
-    }
 
     addSigns(){
 
