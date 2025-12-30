@@ -68,5 +68,7 @@ export class HOFRoom extends Room{
 
         this.addFloor("../textures/fancyFloor.jpg", 6)
 
+        this.addCollectible("AutoSAR")
+
     }
 }

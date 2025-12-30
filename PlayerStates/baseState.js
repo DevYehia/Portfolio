@@ -2,6 +2,40 @@ import * as THREE from 'three'
 import { getDistanceXZ } from '../Utils/MathUtils';
 import { keys, KeyStates } from '../Utils/keyboardUtils'
 import { nextLine, endDialogue } from '../Utils/dialogUtils';
+import { stateInstances } from './states';
+import { changeState } from './common';
+
+export class StateBorders{
+
+    constructor({
+        forward = 0,
+        backward = 0,
+        left = 0,
+        right = 0
+    }){
+        this.forward = forward
+        this.left = left
+        this.right = right
+        this.backward = backward
+    }
+}
+
+export class StateNext{
+
+    constructor({
+        forward = null,
+        backward = null,
+        left = null,
+        right = null
+    }){
+        this.forward = forward
+        this.left = left
+        this.right = right
+        this.backward = backward
+    }
+}
+
+
 
 
 export class BaseState{
@@ -21,6 +55,14 @@ export class BaseState{
 
     interactableList = []
 
+    animatables = []
+
+    constructor(stateBorders, nextStates, stateName){
+        this.stateBorders = stateBorders;
+        this.nextStates = nextStates
+        this.stateName = stateName
+    }
+
     /**
      * 
      * @param {Number} dist 
@@ -37,6 +79,9 @@ export class BaseState{
 
         camera.getWorldDirection(this.camLookAt);
         this.rayCaster.set(camera.position, this.camLookAt);
+
+        //console.log("Awl cond " + (dist <= triggerDistance) + " Tany Cond " + (this.rayCaster.intersectObject(object.hitBox, false).length > 0))
+        
 
         return (dist <= triggerDistance && this.rayCaster.intersectObject(object.hitBox, false).length > 0)
 
@@ -67,7 +112,9 @@ export class BaseState{
         //no current interactable
         else{
             for(let i in this.interactableList){
+            
                 if(this.checkForTrigger(playerPos, camera, this.interactableList[i])){
+                    console.log("ALooo ")
                     this.interactable = this.interactableList[i];
                     this.interactable.trigger()
                     break;
@@ -89,6 +136,47 @@ export class BaseState{
         }        
     }
 
+/** 
+*@param  {THREE.Vector3} playerPos
+*@param  {THREE.Vector3} newPlayerPos
 
+*/
+
+
+    modifyPosition(playerPos, newPlayerPos){
+        playerPos.copy(newPlayerPos)
+    }
+
+    /** 
+    *@param  {PlayerData} playerData
+    */       
+    checkAndUpdateState(playerData){
+        let playerPos = playerData.playerPos;
+
+
+        this.handleDialog()
+        this.animate()
+    
+        if(!this.isInDialog)
+            this.checkInteraction(playerPos, playerData.camera)
+
+
+        if(this.nextStates.forward != null && playerPos.z < this.stateBorders.forward){
+            changeState(stateInstances[this.nextStates.forward]);
+        }
+        else if(this.nextStates.backward != null && playerPos.z > this.stateBorders.backward){
+            changeState(stateInstances[this.nextStates.backward]);
+        }
+        else if(this.nextStates.left != null && playerPos.x < this.stateBorders.left){
+            changeState(stateInstances[this.nextStates.left]);
+        }
+        else if(this.nextStates.right != null && playerPos.x > this.stateBorders.right){
+            changeState(stateInstances[this.nextStates.right]);
+        }
+    }
+
+    animate(){
+        this.animatables.forEach((itm) => itm.animate())
+    }
 
 }

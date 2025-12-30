@@ -1,20 +1,13 @@
 import * as THREE from 'three';
 import {addAmbientLight, addBoundaryCuboids, addGround, addHOFRoom, addMyRoom, addProjectsRoom,  addStars,  adjustCamera} from './environment';
-import {animateText} from './Utils/textUtils'
-import { dialogues } from './Data/dialogues';
+
 import { PlayerData, changeState, currState } from './PlayerStates/common';
-import { StartState } from './PlayerStates/startState';
-import {Sign} from './Objects/sign';
-import { PointerLockControls } from 'three/addons/controls/PointerLockControls.js';
-import { Door } from './Objects/door'
 import { KeyStates, keys, initKeyboardUtils, processKeyboardInput, resetKeys } from './Utils/keyboardUtils';
-import { CSS3DRenderer } from 'three/examples/jsm/Addons.js';
 import { setupPauseMenu } from './pauseMenu';
 import { loadStuff } from './loader';
-import { Torch } from './Objects/torch';
-import { Collectible } from './Objects/collectible';
 
 import { gsap } from 'gsap/gsap-core';
+import { setupStates, stateInstances } from './PlayerStates/states';
 
 
 
@@ -45,7 +38,7 @@ initKeyboardUtils()
 setupPauseMenu()
 
 //important to start game
-changeState(new StartState());
+
 
 
 adjustCamera(camera);
@@ -55,8 +48,6 @@ addBoundaryCuboids(scene, 30)
 addGround(scene)
 //addSigns(scene)
 
-let sign = new Sign(scene);
-sign.setPosition(new THREE.Vector3(0,0,0))
 
 let playerData = new PlayerData(camera.position, camera, scene, keys);
 
@@ -68,59 +59,27 @@ addMyRoom(scene)
 addStars(scene)
 addAmbientLight(scene)
 
-let coll = new Collectible();
-coll.position.z -= 10
-coll.rotateY(-Math.PI / 2)
+
+setupStates()
+changeState(stateInstances["start"]);
 
 
-scene.add(coll)
-
-const clipPlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 5);
-
-let testMat = new THREE.MeshBasicMaterial({color: 0xff0000})
-let geo = new THREE.DodecahedronGeometry(8, 0);
-
-let mesh = new THREE.Mesh(geo, testMat);
-
-scene.add(mesh)
-//mesh.position.y = camera.position.y
-
-let torch = new Torch();
-//scene.add(torch)
 
 let pointLight = new THREE.PointLight(0xFFFFFF, 100, 0)
-//scene.add(pointLight)
+scene.add(pointLight)
 
  let ambLight = new THREE.AmbientLight(0xffffff, 0.1)
- scene.add(ambLight)
+ //scene.add(ambLight)
 
 pointLight.position.copy(camera.position)
 
 
 const clock = new THREE.Clock();
 
-const sphere = new THREE.Mesh(
-  new THREE.SphereGeometry(0.5, 32, 32),
-  new THREE.MeshStandardMaterial({ color: 0xff5500, emissive: 0xff5500 })
-);
-//scene.add(sphere);
 
 
 function animate() {
 
-
-  //particles.rotation.y += 0.001;
- //sphere.material.emissiveIntensity = 0.5 + 0.5 * Math.sin(Date.now() * 0.005);
- // console.log("In state " + JSON.stringify(currState))
-    const pos = coll.particles.geometry.attributes.position.array;
-
-    for(let i = 1 ; i < pos.length ; i+=3){
-      pos[i] += 0.01
-      if(pos[i] > 3){
-        pos[i] = 0;
-      }
-    }
-    coll.particles.geometry.attributes.position.needsUpdate = true;
 
 
     processKeyboardInput()

@@ -42,8 +42,6 @@ export class ForkRoadState extends BaseState{
 
 
 
-        
-
         if(1 ||  !this.collider.doesCollide(newPlayerPos))
             playerPos.copy(newPlayerPos);
         else{

@@ -28,6 +28,8 @@ export class Collectible extends SquareImage{
 
         this.imageMesh.rotateX(-Math.PI / 2)
 
+        this.hitBox.material.visible = false
+
 
         let vertices = []
         for(let i = 0 ; i < 50 ; i++){

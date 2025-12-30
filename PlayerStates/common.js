@@ -6,6 +6,7 @@ export const collisionMargin = 0.5;
 export let currState = null;
 
 export function changeState(newStateObject){
+    console.log("now in " + newStateObject.stateName + " " + newStateObject.interactableList.length)
     currState = newStateObject;
 }
 

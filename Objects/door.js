@@ -69,7 +69,7 @@ export class Door extends Interactable{
         };
 
         let geo = new THREE.ExtrudeGeometry(shape, extrudeSettings);
-        let mat = new THREE.MeshBasicMaterial({color: 0x00ffff})
+        let mat = new THREE.MeshStandardMaterial({color: 0x00ffff})
         this.doorMesh = new THREE.Mesh(geo, mat);
 
         //add hitbox

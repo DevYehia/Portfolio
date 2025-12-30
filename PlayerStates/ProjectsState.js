@@ -55,8 +55,7 @@ export class ProjectsState extends BaseState{
         this.projectsRoom = env.projectsRoom;
         //console.log(JSON.stringify(this.ambLight))
         //this.lightInterval = setInterval(this.incLight.bind(this), 1 / 1000);
-        this.interactableList = [env.projectsRoom.door, ...env.projectsRoom.signsList]
-
+        this.interactableList = [env.projectsRoom.door, ...env.projectsRoom.signsList, env.projectsRoom.certificate]
 
     }
 
