@@ -73,6 +73,7 @@ export class Room extends THREE.Object3D{
         this.certificate.controls = "Certificate<br>E - Collect"
 
         this.certificate.interactions['e'] = () => {
+            certificates[certID].collected = true;
             this.remove(this.certificate)
         }
 
@@ -190,36 +191,28 @@ export class Room extends THREE.Object3D{
     }
 
     addFrontWall(roomWidth, roomHeight, texturePath){
-        // let shape = new THREE.Shape();
-        // shape.setFromPoints(
-        //     [new THREE.Vector2(0,0),
-        //     new THREE.Vector2(0,roomHeight),
-        //     new THREE.Vector2(roomWidth,roomHeight),
-        //     new THREE.Vector2(roomWidth,0)
-        //     ]
-        // );
-
-        // let holeStartX = (roomWidth - this.door.doorWidth) / 2;
-        // const hole = new THREE.Path();
-        // hole.moveTo(holeStartX, 0); //bottom left corner of da door
-        // hole.lineTo(holeStartX, this.door.doorHeight);
-        // hole.lineTo(holeStartX + this.door.doorWidth, this.door.doorHeight);
-        // hole.lineTo(holeStartX + this.door.doorWidth, 0);
-        // hole.lineTo(holeStartX, 0);
 
         // shape.holes.push(hole);
         const WallTexture = new THREE.TextureLoader().load(texturePath)
         let rep = 2
         //WallTexture.repeat.set(rep * (Math.ceil(this.width / this.height)),rep)
         WallTexture.colorSpace = THREE.SRGBColorSpace
+        WallTexture.wrapS = THREE.RepeatWrapping
+        WallTexture.wrapT = THREE.RepeatWrapping
 
-        let frontWallMat = new THREE.MeshPhongMaterial({side: THREE.DoubleSide, map: WallTexture})
+
 
         //three planes approach
         let sideWidth = (roomWidth - this.door.doorWidth) / 2
         let topHeight = roomHeight - this.door.doorHeight
         let sidePlanesGeo = new THREE.BoxGeometry(sideWidth, roomHeight, 0.2)
         let topPlaneGeo = new THREE.BoxGeometry(this.door.doorWidth, topHeight, 0.2)
+
+        WallTexture.repeat.set(rep * (Math.ceil(sideWidth / roomHeight)),rep)
+        let frontWallMat = new THREE.MeshPhongMaterial({side: THREE.DoubleSide, map: WallTexture})
+
+        let topTexture = WallTexture.clone()
+        let topWallMat = new THREE.MeshPhongMaterial({color: 0x0000ff, side: THREE.DoubleSide})
 
         //left mesh
         let leftMesh = new THREE.Mesh(sidePlanesGeo, frontWallMat)
@@ -231,7 +224,7 @@ export class Room extends THREE.Object3D{
         rightMesh.position.y += roomHeight / 2
 
         //top mesh
-        let topMesh = new THREE.Mesh(topPlaneGeo, frontWallMat)
+        let topMesh = new THREE.Mesh(topPlaneGeo, topWallMat)
         topMesh.position.y += this.door.doorHeight + topHeight / 2;
         topMesh.position.x += roomWidth / 2
 

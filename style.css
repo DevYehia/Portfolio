@@ -76,15 +76,18 @@ body {
   align-items: center; /* center horizontally */
   gap: 30px;
 
-  opacity: 0;
-  pointer-events: none;
   transition: opacity 0.25s ease;
 }
 
 /* When menu is open */
-#gameMenu.open {
+.open {
   opacity: 1;
   pointer-events: auto;
+}
+
+.closed {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .menu-item {
@@ -101,4 +104,32 @@ body {
 
 .menu-item:hover {
   background: rgba(255,255,255,0.25);
+}
+
+#collectiblesContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 10px;
+    padding: 10px;
+    transition: opacity 0.25s ease;
+}
+
+.collectible-card {
+    text-align: center;
+    border: 1px solid #333;
+    padding: 5px;
+    border-radius: 5px;
+    background-color: #1a1a1a;
+    color: white;
+}
+
+.collectible-card img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
 }

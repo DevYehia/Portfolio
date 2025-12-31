@@ -39,7 +39,7 @@ export class MyRoom extends Room{
         this.addSkillsBoards()
 
 
-        this.addWalls("../textures/innerWall.jpg", 0xFFD700)
+        this.addWalls("../textures/innerWall.jpg", 0x0000ff)
 
         this.addLight()
 
@@ -66,6 +66,7 @@ export class MyRoom extends Room{
                 signPic: "../textures/profiles/" + profiles[i].image,
                 signName: profiles[i].name,
                 signBaseText: profiles[i].name,
+                signBaseColor: 0x00ff00,
                 padding: signSpacing / 2,
                 signScale: 1.2,
                 controls: profiles[i].name + "<br>E - Show"});

@@ -38,6 +38,7 @@ export class Sign extends Interactable{
         signBaseHeight = 2, 
         signBaseWidth = 0.5, 
         signBaseText = "Alo",
+        signBaseColor = 0xff0000,
         signMainWidth = 5, 
         signMainHeight = 5,
         signScale = 1,
@@ -72,7 +73,7 @@ export class Sign extends Interactable{
         const hitBoxMat = new THREE.MeshBasicMaterial({color: 0xff0000});
         this.hitBox = new THREE.Mesh(hitBoxGeo, hitBoxMat); //will be an attribute, needed for collision detection        
         this.hitBox.visible = false;
-        const baseMaterial = new THREE.MeshStandardMaterial({color: 0x00ff00});
+        const baseMaterial = new THREE.MeshStandardMaterial({color: signBaseColor});
 
         const texture = new THREE.TextureLoader().load( "textures/" + signPic );
         texture.colorSpace = THREE.SRGBColorSpace

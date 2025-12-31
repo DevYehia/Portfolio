@@ -8,11 +8,11 @@ import { loadStuff } from './loader';
 
 import { gsap } from 'gsap/gsap-core';
 import { setupStates, stateInstances } from './PlayerStates/states';
+import { certificates } from './Data/certificates';
 
 
 
 
-let optionsMenuDiv = document.getElementById("menuButton")
 
 
 let inPointerLock = false;
