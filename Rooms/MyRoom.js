@@ -39,7 +39,7 @@ export class MyRoom extends Room{
         this.addSkillsBoards()
 
 
-        this.addWalls("../textures/Wall.jpg", 0xFFD700)
+        this.addWalls("../textures/innerWall.jpg", 0xFFD700)
 
         this.addLight()
 
