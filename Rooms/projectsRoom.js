@@ -27,7 +27,7 @@ export class ProjectsRoom extends Room{
             height: height
         })
         this.addSigns()
-        this.addCollectible("Linux")
+
         let currRoomDims = this.getRoomDims();
         //this.setDims(this.width, this.height, currRoomDims.z + 1)
         console.log("room dims is " + JSON.stringify(currRoomDims))
@@ -35,6 +35,8 @@ export class ProjectsRoom extends Room{
         this.addWalls("../textures/innerWall.jpg", 0x00ffff)
 
         this.addFloor("../textures/floor.jpg", 4)
+
+        this.addCollectible("Linux")
 
         this.addLight()
 

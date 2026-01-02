@@ -67,7 +67,7 @@ export class Room extends THREE.Object3D{
 
         //put it at random position in the room
         this.certificate.position.x = this.width / 2;
-        this.certificate.position.z = -20
+        this.certificate.position.z = - this.depth * 3 / 4
         this.certificate.position.y += 0.1       
         
         this.certificate.controls = "Certificate<br>E - Collect"
@@ -126,7 +126,7 @@ export class Room extends THREE.Object3D{
         let sideWallMat = new THREE.MeshStandardMaterial({color: wallColor, side: THREE.DoubleSide, map: sideWallTexture})
         
         //ceiling texture
-        const ceilTexture = new THREE.TextureLoader().load(texturePath)
+        const ceilTexture = new THREE.TextureLoader().load("textures/Wall.jpg")
         ceilTexture.wrapS = THREE.RepeatWrapping;
         ceilTexture.wrapT = THREE.RepeatWrapping;
         rep = 3
@@ -138,7 +138,7 @@ export class Room extends THREE.Object3D{
         
         this.wallGroup = new THREE.Group();
 
-        let frontWall = this.addFrontWall(roomWidth, roomHeight, texturePath);
+        let frontWall = this.addFrontWall(roomWidth, roomHeight, wallColor);
         let rightWall = new THREE.Mesh(sideWallGeo, sideWallMat);
         let leftWall = new THREE.Mesh(sideWallGeo, sideWallMat);        
         let backWall = new THREE.Mesh(backWallGeo, wallMat);
@@ -178,7 +178,8 @@ export class Room extends THREE.Object3D{
         floorTexture.wrapS = THREE.RepeatWrapping;
         floorTexture.wrapT = THREE.RepeatWrapping;
 
-        floorTexture.repeat.set(rep * (Math.ceil(this.width / this.depth)), rep)
+        floorTexture.repeat.set(rep * (this.width / this.depth), rep)
+
 
         const floorMat = new THREE.MeshPhongMaterial({map: floorTexture, side: THREE.DoubleSide});
 
@@ -190,15 +191,11 @@ export class Room extends THREE.Object3D{
         this.add(floorMesh)
     }
 
-    addFrontWall(roomWidth, roomHeight, texturePath){
+    addFrontWall(roomWidth, roomHeight, wallColor){
 
-        // shape.holes.push(hole);
-        const WallTexture = new THREE.TextureLoader().load(texturePath)
-        let rep = 2
-        //WallTexture.repeat.set(rep * (Math.ceil(this.width / this.height)),rep)
-        WallTexture.colorSpace = THREE.SRGBColorSpace
-        WallTexture.wrapS = THREE.RepeatWrapping
-        WallTexture.wrapT = THREE.RepeatWrapping
+
+        //no textures for front wall
+        //I am tired of trying to make it work
 
 
 
@@ -208,11 +205,8 @@ export class Room extends THREE.Object3D{
         let sidePlanesGeo = new THREE.BoxGeometry(sideWidth, roomHeight, 0.2)
         let topPlaneGeo = new THREE.BoxGeometry(this.door.doorWidth, topHeight, 0.2)
 
-        WallTexture.repeat.set(rep * (Math.ceil(sideWidth / roomHeight)),rep)
-        let frontWallMat = new THREE.MeshPhongMaterial({side: THREE.DoubleSide, map: WallTexture})
-
-        let topTexture = WallTexture.clone()
-        let topWallMat = new THREE.MeshPhongMaterial({color: 0x0000ff, side: THREE.DoubleSide})
+        let frontWallMat = new THREE.MeshPhongMaterial({side: THREE.DoubleSide, color: wallColor})
+        let topWallMat = new THREE.MeshPhongMaterial({color: wallColor, side: THREE.DoubleSide})
 
         //left mesh
         let leftMesh = new THREE.Mesh(sidePlanesGeo, frontWallMat)

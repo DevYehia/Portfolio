@@ -27,6 +27,7 @@ export class Collectible extends SquareImage{
         });
 
         this.imageMesh.rotateX(-Math.PI / 2)
+        this.hitBox.rotateX(-Math.PI / 2)
 
         this.hitBox.material.visible = false
 

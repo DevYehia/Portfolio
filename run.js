@@ -63,10 +63,20 @@ addAmbientLight(scene)
 setupStates()
 changeState(stateInstances["start"]);
 
+const geometry = new THREE.ConeGeometry(
+  1,    // radius (base half-size)
+  4,    // height
+);
+
+const material = new THREE.MeshStandardMaterial({ color: 0xffcc00 });
+const pyramid = new THREE.Mesh(geometry, material);
+
+scene.add(pyramid);
+
 
 
 let pointLight = new THREE.PointLight(0xFFFFFF, 100, 0)
-scene.add(pointLight)
+//scene.add(pointLight)
 
  let ambLight = new THREE.AmbientLight(0xffffff, 0.1)
  //scene.add(ambLight)

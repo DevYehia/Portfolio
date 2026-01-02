@@ -41,6 +41,8 @@ export class MyRoom extends Room{
 
         this.addWalls("../textures/innerWall.jpg", 0x0000ff)
 
+        this.addFloor("../textures/floor.jpg", 4)
+
         this.addLight()
 
         this.addCollectible("Testing")

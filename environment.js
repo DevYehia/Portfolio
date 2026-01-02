@@ -8,6 +8,7 @@ import { ProjectsRoom } from './Rooms/projectsRoom';
 import { HOFRoom } from './Rooms/HOFRoom';
 import { friends } from './Data/friends';
 import { MyRoom } from './Rooms/MyRoom';
+import { loadTexture } from './Utils/sceneUtils';
 
 
 export const boundaryCuboidHeight = 12;
@@ -59,6 +60,7 @@ export function adjustCamera(camera){
 }
 
 
+
 /**
  * @param {THREE.Scene} scene
  */
@@ -66,21 +68,27 @@ export function addBoundaryCuboids(scene, inputPathWidth){
 
     pathWidth = inputPathWidth;
 
-    //let nearBoundaryCuboidDepth = boundaryCuboidWidth * 2;
+    let nearWidthTexture = loadTexture("textures/env/stone.jpeg", nearBoundaryCuboidDepth, boundaryCuboidHeight, 3)
+    let depthTexture = loadTexture("textures/env/stone.jpeg", boundaryCuboidWidth, boundaryCuboidHeight, 3)
+
 
     const nearGeometry = new THREE.BoxGeometry( boundaryCuboidWidth, boundaryCuboidHeight , nearBoundaryCuboidDepth);
     const farGeometry = new THREE.BoxGeometry( boundaryCuboidWidth, boundaryCuboidHeight , boundaryCuboidWidth);
-    const material = new THREE.MeshStandardMaterial( { color: 0x0000ff} );
+    const depthMat = new THREE.MeshStandardMaterial( { map: depthTexture} );
+    const nearMat = new THREE.MeshStandardMaterial( { map: nearWidthTexture} );
+
+    //order is right, left, top, bottom, front ,back
+    let matList = [nearMat, nearMat, null, null, depthMat, depthMat]
 
     //near cuboids
-    addCuboid(scene, nearGeometry, material, new THREE.Vector3(pathWidth/2 + boundaryCuboidWidth/2, boundaryCuboidHeight / 2 , 0));
-    addCuboid(scene, nearGeometry, material, new THREE.Vector3(-pathWidth/2 - boundaryCuboidWidth/2, boundaryCuboidHeight / 2 , 0));
+    addCuboid(scene, nearGeometry, matList, new THREE.Vector3(pathWidth/2 + boundaryCuboidWidth/2, boundaryCuboidHeight / 2 , 0));
+    addCuboid(scene, nearGeometry, matList, new THREE.Vector3(-pathWidth/2 - boundaryCuboidWidth/2, boundaryCuboidHeight / 2 , 0));
     
     let farCuboidZ = nearBoundaryCuboidDepth/2 + pathWidth + boundaryCuboidWidth / 2;
     
     //far cuboids
-    addCuboid(scene, farGeometry, material, new THREE.Vector3(pathWidth/2 + boundaryCuboidWidth/2, boundaryCuboidHeight / 2 , -(farCuboidZ)));
-    addCuboid(scene, farGeometry, material, new THREE.Vector3(-pathWidth/2 - boundaryCuboidWidth/2, boundaryCuboidHeight / 2 , -(farCuboidZ)));
+    addCuboid(scene, farGeometry, depthMat, new THREE.Vector3(pathWidth/2 + boundaryCuboidWidth/2, boundaryCuboidHeight / 2 , -(farCuboidZ)));
+    addCuboid(scene, farGeometry, depthMat, new THREE.Vector3(-pathWidth/2 - boundaryCuboidWidth/2, boundaryCuboidHeight / 2 , -(farCuboidZ)));
 
 }
 
