@@ -7,12 +7,16 @@ import { changeState } from './common';
 
 export class StateBorders{
 
+    forward
+    backward
+    left
+    right
     constructor({
         forward = 0,
         backward = 0,
         left = 0,
         right = 0
-    }){
+    } = {}){
         this.forward = forward
         this.left = left
         this.right = right
@@ -22,12 +26,17 @@ export class StateBorders{
 
 export class StateNext{
 
+
+    forward
+    backward
+    left
+    right
     constructor({
         forward = null,
         backward = null,
         left = null,
         right = null
-    }){
+    } = {}){
         this.forward = forward
         this.left = left
         this.right = right
@@ -57,9 +66,11 @@ export class BaseState{
 
     animatables = []
 
-    constructor(stateBorders, nextStates, stateName){
-        this.stateBorders = stateBorders;
-        this.nextStates = nextStates
+    stateBorders
+    nextStates
+    collider
+
+    constructor(stateName){
         this.stateName = stateName
     }
 
@@ -144,7 +155,9 @@ export class BaseState{
 
 
     modifyPosition(playerPos, newPlayerPos){
-        playerPos.copy(newPlayerPos)
+        if(!this.collider.collides(newPlayerPos)){
+            playerPos.copy(newPlayerPos)
+        }
     }
 
     /** 

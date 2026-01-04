@@ -33,3 +33,10 @@ export class PlayerData{
     this.inputKeys = inputKeys
   }    
 }
+
+export const directions = {
+  "forward" : "-z",
+  "backward" : "+z",
+  "left" : "-x",
+  "right" : "+x"
+}

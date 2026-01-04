@@ -23,6 +23,8 @@ const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 const moveSpeed = 20
 
+let dict = {"yaya" : true}
+console.log(dict["lla"] + "eih")
 
 
 export const renderer = new THREE.WebGLRenderer({antialias: true});
@@ -76,7 +78,7 @@ scene.add(pyramid);
 
 
 let pointLight = new THREE.PointLight(0xFFFFFF, 100, 0)
-//scene.add(pointLight)
+scene.add(pointLight)
 
  let ambLight = new THREE.AmbientLight(0xffffff, 0.1)
  //scene.add(ambLight)

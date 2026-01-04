@@ -1,5 +1,7 @@
 import * as env from '../environment'
 import { BaseState, StateBorders, StateNext } from './baseState'
+import { CollisionBorders, CollisionHandler, StateDoors } from './collision'
+import { directions } from './common'
 
 export const states = {
     "start":{
@@ -10,6 +12,12 @@ export const states = {
         },
         "next":{
             "forward" : "fork"
+        },
+        "coll" : {
+            "left": true,
+            "right": true,
+            "forward": false,
+            "backward": true
         }
     },
     "fork": {
@@ -24,16 +32,30 @@ export const states = {
             "left" : "left",
             "right" : "right",
             "backward" : "start"
+        },
+        "coll" : {
+            "left": false,
+            "right": false,
+            "forward": false,
+            "backward": false
         }
     },
     "left": {
         "borders":{
             "left": -env.pathWidth / 2 - env.boundaryCuboidWidth,
             "right": -env.pathWidth / 2,
+            "forward" : -env.nearBoundaryCuboidDepth / 2 - env.pathWidth,
+            "backward" : -env.nearBoundaryCuboidDepth / 2
         },
         "next":{
             "left" : "projects",
             "right" : "fork"
+        },
+        "coll" : {
+            "left": true,
+            "right": false,
+            "forward": true,
+            "backward": true
         }
     },
     "projects": {
@@ -42,16 +64,30 @@ export const states = {
         },
         "next":{
             "right" : "left"
+        },
+        "coll" : {
+            "left": true,
+            "right": true,
+            "forward": true,
+            "backward": true
         }
     } ,
     "right": {
         "borders":{
             "left": env.pathWidth / 2 ,
             "right": env.pathWidth / 2 + env.boundaryCuboidWidth,
+            "forward" : -env.nearBoundaryCuboidDepth / 2 - env.pathWidth,
+            "backward" : -env.nearBoundaryCuboidDepth / 2
         },
         "next":{
             "left" : "fork",
             "right" : "HOF"
+        },
+        "coll" : {
+            "left": false,
+            "right": true,
+            "forward": true,
+            "backward": true
         }
     },
     "HOF": {
@@ -60,6 +96,12 @@ export const states = {
         },
         "next":{
             "left": "right"
+        },
+        "coll" : {
+            "left": true,
+            "right": true,
+            "forward": true,
+            "backward": true
         }
     } ,
     "forward": {
@@ -70,6 +112,12 @@ export const states = {
         "next":{
             "forward" : "myRoom",
             "backward" : "fork"
+        },
+        "coll" : {
+            "left": true,
+            "right": true,
+            "forward": true,
+            "backward": false
         }
     },
     "myRoom": {
@@ -78,6 +126,12 @@ export const states = {
         },
         "next":{
             "backward" : "forward"
+        },
+        "coll" : {
+            "left": true,
+            "right": true,
+            "forward": true,
+            "backward": true
         }
     } 
 }
@@ -105,23 +159,29 @@ export function setupStates(){
     for(let stateName in states){
         let state = states[stateName]
         if(state == null)continue;
-        let stateBorders = state.border
+        let stateBorders = state.borders
         let stateNext = state.next
-        stateInstances[stateName] = new BaseState(
-            new StateBorders({
-                forward: state.borders.forward,
-                left: state.borders.left,
-                right: state.borders.right,
-                backward: state.borders.backward,
-            }),
-            new StateNext({
-                forward: stateNext.forward,
-                left: stateNext.left,
-                right: stateNext.right,
-                backward: stateNext.backward,                
-            }),
-            stateName
-        );
+        let stateColl = state.coll
+        stateInstances[stateName] = new BaseState(stateName)
+
+        //set directions stuff
+        let stateBordersObj = new StateBorders()
+        let stateNextObj = new StateNext()
+        let stateBordersColl = new CollisionBorders()
+        let stateDoors = new StateDoors()
+
+        for(let dir in directions){
+            stateBordersObj[dir] = (dir in stateBorders) ? stateBorders[dir] : null
+            stateNextObj[dir] = (dir in stateNext) ? stateNext[dir] : null
+            stateBordersColl[dir] = (stateColl[dir] == true) ? stateBorders[dir] : null
+            //stateBordersObj.dir = stateBorders.dir
+        }
+
+        stateInstances[stateName].stateBorders = stateBordersObj
+        stateInstances[stateName].nextStates = stateNextObj
+        stateInstances[stateName].collider = new CollisionHandler(stateBordersColl, stateDoors)        
+
+
         if(stateName in interactables)
             stateInstances[stateName].interactableList = interactables[stateName]
 
