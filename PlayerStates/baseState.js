@@ -189,7 +189,7 @@ export class BaseState{
     }
 
     animate(){
-        this.animatables.forEach((itm) => itm.animate())
+        this.animatables.forEach((itm) => itm?.animate())
     }
 
 }

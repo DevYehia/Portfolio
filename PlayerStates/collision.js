@@ -2,6 +2,7 @@ import * as THREE from 'three'
 import { StateBorders } from './baseState'
 import { Door } from '../Objects/door'
 import { directions } from './common'
+import { isBetween } from '../Utils/MathUtils'
 
 export class CollisionBorders{
 
@@ -50,6 +51,13 @@ export class StateDoors{
     }
 }
 
+const perpenDict = {
+    "+x" : "+z",
+    "-x" : "-z",
+    "+z" : "-x",
+    "-z" : "+x"
+}
+
 
 
 export class CollisionHandler{
@@ -79,18 +87,20 @@ export class CollisionHandler{
 
             let axisSign = dir.charAt(0)
             let axis = dir.charAt(1)
-            let otherAxis = (axis == 'z') ? 'x' : 'z';
+            let otherAxis = perpenDict[dir].charAt(1);
+            let otherAxisSign = (perpenDict[dir].charAt(0) == '+') ? 1 : -1;
 
             let border = this.stateBorders[dirName]
             let door = this.stateDoors[dirName]
             let doorPos = (door != null) ? door.getWorldPos() : null;
             let cond = (axisSign == '+') ? (playerPos[axis] > border) : (playerPos[axis] < border)
 
+            console.log("this is " + doorPos?.[otherAxis] + door?.doorWidth * otherAxisSign)
+
             if(cond &&
                 (door == null || !(
                     door.isOpen() &&
-                    playerPos[otherAxis] > doorPos[otherAxis] &&
-                    playerPos[otherAxis] < doorPos[otherAxis] + door.doorWidth
+                    isBetween(doorPos[otherAxis], doorPos[otherAxis] + door.doorWidth * otherAxisSign, playerPos[otherAxis])
                     )
                 )
             )return true;

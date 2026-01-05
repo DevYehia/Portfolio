@@ -10,12 +10,19 @@ import { friends } from './Data/friends';
 import { MyRoom } from './Rooms/MyRoom';
 import { loadTexture } from './Utils/sceneUtils';
 
-
+//configs
 export const boundaryCuboidHeight = 12;
 export const boundaryCuboidWidth = 60;
 export const nearBoundaryCuboidDepth = boundaryCuboidWidth * 2;
-export let pathWidth = 25;
+export let pathWidth = 30;
 export let stars;
+
+//central environment objects collection
+export const envStuff = {}; 
+
+/**
+ * @type {ProjectsRoom}
+ */
 
 export let projectsRoom = null;
 
@@ -112,6 +119,14 @@ export function addProjectsRoom(scene){
 
 
     projectsRoom.position.set(roomX, roomY, roomZ);
+    
+    //set up envStuff
+    envStuff["projectsRoom"] = {}
+    let projectsEnv = envStuff["projectsRoom"]
+    projectsEnv["door"] = projectsRoom.door
+    projectsEnv["cert"] = projectsRoom.certificate
+    projectsRoom["signs"] = projectsRoom.signsList
+
 }
 
 export function addHOFRoom(scene){
@@ -133,8 +148,12 @@ export function addHOFRoom(scene){
 
     hallOfFameRoom.position.set(roomX, roomY, roomZ);
 
-    
-    //console.log("door at " + JSON.stringify(hallOfFameRoom.door.doorMesh.getWorldPosition(doorTest)))
+    //set up envStuff
+    envStuff["HOFRoom"] = {}
+    let HOFEnv = envStuff["HOFRoom"]
+    HOFEnv["door"] = hallOfFameRoom.door
+    HOFEnv["cert"] = hallOfFameRoom.certificate
+    HOFEnv["friends"] = hallOfFameRoom.board.imageList 
 }
 
 export function addMyRoom(scene){
@@ -155,6 +174,15 @@ export function addMyRoom(scene){
     myRoom.position.set(roomX, roomY, roomZ)
 
     myRoom.updateClippingPlanes()
+
+    //set up envStuff
+    envStuff["myRoom"] = {}
+    let myRoomEnv = envStuff["myRoom"]
+    myRoomEnv["door"] = myRoom.door
+    myRoomEnv["cert"] = myRoom.certificate
+    myRoomEnv["profiles"] = myRoom.signsList
+    myRoomEnv["timeline"] = myRoom.timeLineBoard
+    myRoomEnv["skills"] = myRoom.skillsBoardGroup  
 }
 
 

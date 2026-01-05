@@ -9,3 +9,9 @@ export function getDistanceXZ(playerPos, object){
         let dist = Math.sqrt(zDiff*zDiff + xDiff*xDiff);
         return dist;
     }
+
+export function isBetween(val1, val2, target){
+    let mini = Math.min(val1, val2)
+    let maxi = Math.max(val1, val2)
+    return (target < maxi && target > mini) 
+}

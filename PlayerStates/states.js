@@ -2,13 +2,18 @@ import * as env from '../environment'
 import { BaseState, StateBorders, StateNext } from './baseState'
 import { CollisionBorders, CollisionHandler, StateDoors } from './collision'
 import { directions } from './common'
+import { envStuff } from '../environment'
 
+//each state will have origin at its bottom left
 export const states = {
     "start":{
-        "borders":{
-            "left": -env.pathWidth / 2,
-            "right": env.pathWidth / 2,
-            "forward": -env.nearBoundaryCuboidDepth / 2,
+        "dims":{
+            "origin" : {
+                "x" : -env.pathWidth / 2,
+                "z" : env.nearBoundaryCuboidDepth / 2
+            },
+            "width": env.pathWidth,
+            "depth": env.nearBoundaryCuboidDepth
         },
         "next":{
             "forward" : "fork"
@@ -21,11 +26,13 @@ export const states = {
         }
     },
     "fork": {
-        "borders":{
-            "left": -env.pathWidth / 2,
-            "right": env.pathWidth / 2,
-            "forward": -env.nearBoundaryCuboidDepth / 2 - env.pathWidth,
-            "backward": -env.nearBoundaryCuboidDepth / 2
+        "dims":{
+            "origin" : {
+                "x" : -env.pathWidth / 2,
+                "z" : - env.nearBoundaryCuboidDepth / 2
+            },
+            "width": env.pathWidth,
+            "depth": env.pathWidth
         },
         "next":{
             "forward" : "forward",
@@ -41,11 +48,13 @@ export const states = {
         }
     },
     "left": {
-        "borders":{
-            "left": -env.pathWidth / 2 - env.boundaryCuboidWidth,
-            "right": -env.pathWidth / 2,
-            "forward" : -env.nearBoundaryCuboidDepth / 2 - env.pathWidth,
-            "backward" : -env.nearBoundaryCuboidDepth / 2
+        "dims":{
+            "origin" : {
+                "x" : -env.pathWidth / 2 - env.boundaryCuboidWidth,
+                "z" : - env.nearBoundaryCuboidDepth / 2
+            },
+            "width": env.boundaryCuboidWidth,
+            "depth": env.pathWidth
         },
         "next":{
             "left" : "projects",
@@ -73,11 +82,13 @@ export const states = {
         }
     } ,
     "right": {
-        "borders":{
-            "left": env.pathWidth / 2 ,
-            "right": env.pathWidth / 2 + env.boundaryCuboidWidth,
-            "forward" : -env.nearBoundaryCuboidDepth / 2 - env.pathWidth,
-            "backward" : -env.nearBoundaryCuboidDepth / 2
+        "dims":{
+            "origin" : {
+                "x" : env.pathWidth / 2,
+                "z" : - env.nearBoundaryCuboidDepth / 2
+            },
+            "width": env.boundaryCuboidWidth,
+            "depth": env.pathWidth
         },
         "next":{
             "left" : "fork",
@@ -105,9 +116,13 @@ export const states = {
         }
     } ,
     "forward": {
-        "borders":{
-            "forward": -env.pathWidth - env.boundaryCuboidWidth - env.nearBoundaryCuboidDepth / 2,
-            "backward": -env.pathWidth  - env.nearBoundaryCuboidDepth / 2,
+        "dims":{
+            "origin" : {
+                "x" : - env.pathWidth / 2,
+                "z" : - env.nearBoundaryCuboidDepth / 2 - env.pathWidth
+            },
+            "width": env.pathWidth,
+            "depth": env.boundaryCuboidWidth
         },
         "next":{
             "forward" : "myRoom",
@@ -151,35 +166,75 @@ export function setupStates(){
     }
 
     let animatables = {
-        "projects" : [ env.projectsRoom.certificate ],
-        "HOF" : [ env.hallOfFameRoom.certificate ],
-        "myRoom" : [ env.myRoom.certificate ],        
+        "projects" : [ envStuff["projectsRoom"]["cert"] ],
+        "HOF" : [ envStuff["HOFRoom"]["cert"] ],
+        "myRoom" : [ envStuff["myRoom"]["cert"] ],        
     }
+
+
+    let stateDoors = {
+        "left": {
+            "left" : envStuff["projectsRoom"]["door"]
+        } ,
+        "projects": {
+            "right" : envStuff["projectsRoom"]["door"]
+        },
+        "right":{
+            "right" : envStuff["HOFRoom"]["door"]
+        },
+        "HOF":{
+            "left" : envStuff["HOFRoom"]["door"]
+        },
+        "forward":{
+            "forward" : envStuff["myRoom"]["door"]
+        },
+        "myRoom":{
+            "backward" : envStuff["myRoom"]["door"]
+        }
+    }
+
+
+
 
     for(let stateName in states){
         let state = states[stateName]
         if(state == null)continue;
-        let stateBorders = state.borders
         let stateNext = state.next
         let stateColl = state.coll
         stateInstances[stateName] = new BaseState(stateName)
+
+
+        //set up the state borders
+        const originX = state?.dims?.origin?.x ?? 0;
+        const originZ = state?.dims?.origin?.z ?? 0;
+        const width   = state?.dims?.width   ?? 0;
+        const depth   = state?.dims?.depth   ?? 0;
+
+        let collMargin = 0.5
+
+        state["borders"] = {}
+        state["borders"]["left"] = originX + collMargin 
+        state["borders"]["backward"] = originZ - collMargin
+        state["borders"]["forward"] = originZ - depth + collMargin
+        state["borders"]["right"] = originX + width - collMargin
+        let stateBorders = state.borders
 
         //set directions stuff
         let stateBordersObj = new StateBorders()
         let stateNextObj = new StateNext()
         let stateBordersColl = new CollisionBorders()
-        let stateDoors = new StateDoors()
+        let stateDoorsObj = new StateDoors()
 
         for(let dir in directions){
             stateBordersObj[dir] = (dir in stateBorders) ? stateBorders[dir] : null
             stateNextObj[dir] = (dir in stateNext) ? stateNext[dir] : null
             stateBordersColl[dir] = (stateColl[dir] == true) ? stateBorders[dir] : null
-            //stateBordersObj.dir = stateBorders.dir
+            stateDoorsObj[dir] = stateDoors?.[stateName]?.[dir] ?? null
         }
 
         stateInstances[stateName].stateBorders = stateBordersObj
         stateInstances[stateName].nextStates = stateNextObj
-        stateInstances[stateName].collider = new CollisionHandler(stateBordersColl, stateDoors)        
+        stateInstances[stateName].collider = new CollisionHandler(stateBordersColl, stateDoorsObj)        
 
 
         if(stateName in interactables)
