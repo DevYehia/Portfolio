@@ -15,3 +15,11 @@ export function isBetween(val1, val2, target){
     let maxi = Math.max(val1, val2)
     return (target < maxi && target > mini) 
 }
+
+export function getclosestDistance(pos, borders){
+    return Math.min(pos.z - borders.forward,
+        borders.backward - pos.z,
+        borders.right - pos.x,
+        pos.x - borders.left 
+    )
+}

@@ -4,6 +4,7 @@ import { keys, KeyStates } from '../Utils/keyboardUtils'
 import { nextLine, endDialogue } from '../Utils/dialogUtils';
 import { stateInstances } from './states';
 import { changeState } from './common';
+import { player } from '../run';
 
 export class StateBorders{
 
@@ -70,8 +71,15 @@ export class BaseState{
     nextStates
     collider
 
-    constructor(stateName){
+    axis;
+
+    constructor(stateName, axis){
         this.stateName = stateName
+
+        //adjust player light
+ 
+        
+
     }
 
     /**
@@ -191,5 +199,19 @@ export class BaseState{
     animate(){
         this.animatables.forEach((itm) => itm?.animate())
     }
+
+    adjustLight(){
+        if(this.axis == 'x'){
+            console.log("d5lna el x")
+            console.log("data " + this.stateBorders.forward + " " + this.stateBorders.backward)
+            player.light.position.z = (this.stateBorders.forward + this.stateBorders.backward) / 2
+        }
+        else if(this.axis == 'z'){
+            console.log("d5lna el z")
+            console.log("data " + this.stateBorders.left + " " + this.stateBorders.right)
+            player.light.position.x = (this.stateBorders.left + this.stateBorders.right) / 2
+        }           
+    }
+
 
 }

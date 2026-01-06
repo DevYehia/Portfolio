@@ -95,7 +95,6 @@ export class CollisionHandler{
             let doorPos = (door != null) ? door.getWorldPos() : null;
             let cond = (axisSign == '+') ? (playerPos[axis] > border) : (playerPos[axis] < border)
 
-            console.log("this is " + doorPos?.[otherAxis] + door?.doorWidth * otherAxisSign)
 
             if(cond &&
                 (door == null || !(

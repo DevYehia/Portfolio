@@ -23,7 +23,8 @@ export const states = {
             "right": true,
             "forward": false,
             "backward": true
-        }
+        },
+        "axis" : "z"
     },
     "fork": {
         "dims":{
@@ -45,7 +46,8 @@ export const states = {
             "right": false,
             "forward": false,
             "backward": false
-        }
+        },
+        "axis" : "all"
     },
     "left": {
         "dims":{
@@ -65,7 +67,8 @@ export const states = {
             "right": false,
             "forward": true,
             "backward": true
-        }
+        },
+        "axis" : "x"
     },
     "projects": {
         "borders":{
@@ -99,7 +102,8 @@ export const states = {
             "right": true,
             "forward": true,
             "backward": true
-        }
+        },
+        "axis" : "x"
     },
     "HOF": {
         "borders":{
@@ -133,7 +137,8 @@ export const states = {
             "right": true,
             "forward": true,
             "backward": false
-        }
+        },
+        "axis" : "z"
     },
     "myRoom": {
         "borders":{
@@ -201,7 +206,7 @@ export function setupStates(){
         if(state == null)continue;
         let stateNext = state.next
         let stateColl = state.coll
-        stateInstances[stateName] = new BaseState(stateName)
+        stateInstances[stateName] = new BaseState(stateName, state.axis)
 
 
         //set up the state borders
@@ -231,7 +236,7 @@ export function setupStates(){
             stateBordersColl[dir] = (stateColl[dir] == true) ? stateBorders[dir] : null
             stateDoorsObj[dir] = stateDoors?.[stateName]?.[dir] ?? null
         }
-
+        stateInstances[stateName].axis = state.axis ?? null;
         stateInstances[stateName].stateBorders = stateBordersObj
         stateInstances[stateName].nextStates = stateNextObj
         stateInstances[stateName].collider = new CollisionHandler(stateBordersColl, stateDoorsObj)        

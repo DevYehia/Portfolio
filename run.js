@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {addAmbientLight, addBoundaryCuboids, addGround, addHOFRoom, addMyRoom, addProjectsRoom,  addStars,  adjustCamera} from './environment';
+import {addAmbientLight, addBoundaryCuboids, addGround, addHOFRoom, addMyRoom, addProjectsRoom,  addStars,  adjustCamera, pathWidth} from './environment';
 
 import { PlayerData, changeState, currState } from './PlayerStates/common';
 import { KeyStates, keys, initKeyboardUtils, processKeyboardInput, resetKeys } from './Utils/keyboardUtils';
@@ -9,6 +9,8 @@ import { loadStuff } from './loader';
 import { gsap } from 'gsap/gsap-core';
 import { setupStates, stateInstances } from './PlayerStates/states';
 import { certificates } from './Data/certificates';
+import { Player } from './player';
+import { getclosestDistance } from './Utils/MathUtils';
 
 
 
@@ -32,7 +34,9 @@ renderer.setSize( window.innerWidth, window.innerHeight );
 renderer.setPixelRatio(window.devicePixelRatio)
 renderer.localClippingEnabled = true
 document.body.appendChild( renderer.domElement );
-renderer.localClippingEnabled = true;
+renderer.physicallyCorrectLights = true;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 0.9;
 
 await loadStuff()
 
@@ -63,7 +67,7 @@ addAmbientLight(scene)
 
 
 setupStates()
-changeState(stateInstances["start"]);
+
 
 const geometry = new THREE.ConeGeometry(
   1,    // radius (base half-size)
@@ -76,14 +80,21 @@ const pyramid = new THREE.Mesh(geometry, material);
 scene.add(pyramid);
 
 
-
-let pointLight = new THREE.PointLight(0xFFFFFF, 100, 0)
+let pointLight = new THREE.PointLight(0xFFFFFF, 1, pathWidth, 0)
 scene.add(pointLight)
+pointLight.position.x = -10;
 
- let ambLight = new THREE.AmbientLight(0xffffff, 0.1)
+export const player = new Player(camera, pointLight)
+
+changeState(stateInstances["start"]);
+
+let ambLight = new THREE.AmbientLight(0xffffff, 0.1)
  //scene.add(ambLight)
 
 pointLight.position.copy(camera.position)
+
+
+
 
 
 const clock = new THREE.Clock();
@@ -158,6 +169,12 @@ function animate() {
         // }
         currState.modifyPosition(camera.position, newPos);
         currState.modifyPosition(pointLight.position, newPos);
+        //pointLight.distance = 2* getclosestDistance(camera.position, currState.stateBorders)
+        // if(currState.axis != null && currState.axis != "all")
+        //   pointLight.position[currState.axis] = camera.position[currState.axis]
+        // else if(currState.axis != null){
+        //   pointLight.position.copy(camera.position)
+        // }
 
 
     }
