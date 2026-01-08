@@ -1,7 +1,7 @@
 import * as env from '../environment'
 import { BaseState, StateBorders, StateNext } from './baseState'
 import { CollisionBorders, CollisionHandler, StateDoors } from './collision'
-import { directions } from './common'
+import { collisionMargin, directions } from './common'
 import { envStuff } from '../environment'
 
 //each state will have origin at its bottom left
@@ -71,8 +71,13 @@ export const states = {
         "axis" : "x"
     },
     "projects": {
-        "borders":{
-            "right": -env.pathWidth / 2 - env.boundaryCuboidWidth,
+        "dims":{
+            "origin" : {
+                "x" : -env.pathWidth / 2 - env.boundaryCuboidWidth,
+                "z" : - env.nearBoundaryCuboidDepth / 2
+            },
+            "width": env.boundaryCuboidWidth,
+            "depth": env.pathWidth
         },
         "next":{
             "right" : "left"
@@ -90,7 +95,7 @@ export const states = {
                 "x" : env.pathWidth / 2,
                 "z" : - env.nearBoundaryCuboidDepth / 2
             },
-            "width": env.boundaryCuboidWidth,
+            "width": env.boundaryCuboidWidth + 2000,
             "depth": env.pathWidth
         },
         "next":{
@@ -160,10 +165,15 @@ export const stateInstances = {}
 
 export function setupStates(){
 
+    //set up room borders
+    states["projects"]["dims"]["origin"]["x"] = -env.pathWidth / 2 - env.boundaryCuboidWidth - env.projectsRoom.depth;
+    states["projects"]["dims"]["origin"]["z"] = -env.nearBoundaryCuboidDepth / 2 - env.pathWidth / 2 + env.projectsRoom.width / 2;    
+    states["projects"]["dims"]["width"] = env.projectsRoom.depth;
+    states["projects"]["dims"]["depth"] = env.projectsRoom.width;
 
     let interactables = {
         "left" : [ env.projectsRoom.door ],
-        "projects" : [env.projectsRoom.door, ...env.projectsRoom.signsList, env.projectsRoom.certificate],
+        "projects" : [env.projectsRoom.door, ...env.projectsRoom.signsList],
         "right" : [ env.hallOfFameRoom.door ],
         "HOF" : [env.hallOfFameRoom.door, ...env.hallOfFameRoom.board.imageList, env.hallOfFameRoom.certificate],
         "forward" : [ env.myRoom.door ],
@@ -215,13 +225,13 @@ export function setupStates(){
         const width   = state?.dims?.width   ?? 0;
         const depth   = state?.dims?.depth   ?? 0;
 
-        let collMargin = 0.5
+        let collMargin = collisionMargin
 
         state["borders"] = {}
-        state["borders"]["left"] = originX + collMargin 
-        state["borders"]["backward"] = originZ - collMargin
-        state["borders"]["forward"] = originZ - depth + collMargin
-        state["borders"]["right"] = originX + width - collMargin
+        state["borders"]["left"] = originX 
+        state["borders"]["backward"] = originZ 
+        state["borders"]["forward"] = originZ - depth 
+        state["borders"]["right"] = originX + width 
         let stateBorders = state.borders
 
         //set directions stuff
@@ -231,9 +241,11 @@ export function setupStates(){
         let stateDoorsObj = new StateDoors()
 
         for(let dir in directions){
+            let sign = (directions[dir].charAt(0) == '+') ? -1 : 1
+
             stateBordersObj[dir] = (dir in stateBorders) ? stateBorders[dir] : null
             stateNextObj[dir] = (dir in stateNext) ? stateNext[dir] : null
-            stateBordersColl[dir] = (stateColl[dir] == true) ? stateBorders[dir] : null
+            stateBordersColl[dir] = (stateColl[dir] == true) ? stateBorders[dir] + collMargin * sign : null
             stateDoorsObj[dir] = stateDoors?.[stateName]?.[dir] ?? null
         }
         stateInstances[stateName].axis = state.axis ?? null;

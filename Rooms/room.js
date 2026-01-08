@@ -18,7 +18,7 @@ export class Room extends THREE.Object3D{
 
     depth;
 
-    roomLight = new THREE.PointLight(0xffffff, 1000)
+    roomLight = new THREE.PointLight(0xffffff, 1, 0, 0)
 
 
     constructor({

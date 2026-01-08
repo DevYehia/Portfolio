@@ -49,7 +49,7 @@ export class SquareImage extends Interactable{
             const imageTexture = new THREE.TextureLoader().load("textures/" + imageName);
             imageTexture.colorSpace = THREE.SRGBColorSpace
             const imageGeo = new THREE.PlaneGeometry(this.width, this.height);
-            const imageMat = new THREE.MeshPhongMaterial({map: imageTexture, 
+            const imageMat = new THREE.MeshBasicMaterial({map: imageTexture, 
                 side: THREE.DoubleSide, 
                 transparent: true, 
                 clippingPlanes: this.clippingPlanes})

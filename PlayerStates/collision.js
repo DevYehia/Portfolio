@@ -3,6 +3,8 @@ import { StateBorders } from './baseState'
 import { Door } from '../Objects/door'
 import { directions } from './common'
 import { isBetween } from '../Utils/MathUtils'
+import { collisionMargin } from './common'
+import { player } from '../run'
 
 export class CollisionBorders{
 
@@ -75,9 +77,16 @@ export class CollisionHandler{
 /**
  * 
  * @param {THREE.Vector3} playerPos 
+ * @param {THREE.Vector3} newPlayerPos 
  */
 
-    collides(playerPos){
+    modifyPosition(playerPos, newPlayerPos){
+
+
+        const modifyAxis = {
+            "x" : true,
+            "z" : true
+        }
         
         for(let dirName in directions){
             let dir = directions[dirName]
@@ -93,22 +102,43 @@ export class CollisionHandler{
             let border = this.stateBorders[dirName]
             let door = this.stateDoors[dirName]
             let doorPos = (door != null) ? door.getWorldPos() : null;
-            let cond = (axisSign == '+') ? (playerPos[axis] > border) : (playerPos[axis] < border)
+            let cond = (axisSign == '+') ? (newPlayerPos[axis] > border) : (newPlayerPos[axis] < border)
+            let unStuckCond = (axisSign == '+') ? (playerPos[axis] > border) : (playerPos[axis] < border)
 
 
-            if(cond &&
-                (door == null || !(
-                    door.isOpen() &&
-                    isBetween(doorPos[otherAxis], doorPos[otherAxis] + door.doorWidth * otherAxisSign, playerPos[otherAxis])
-                    )
-                )
-            )return true;
+            if( door != null &&
+                isBetween(doorPos[otherAxis], doorPos[otherAxis] + door.doorWidth * otherAxisSign, playerPos[otherAxis])
+            && door.isOpen()){
+                //don't unstuck
+            }
+            else if(
+                unStuckCond
+            ) {
+                //console.log("dir is + " + dirName + "get unstuck man")
+                playerPos[axis] = border;
+                modifyAxis[axis] = false
+            }
+            
 
+            //collision code
+            if(door == null){
+                if(cond)modifyAxis[axis] = false;
+            }
+
+            else if(!isBetween(doorPos[otherAxis], doorPos[otherAxis] + door.doorWidth * otherAxisSign, newPlayerPos[otherAxis])){
+                if(cond)modifyAxis[axis] = false;
+            }
+            
+            else{
+                if(!door.isOpen() && cond)modifyAxis[axis] = false
+                else if(door.isOpen());// do nothing
+            }
         }
 
-
-        return false;
-
+        //check for modifications
+        for(let axis in modifyAxis){
+            if(modifyAxis[axis])playerPos[axis] = newPlayerPos[axis];
+        }
 
     }
 

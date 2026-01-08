@@ -5,6 +5,7 @@ import { nextLine, endDialogue } from '../Utils/dialogUtils';
 import { stateInstances } from './states';
 import { changeState } from './common';
 import { player } from '../run';
+import { CollisionHandler } from './collision';
 
 export class StateBorders{
 
@@ -69,6 +70,11 @@ export class BaseState{
 
     stateBorders
     nextStates
+
+    /**
+     * @type {CollisionHandler}
+     */
+
     collider
 
     axis;
@@ -131,6 +137,9 @@ export class BaseState{
         //no current interactable
         else{
             for(let i in this.interactableList){
+
+                //skip null
+                if(this.interactableList[i] == null)continue
             
                 if(this.checkForTrigger(playerPos, camera, this.interactableList[i])){
                     console.log("ALooo ")
@@ -163,9 +172,7 @@ export class BaseState{
 
 
     modifyPosition(playerPos, newPlayerPos){
-        if(!this.collider.collides(newPlayerPos)){
-            playerPos.copy(newPlayerPos)
-        }
+        this.collider.modifyPosition(playerPos, newPlayerPos)
     }
 
     /** 

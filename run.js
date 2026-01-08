@@ -34,9 +34,7 @@ renderer.setSize( window.innerWidth, window.innerHeight );
 renderer.setPixelRatio(window.devicePixelRatio)
 renderer.localClippingEnabled = true
 document.body.appendChild( renderer.domElement );
-renderer.physicallyCorrectLights = true;
-renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 0.9;
+
 
 await loadStuff()
 
@@ -80,7 +78,7 @@ const pyramid = new THREE.Mesh(geometry, material);
 scene.add(pyramid);
 
 
-let pointLight = new THREE.PointLight(0xFFFFFF, 1, pathWidth, 0)
+let pointLight = new THREE.PointLight(0xffffff, 1, pathWidth, 0)
 scene.add(pointLight)
 pointLight.position.x = -10;
 
@@ -168,7 +166,8 @@ function animate() {
         //     camera.position.copy(newPos);
         // }
         currState.modifyPosition(camera.position, newPos);
-        currState.modifyPosition(pointLight.position, newPos);
+        pointLight.position.copy(camera.position)
+        //currState.modifyPosition(pointLight.position, newPos);
         //pointLight.distance = 2* getclosestDistance(camera.position, currState.stateBorders)
         // if(currState.axis != null && currState.axis != "all")
         //   pointLight.position[currState.axis] = camera.position[currState.axis]
