@@ -255,7 +255,7 @@ export function setupStates(){
 
 
         if(stateName in interactables)
-            stateInstances[stateName].interactableList = interactables[stateName]
+            stateInstances[stateName].interactionManager.interactableList = interactables[stateName]
 
         if(stateName in animatables)
             stateInstances[stateName].animatables = animatables[stateName]
