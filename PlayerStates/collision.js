@@ -65,6 +65,9 @@ const perpenDict = {
 export class CollisionHandler{
 
 
+    playerLocalPos = new THREE.Vector3(); //will be used relative to doors
+
+
 /**
  * @param {CollisionBorders} stateBorders
  * @param {StateDoors} stateDoors
@@ -97,24 +100,26 @@ export class CollisionHandler{
             let axisSign = dir.charAt(0)
             let axis = dir.charAt(1)
             let otherAxis = perpenDict[dir].charAt(1);
-            let otherAxisSign = (perpenDict[dir].charAt(0) == '+') ? 1 : -1;
+
 
             let border = this.stateBorders[dirName]
             let door = this.stateDoors[dirName]
+        
             let doorPos = (door != null) ? door.getWorldPos() : null;
             let cond = (axisSign == '+') ? (newPlayerPos[axis] > border) : (newPlayerPos[axis] < border)
             let unStuckCond = (axisSign == '+') ? (playerPos[axis] > border) : (playerPos[axis] < border)
 
 
             if( door != null &&
-                isBetween(doorPos[otherAxis], doorPos[otherAxis] + door.doorWidth * otherAxisSign, playerPos[otherAxis])
+                isBetween(doorPos[otherAxis], doorPos[otherAxis] + door.doorWidth * door.sign, playerPos[otherAxis])
             && door.isOpen()){
                 //don't unstuck
+                console.log("dont unstuck")
             }
             else if(
                 unStuckCond
             ) {
-                //console.log("dir is + " + dirName + "get unstuck man")
+                console.log('Unstuck')
                 playerPos[axis] = border;
                 modifyAxis[axis] = false
             }
@@ -125,7 +130,8 @@ export class CollisionHandler{
                 if(cond)modifyAxis[axis] = false;
             }
 
-            else if(!isBetween(doorPos[otherAxis], doorPos[otherAxis] + door.doorWidth * otherAxisSign, newPlayerPos[otherAxis])){
+            else if(!isBetween(doorPos[otherAxis], doorPos[otherAxis] + door.doorWidth * door.sign, playerPos[otherAxis])){
+                console.log("Elcondition el saye2")
                 if(cond)modifyAxis[axis] = false;
             }
             

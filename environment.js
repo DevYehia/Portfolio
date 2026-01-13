@@ -119,6 +119,7 @@ export function addProjectsRoom(scene){
 
 
     projectsRoom.position.set(roomX, roomY, roomZ);
+    projectsRoom.door.sign = -1;
     
     //set up envStuff
     envStuff["projectsRoom"] = {}

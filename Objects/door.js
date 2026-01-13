@@ -29,6 +29,7 @@ export class Door extends Interactable{
     numRotationsPerAnimation = 50;
 
     worldPos = new THREE.Vector3()
+    sign = 1;
 
 
     constructor(isClockWiseOpen){
@@ -44,32 +45,10 @@ export class Door extends Interactable{
             this.rotationSign = 1;
         }
 
-        let shape = new THREE.Shape();
-        shape.setFromPoints(
-            [new THREE.Vector2(0,0),
-            new THREE.Vector2(0,this.doorHeight),
-            new THREE.Vector2(this.doorWidth,this.doorHeight),
-            new THREE.Vector2(this.doorWidth,0)
-            ]
-        );
 
-        let holeBottomOffset = this.doorHeight - this.holetopOffset -  this.holeHeight;
-        let holeRightOffset = (this.doorWidth - this.holeWidth) / 2 //to be a centered hole
-        const hole = new THREE.Path();
-        hole.moveTo(holeRightOffset, holeBottomOffset);
-        hole.lineTo(holeRightOffset, holeBottomOffset + this.holeHeight);
-        hole.lineTo(holeRightOffset + this.holeWidth, holeBottomOffset + this.holeHeight);
-        hole.lineTo(holeRightOffset + this.holeWidth, holeBottomOffset);
-        hole.lineTo(holeRightOffset, holeBottomOffset);
-        //shape.holes.push(hole);
-
-        const extrudeSettings = {
-            depth: 0.2,  
-            bevelEnabled: false
-        };
-
-        let geo = new THREE.ExtrudeGeometry(shape, extrudeSettings);
-        let mat = new THREE.MeshStandardMaterial({color: 0x00ffff})
+        let geo = new THREE.BoxGeometry(this.doorWidth, this.doorHeight, 0.2);
+        geo.translate(this.doorWidth / 2, this.doorHeight / 2, 0)
+        let mat = new THREE.MeshStandardMaterial({color: 0x00ffff, side: THREE.DoubleSide})
         this.doorMesh = new THREE.Mesh(geo, mat);
 
         //add hitbox
@@ -145,4 +124,5 @@ export class Door extends Interactable{
         this.doorMesh.getWorldPosition(this.worldPos);
         return this.worldPos
     }
+
 }
