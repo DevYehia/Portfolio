@@ -12,12 +12,19 @@ body {
   bottom: 20px;
   left: 20px;
   right: 20px;
-  border: 2px solid white;
   width: calc(100% - 40px); /* account for left/right padding */
   height: 20%;
-  font-size: 20px;
+  padding-left: 10px;
+  padding-top: 10px;
+  font-size: 30px;
   pointer-events: none; /* clicks pass through */
+  background-color: rgba(0, 0, 0, 0.8);
+  font-family: "Quantico", sans-serif;
+  color: #f2f2f2;
 }
+
+
+
 
 /* Center click text */
 #clickDiv {

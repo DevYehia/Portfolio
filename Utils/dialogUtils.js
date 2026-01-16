@@ -40,7 +40,8 @@ export function nextLine(){
     }
     else{
         talkDiv.hidden = true;
-        controlsDiv.innerHTML = currState.interactable.controls
+        console.log("Ezay")
+        controlsDiv.innerHTML = currState.interactionManager.interactable.controls
         currState.isInDialog = false;  
         return false;
     }

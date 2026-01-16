@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {addAmbientLight, addBoundaryCuboids, addGround, addHOFRoom, addMyRoom, addProjectsRoom,  addStars,  adjustCamera, pathWidth} from './environment';
+import {addAmbientLight, addBoundaryCuboids, addGround, addHOFRoom, addMyRoom, addProjectsRoom,  addStars,  adjustCamera, audio, pathWidth, setupSound} from './environment';
 
 import { PlayerData, changeState, currState } from './PlayerStates/common';
 import { KeyStates, keys, initKeyboardUtils, processKeyboardInput, resetKeys } from './Utils/keyboardUtils';
@@ -40,7 +40,7 @@ await loadStuff()
 
 initKeyboardUtils()
 setupPauseMenu()
-
+setupSound()
 //important to start game
 
 
@@ -156,26 +156,24 @@ function animate() {
             //testDoor.close()          
         }
 
-        if(keys['q'] == KeyStates.SINGLE_PRESS){
-          pointLight.intensity = ((pointLight.intensity == 0) ? 100 : 0);
+        if(!camera.position.equals(newPos)){
+
+            currState.modifyPosition(camera.position, newPos);
+            pointLight.position.copy(camera.position)
+
+            if(camera.position.equals(newPos)){
+                audio.play()
+            }
+            else{
+                audio.pause();    // pauses playback
+                audio.currentTime = 0;  // resets to start
+            }
+
         }
-
-        //check for collision using newPos
-        // if(!currState.checkCollision(newPos)){
-        //     //copy change to camera position
-        //     camera.position.copy(newPos);
-        // }
-        currState.modifyPosition(camera.position, newPos);
-        pointLight.position.copy(camera.position)
-        //currState.modifyPosition(pointLight.position, newPos);
-        //pointLight.distance = 2* getclosestDistance(camera.position, currState.stateBorders)
-        // if(currState.axis != null && currState.axis != "all")
-        //   pointLight.position[currState.axis] = camera.position[currState.axis]
-        // else if(currState.axis != null){
-        //   pointLight.position.copy(camera.position)
-        // }
-
-
+        else{
+                audio.pause();    // pauses playback
+                audio.currentTime = 0;  // resets to start            
+        }
     }
 
     //check for next state
