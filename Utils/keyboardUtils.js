@@ -14,26 +14,17 @@ export function initKeyboardUtils(){
 
     window.addEventListener('keydown', e => {
     
-        // //dialog logic
-        // if(inDialog && e.key == 'e' && !e.repeat){
-        //     let talkDiv = document.getElementById("talkDiv");
-        //     if(currDialogIdx >= currDialog.length){
-        //         inDialog = false;
-        //         talkDiv.hidden = true;
-                
-        //     }
-        //     else{
-        //         animateText(talkDiv, currDialog[currDialogIdx]);
-        //         currDialogIdx++;
-        //     }        
-        // }    
-        // let key = e.key
-    
+        let key = e.key.toLowerCase()
 
-        helperKeys[e.key] = true;
+
+        helperKeys[key] = true;
     
     });
-    window.addEventListener('keyup', e => {helperKeys[e.key] = false});
+    window.addEventListener('keyup', e => {
+        let key = e.key.toLowerCase()
+        helperKeys[key] = false
+        
+    });
 }
 
 export function resetKeys(){

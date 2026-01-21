@@ -1,3 +1,6 @@
+//Modify
+//JS, GitHub, Dart
+
 
 export const skills = {
     "Programming Languages" : {
@@ -19,7 +22,7 @@ export const skills = {
         list: [
             "html.png",
             "css.png",
-            "js.webp",
+            "js.png",
             "php.png"
         ],
         dialogue: [
@@ -41,7 +44,7 @@ export const skills = {
         numRows : 1,
         list: [
             "git.webp",
-            "github.webp"
+            "Github.jpg"
         ]
     },
 
@@ -49,7 +52,7 @@ export const skills = {
         numRows : 1,
         list : [
             "flutter.png",
-            "dart.png"
+            "firebase.png"
         ]
     },
 

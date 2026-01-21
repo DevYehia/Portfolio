@@ -1,6 +1,8 @@
 //el baab
 import * as THREE from 'three'
 import { Interactable } from './interactable';
+import { commonTextures } from '../loader';
+import { gsap } from 'gsap/gsap-core';
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -48,7 +50,7 @@ export class Door extends Interactable{
 
         let geo = new THREE.BoxGeometry(this.doorWidth, this.doorHeight, 0.2);
         geo.translate(this.doorWidth / 2, this.doorHeight / 2, 0)
-        let mat = new THREE.MeshStandardMaterial({color: 0x00ffff, side: THREE.DoubleSide})
+        let mat = new THREE.MeshStandardMaterial({color: 0xffffff, map: commonTextures["door"].texture})
         this.doorMesh = new THREE.Mesh(geo, mat);
 
         //add hitbox
@@ -77,33 +79,30 @@ export class Door extends Interactable{
         this.state = DoorStates.OPENING
 
         let sleepDuration = this.animationTime / this.numRotationsPerAnimation
-        while(Math.abs(this.rotation.y - originalRotationY) < Math.PI/2){
-            this.rotation.y += (Math.PI/2) / this.numRotationsPerAnimation * this.rotationSign
-            await sleep(sleepDuration)
-        }
-        this.state = DoorStates.OPEN
-        // else{
-        //     clearInterval(this.openIntervalHandler)
-        // }
+        gsap.to(this.rotation, 
+            {
+            y: Math.PI / 2 * this.rotationSign,
+            onComplete: () => { this.state = DoorStates.OPEN},
+            duration: this.animationTime,
+            ease: "none"
+            }
+        )
     }
 
     async close(){
-        let originalRotationY = this.rotation.y;
         if(this.state == DoorStates.CLOSED || this.state == DoorStates.OPENING || this.state == DoorStates.CLOSING){
             return;
         }
         this.state = DoorStates.CLOSING
 
-        let sleepDuration = this.animationTime / this.numRotationsPerAnimation
-
-        while(Math.abs(this.rotation.y - originalRotationY) < Math.PI/2){
-            this.rotation.y -= (Math.PI/2) / this.numRotationsPerAnimation * this.rotationSign
-            await sleep(sleepDuration)
-        }
-        this.state = DoorStates.CLOSED
-        // else{
-        //     clearInterval(this.closeIntervalHandler)
-        // }
+        gsap.to(this.rotation, 
+            {
+            y: 0,
+            onComplete: () => { this.state = DoorStates.CLOSED},
+            duration: this.animationTime,
+            ease: "none"
+            }
+        )
     }
 
     //this function will move the door according to its current state

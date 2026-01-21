@@ -70,5 +70,7 @@ export class HOFRoom extends Room{
 
         //this.addCollectible("AutoSAR")
 
+        this.addTitle("Friends", ~0xFFD700)
+
     }
 }

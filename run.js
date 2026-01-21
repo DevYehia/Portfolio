@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {addAmbientLight, addBoundaryCuboids, addGround, addHOFRoom, addMyRoom, addProjectsRoom,  addStars,  adjustCamera, audio, pathWidth, setupSound} from './environment';
+import {addAmbientLight, addBoundaryCuboids, addGround, addHOFRoom, addMyRoom, addProjectsRoom,  addStars,  adjustCamera, pathWidth} from './environment';
 
 import { PlayerData, changeState, currState } from './PlayerStates/common';
 import { KeyStates, keys, initKeyboardUtils, processKeyboardInput, resetKeys } from './Utils/keyboardUtils';
@@ -8,9 +8,8 @@ import { loadStuff } from './loader';
 
 import { gsap } from 'gsap/gsap-core';
 import { setupStates, stateInstances } from './PlayerStates/states';
-import { certificates } from './Data/certificates';
 import { Player } from './player';
-import { getclosestDistance } from './Utils/MathUtils';
+import { setUpAudio, walkingAudio } from './Utils/audioUtils';
 
 
 
@@ -40,7 +39,7 @@ await loadStuff()
 
 initKeyboardUtils()
 setupPauseMenu()
-setupSound()
+setUpAudio()
 //important to start game
 
 
@@ -127,6 +126,10 @@ function animate() {
         let camLookAt = new THREE.Vector3;
         camera.getWorldDirection(camLookAt);
 
+        //remove y component, so it doesn't alter movement
+        camLookAt.y = 0;
+        camLookAt.normalize()
+
         //to get perpendicular we cross product with up vector
         //this gives vector to left of look at vector
         let perpendicularToCamLookAt = new THREE.Vector3(0,1,0).cross(camLookAt).normalize();
@@ -162,17 +165,17 @@ function animate() {
             pointLight.position.copy(camera.position)
 
             if(camera.position.equals(newPos)){
-                audio.play()
+                walkingAudio.play()
             }
             else{
-                audio.pause();    // pauses playback
-                audio.currentTime = 0;  // resets to start
+                walkingAudio.pause();    // pauses playback
+                walkingAudio.currentTime = 0;  // resets to start
             }
 
         }
         else{
-                audio.pause();    // pauses playback
-                audio.currentTime = 0;  // resets to start            
+                walkingAudio.pause();    // pauses playback
+                walkingAudio.currentTime = 0;  // resets to start            
         }
     }
 

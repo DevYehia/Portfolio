@@ -95,7 +95,7 @@ export const states = {
                 "x" : env.pathWidth / 2,
                 "z" : - env.nearBoundaryCuboidDepth / 2
             },
-            "width": env.boundaryCuboidWidth + 2000,
+            "width": env.boundaryCuboidWidth,
             "depth": env.pathWidth
         },
         "next":{
@@ -111,8 +111,13 @@ export const states = {
         "axis" : "x"
     },
     "HOF": {
-        "borders":{
-            "left": env.pathWidth / 2 + env.boundaryCuboidWidth,
+        "dims":{
+            "origin" : {
+                "x" : -env.pathWidth / 2 - env.boundaryCuboidWidth,
+                "z" : - env.nearBoundaryCuboidDepth / 2
+            },
+            "width": env.boundaryCuboidWidth,
+            "depth": env.pathWidth
         },
         "next":{
             "left": "right"
@@ -146,8 +151,13 @@ export const states = {
         "axis" : "z"
     },
     "myRoom": {
-        "borders":{
-            "backward": -env.pathWidth - env.boundaryCuboidWidth - env.nearBoundaryCuboidDepth / 2,
+        "dims":{
+            "origin" : {
+                "x" : -env.pathWidth / 2 - env.boundaryCuboidWidth,
+                "z" : - env.nearBoundaryCuboidDepth / 2
+            },
+            "width": env.boundaryCuboidWidth,
+            "depth": env.pathWidth
         },
         "next":{
             "backward" : "forward"
@@ -163,13 +173,31 @@ export const states = {
 
 export const stateInstances = {} 
 
-export function setupStates(){
 
-    //set up room borders
+function setUpDynamic(){
     states["projects"]["dims"]["origin"]["x"] = -env.pathWidth / 2 - env.boundaryCuboidWidth - env.projectsRoom.depth;
     states["projects"]["dims"]["origin"]["z"] = -env.nearBoundaryCuboidDepth / 2 - env.pathWidth / 2 + env.projectsRoom.width / 2;    
     states["projects"]["dims"]["width"] = env.projectsRoom.depth;
     states["projects"]["dims"]["depth"] = env.projectsRoom.width;
+
+    //HOF Room
+    states["HOF"]["dims"]["origin"]["x"] = env.pathWidth / 2 + env.boundaryCuboidWidth
+    states["HOF"]["dims"]["origin"]["z"] = -env.nearBoundaryCuboidDepth / 2 - env.pathWidth / 2 + env.hallOfFameRoom.width / 2;    
+    states["HOF"]["dims"]["width"] = env.hallOfFameRoom.depth;
+    states["HOF"]["dims"]["depth"] = env.hallOfFameRoom.width;
+
+    //myRoom
+    states["myRoom"]["dims"]["origin"]["x"] = -env.myRoom.width / 2
+    states["myRoom"]["dims"]["origin"]["z"] = -env.nearBoundaryCuboidDepth / 2 - env.pathWidth - env.boundaryCuboidWidth;    
+    states["myRoom"]["dims"]["width"] = env.myRoom.width;
+    states["myRoom"]["dims"]["depth"] = env.myRoom.depth;
+}
+
+export function setupStates(){
+
+    // set up room borders
+    // projects room
+    setUpDynamic()
 
     let interactables = {
         "left" : [ env.projectsRoom.door ],
@@ -251,7 +279,8 @@ export function setupStates(){
         stateInstances[stateName].axis = state.axis ?? null;
         stateInstances[stateName].stateBorders = stateBordersObj
         stateInstances[stateName].nextStates = stateNextObj
-        stateInstances[stateName].collider = new CollisionHandler(stateBordersColl, stateDoorsObj)        
+        stateInstances[stateName].collider = new CollisionHandler(stateBordersColl, stateDoorsObj) 
+        //console.log("Ba2olk eih " + stateName + " " + JSON.stringify(stateBordersColl))       
 
 
         if(stateName in interactables)

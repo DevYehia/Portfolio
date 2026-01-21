@@ -11,7 +11,7 @@ export const profiles = [
     },
     {
         "name" : "Gmail",
-        "image" : "gmail.png",
+        "image" : "gmail.webp",
         "profile" : "alo"
     }
 ]

@@ -49,6 +49,6 @@ export function nextLine(){
 
 export function endDialogue(){
     talkDiv.hidden = true;
-    controlsDiv.innerHTML = currState.interactable.controls
+    controlsDiv.innerHTML = currState.interactionManager.interactable.controls
     currState.isInDialog = false;   
 }

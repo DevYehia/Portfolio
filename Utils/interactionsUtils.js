@@ -4,6 +4,7 @@
 //timeline skip
 //skills skip
 
+import { playOneTimeAudio } from "./audioUtils"
 import { startDialogue } from "./dialogUtils"
 
 export function handleInteraction(target, interaction){
@@ -36,7 +37,9 @@ export const interactions = {
 
     "DOOR" : (target) => {
         console.log("called you")
+        playOneTimeAudio("Sounds/door.mp3")
         target.toggle()
+ 
     },
 
     "NEXT" : (target) => {

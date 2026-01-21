@@ -1,6 +1,6 @@
 import { Room } from "./room";
 import * as THREE from 'three'
-import { SkillsBoard } from "../Objects/skillsBoard";
+import { commonTextures } from "../loader";
 import { skills } from "../Data/skills";
 import { TimelineBoard } from "../Objects/myTimeline";
 import { profiles } from "../Data/profiles";
@@ -46,6 +46,8 @@ export class MyRoom extends Room{
         this.addLight()
 
         //this.addCollectible("Testing")
+
+        this.addTitle("About Me", ~0x0000ff)
 
 
     }
@@ -165,7 +167,7 @@ export class MyRoom extends Room{
     }
 
     addMyImage(){
-        let myTexture = new THREE.TextureLoader().load("../textures/me.jpg")
+        let myTexture = commonTextures["me"].texture
         myTexture.colorSpace = THREE.SRGBColorSpace
         let myImageGeo = new THREE.PlaneGeometry(10,10)
         let myImageMat = new THREE.MeshBasicMaterial({map: myTexture})

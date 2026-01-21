@@ -38,6 +38,8 @@ export class ProjectsRoom extends Room{
 
         //this.addCollectible("Linux")
 
+        this.addTitle("Projects", ~0x00ffff)
+
         this.addLight()
 
     }

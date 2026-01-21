@@ -4,6 +4,9 @@ import { MeshPhongMaterial, PlaneGeometry, Vector3 } from 'three/webgpu';
 import { handleInteraction } from '../Utils/interactionsUtils';
 import { Collectible } from '../Objects/collectible';
 import { certificates } from '../Data/certificates';
+import { commonTextures } from '../loader';
+import { TextGeometry } from 'three/examples/jsm/Addons.js';
+import { HOFTitlefont } from '../loader';
 export class Room extends THREE.Object3D{
 
     //the door to enter the room
@@ -114,7 +117,7 @@ export class Room extends THREE.Object3D{
         const roofGeo = new THREE.PlaneGeometry(roomWidth, roomDepth)
 
         //wall texture
-        const WallTexture = new THREE.TextureLoader().load(texturePath)
+        const WallTexture = commonTextures["wall"].texture.clone()
         WallTexture.wrapS = THREE.RepeatWrapping;
         WallTexture.wrapT = THREE.RepeatWrapping;
         let rep = 2
@@ -126,7 +129,7 @@ export class Room extends THREE.Object3D{
         let sideWallMat = new THREE.MeshStandardMaterial({color: wallColor, side: THREE.DoubleSide, map: sideWallTexture})
         
         //ceiling texture
-        const ceilTexture = new THREE.TextureLoader().load("textures/Wall.jpg")
+        const ceilTexture = commonTextures["roof"].texture.clone()
         ceilTexture.wrapS = THREE.RepeatWrapping;
         ceilTexture.wrapT = THREE.RepeatWrapping;
         rep = 3
@@ -172,7 +175,7 @@ export class Room extends THREE.Object3D{
 
     addFloor(floorTexturePath, rep = 4){
         const floorGeo = new PlaneGeometry(this.width, this.depth);
-        let floorTexture = new THREE.TextureLoader().load(floorTexturePath)
+        let floorTexture = commonTextures["floor"].texture.clone()
 
         floorTexture.colorSpace = THREE.SRGBColorSpace;
         floorTexture.wrapS = THREE.RepeatWrapping;
@@ -226,6 +229,20 @@ export class Room extends THREE.Object3D{
         elGroup.add(rightMesh, leftMesh, topMesh)
 
         return elGroup
+    }
+
+    addTitle(titleName, titleColor){
+        let textGeo = new TextGeometry(titleName, {font: HOFTitlefont, size: 2, depth: 0.2})
+        let textMat = new THREE.MeshBasicMaterial({color: titleColor});
+        this.title = new THREE.Mesh(textGeo, textMat)
+        
+        this.title.geometry.computeBoundingBox()
+
+        let ttlSize = new THREE.Vector3()
+        this.title.position.x = this.width / 2 - this.title.geometry.boundingBox.getSize(ttlSize).x / 2;
+        this.title.position.y = this.door.doorHeight + this.title.geometry.boundingBox.getSize(ttlSize).y / 2
+        this.title.position.z += 1.2;
+        this.add(this.title)
     }
 
 

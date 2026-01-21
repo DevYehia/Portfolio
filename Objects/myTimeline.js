@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { gsap } from 'gsap/gsap-core';
 import { Interactable } from './interactable';
 import { TextGeometry } from 'three/examples/jsm/Addons.js';
-import { HOFTitlefont } from '../loader';
+import { commonTextures, HOFTitlefont } from '../loader';
 
 export class TimelineBoard extends Interactable {
 
@@ -34,7 +34,7 @@ export class TimelineBoard extends Interactable {
         //modify clipping planes
         this.clipPlanes = clipPlanes
 
-        this.avatarTexturePath = "../textures/me.jpg";
+        this.avatarTexturePath = "../textures/me.jpeg";
 
         this.createBoard(width, height);
 
@@ -130,24 +130,22 @@ export class TimelineBoard extends Interactable {
     /* ================= AVATAR ================= */
 
     createAvatar(parentImage){
-        new THREE.TextureLoader().load(this.avatarTexturePath, texture => {
-            texture.colorSpace = THREE.SRGBColorSpace;
 
-            const geo = new THREE.CircleGeometry(0.5, 32);
-            const mat = new THREE.MeshBasicMaterial({ map: texture });
-            const avatar = new THREE.Mesh(geo, mat);
 
-            avatar.position.set(
-                parentImage.position.x,
-                parentImage.position.y + 2.2,
-                0.01
-            );
+        const geo = new THREE.CircleGeometry(0.5, 32);
+        const mat = new THREE.MeshBasicMaterial({ map: commonTextures["me"].texture });
+        const avatar = new THREE.Mesh(geo, mat);
 
-            this.avatar = avatar
-            this.origAvatarY = this.avatar.position.y
+        avatar.position.set(
+            parentImage.position.x,
+            parentImage.position.y + 2.2,
+            0.01
+        );
 
-            this.add(avatar);
-        });
+        this.avatar = avatar
+        this.origAvatarY = this.avatar.position.y
+
+        this.add(avatar);
     }
 
     /* ================= DATE LABEL ================= */

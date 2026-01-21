@@ -18,7 +18,16 @@ export let pathWidth = 30;
 export let stars;
 
 //central environment objects collection
-export const envStuff = {}; 
+export const envStuff = {"projectsRoom" : {
+    "door" : null
+},
+    "HOFRoom" : {
+    "door" : null
+},
+    "myRoom" : {
+    "door" : null
+}
+}; 
 
 /**
  * @type {ProjectsRoom}
@@ -46,8 +55,6 @@ export let theaterRoom = null;
 
 export let ambLight = new THREE.AmbientLight(0xffffff, 0);
 
-export const audio = new Audio('Sounds/walking.mp3'); // path to your audio file
-
 
 
 
@@ -67,10 +74,7 @@ export function adjustCamera(camera){
     camera.position.y += boundaryCuboidHeight / 2;
 }
 
-export function setupSound(){
-    audio.volume = 0.5;
-    audio.loop = true
-}
+
 
 
 /**

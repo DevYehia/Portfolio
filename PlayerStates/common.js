@@ -7,6 +7,7 @@ export let currState = null;
 
 export function changeState(newStateObject){
     currState = newStateObject;
+    console.log("Now in " + currState.stateName)
 }
 
 

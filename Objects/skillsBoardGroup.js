@@ -16,7 +16,7 @@ export class SkillsBoardsGroup extends Interactable{
     constructor({
         imageDim = 3,
         boardWidth = 10,
-        boardHeight = 7,
+        boardHeight = 5,
         heightOffset = 0,
         numRows = 2,
         clippingPlanes = []} = {}){
@@ -26,6 +26,7 @@ export class SkillsBoardsGroup extends Interactable{
 
             this.clippingPlanes = clippingPlanes
             this.boardWidth = boardWidth
+            this.boardHeight = boardHeight
 
             let imageSpacing = 1;
 
