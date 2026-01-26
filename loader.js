@@ -1,7 +1,14 @@
 import * as THREE from 'three'
-import { FontLoader } from "three/examples/jsm/Addons.js";
+import {GLTFLoader, FontLoader } from "three/examples/jsm/Addons.js";
+
 
 export let HOFTitlefont;
+
+/**
+ * @type {GLTF}
+ */
+
+export let throne;
 
 export let commonTextures = {
     "door" : {
@@ -36,4 +43,8 @@ export async function loadStuff(){
         commonTextures[textureName].texture = texture
     }
 
+    const throneLoader = new GLTFLoader()
+    let loadedThrone = await throneLoader.loadAsync('textures/throne/scene.gltf')
+    throne = loadedThrone.scene
+    
 }

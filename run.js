@@ -4,12 +4,14 @@ import {addAmbientLight, addBoundaryCuboids, addGround, addHOFRoom, addMyRoom, a
 import { PlayerData, changeState, currState } from './PlayerStates/common';
 import { KeyStates, keys, initKeyboardUtils, processKeyboardInput, resetKeys } from './Utils/keyboardUtils';
 import { setupPauseMenu } from './pauseMenu';
-import { loadStuff } from './loader';
+import { loadStuff, throne } from './loader';
 
 import { gsap } from 'gsap/gsap-core';
 import { setupStates, stateInstances } from './PlayerStates/states';
 import { Player } from './player';
 import { setUpAudio, walkingAudio } from './Utils/audioUtils';
+import { startSequence } from './Utils/sequenceUtils';
+import { startDialogue } from './Utils/dialogUtils';
 
 
 
@@ -36,6 +38,9 @@ document.body.appendChild( renderer.domElement );
 
 
 await loadStuff()
+
+//scene.add(throne)
+throne.scale.set(2,2,2)
 
 initKeyboardUtils()
 setupPauseMenu()
@@ -77,9 +82,8 @@ const pyramid = new THREE.Mesh(geometry, material);
 scene.add(pyramid);
 
 
-let pointLight = new THREE.PointLight(0xffffff, 1, pathWidth, 0)
+let pointLight = new THREE.PointLight(0xffffff, 1, 0.1, 0)
 scene.add(pointLight)
-pointLight.position.x = -10;
 
 export const player = new Player(camera, pointLight)
 
@@ -95,6 +99,20 @@ pointLight.position.copy(camera.position)
 
 
 const clock = new THREE.Clock();
+
+startSequence([
+    [() => {startDialogue(["Hello Adventurer"])}, 1000],
+    [() => {startDialogue(["Welcome to my portfolio"])}, 1000],
+    [ () => {gsap.to(
+        pointLight,
+        {
+            ease: "none",
+            duration: 1,
+            distance: pathWidth
+        }
+    )}, 1000],
+    [() => {startDialogue(["Ahh Much Better"])}, 1000]
+])
 
 
 

@@ -17,8 +17,7 @@ export const projectsData = [
         dialogue : [
             "This was my embedded systems course project",
             "We built a Hazard detection system using Tiva-C, ultrasonic sensor and smoke sensor",
-            "The hazard info would be sent to the phone via bluetooth",
-            "Also would be sent to another micro-controller (Atmega32) via Light Signals",
+            "The hazard info would be sent to the phone via bluetooth, Also would be sent to another micro-controller (Atmega32) via Light Signals",
             "The Atmega32 activates a buzzer and displays the hazard on an LCD",
             "It was a really cool project and i loved working on it with great people"
         ]
@@ -77,7 +76,10 @@ export const projectsData = [
         tech: "Flutter/Firebase",
         github: "https://github.com/DevYehia/Hediaty-Gifter",
         dialogue : [
-            "ello"
+            "This was my first (and only) Mobile Application using flutter",
+            "It is a gifting app where you can see your friend's events and what gifts they want",
+            "then you can pledge the gifts you want to buy them",
+            "This app was built with SQLite for local storage and firebase for cloud storage"
         ]
     },
     {

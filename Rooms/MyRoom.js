@@ -76,8 +76,9 @@ export class MyRoom extends Room{
                 controls: profiles[i].name + "<br>E - Show"});
             
             console.log("at " + signsPos.x)
+  
+            sign.interactions['e'] = () => {handleInteraction(profiles[i].profile, profiles[i].interaction)}
 
-            sign.interactions['e'] = () => {handleInteraction(profiles[i].profile, "OPEN_LINK")}
             this.add(sign)
             this.signsList.push(sign)
             sign.position.copy(signsPos)

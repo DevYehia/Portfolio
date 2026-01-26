@@ -1,6 +1,14 @@
 
 let currIdx = 0;
+
+/**
+ * @type {HTMLElement}
+ */
 let currElem;
+
+/**
+ * @type {String}
+ */
 let originalText;
 let intervalHandler;
 
@@ -14,7 +22,6 @@ export function animateText(divElement, text){
     //clear previous interval
     clearInterval(intervalHandler);
     currIdx = 0;
-
     currElem = divElement;
     originalText = text;
     let delay = 25
@@ -23,10 +30,20 @@ export function animateText(divElement, text){
 }
 
 function animateIteration(){
-    currElem.textContent = originalText.slice(0, currIdx);
+    currElem.innerHTML = originalText.slice(0, currIdx);
     currIdx++;
+
+
     if(currIdx > originalText.length){
         clearInterval(intervalHandler);
         currIdx = 0;
+        return;
     }
+
+
+}
+
+//this function is to handle any inner html
+function specialAnimate(){
+
 }
