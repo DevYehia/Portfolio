@@ -3,6 +3,7 @@ import * as THREE from 'three'
 import { Interactable } from './interactable';
 import { commonTextures } from '../loader';
 import { gsap } from 'gsap/gsap-core';
+import { makeControls } from '../Utils/textUtils';
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -38,7 +39,7 @@ export class Door extends Interactable{
 
         super()
 
-        this.controls = "Door<br>E - Open/Close"
+        this.controls = makeControls("Door", "E - Open/Close")
 
         if(isClockWiseOpen){
             this.rotationSign = -1;

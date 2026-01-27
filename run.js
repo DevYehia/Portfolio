@@ -82,7 +82,7 @@ const pyramid = new THREE.Mesh(geometry, material);
 scene.add(pyramid);
 
 
-let pointLight = new THREE.PointLight(0xffffff, 1, 0.1, 0)
+let pointLight = new THREE.PointLight(0xffffff, 1, pathWidth, 0)
 scene.add(pointLight)
 
 export const player = new Player(camera, pointLight)
@@ -100,19 +100,19 @@ pointLight.position.copy(camera.position)
 
 const clock = new THREE.Clock();
 
-startSequence([
-    [() => {startDialogue(["Hello Adventurer"])}, 1000],
-    [() => {startDialogue(["Welcome to my portfolio"])}, 1000],
-    [ () => {gsap.to(
-        pointLight,
-        {
-            ease: "none",
-            duration: 1,
-            distance: pathWidth
-        }
-    )}, 1000],
-    [() => {startDialogue(["Ahh Much Better"])}, 1000]
-])
+// startSequence([
+//     [() => {startDialogue(["Hello Adventurer"])}, 1000],
+//     [() => {startDialogue(["Welcome to my portfolio"])}, 1000],
+//     [ () => {gsap.to(
+//         pointLight,
+//         {
+//             ease: "none",
+//             duration: 1,
+//             distance: pathWidth
+//         }
+//     )}, 1000],
+//     [() => {startDialogue(["Ahh Much Better"])}, 1000]
+// ])
 
 
 

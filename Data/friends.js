@@ -55,7 +55,7 @@ export let friends = [
 
     {
         "name" : "Mohammed Ayman",
-        "image" : "MAyman.jpg",
+        "image" : "khalifa.png",
         "profile" : "https://www.linkedin.com/in/mohamed-ayman-khalifa/"
     },
 
@@ -90,7 +90,7 @@ export let friends = [
     //shabab wael
     {
         "name" : "Mina Morgan",
-        "image" : "Morgan.jpg",
+        "image" : "Morgan.png",
         "profile" : "https://www.linkedin.com/in/mina-m-morgan/"
     },
 
@@ -98,6 +98,18 @@ export let friends = [
         "name" : "Ahmed Wael",
         "image" : "Wael.jpg",
         "profile" : "https://www.linkedin.com/in/ahmed-wael-ibrahim/"
+    },
+
+    {
+        "name" : "Rafik Tamer",
+        "image" : "Rafik.jpeg",
+        "profile" : "https://www.linkedin.com/in/rafik-ghaly-608851245/"
+    },
+
+    {
+        "name" : "Mina George",
+        "image" : "George.png",
+        "profile" : "https://www.linkedin.com/in/mina-george-0131b5231/"
     },
 
     //end of shabab wael
@@ -112,7 +124,7 @@ export let friends = [
 
     {
         "name" : "Hamza Mazen",
-        "image" : "HMazen.jpg",
+        "image" : "Hamza.jpg",
         "profile" : "https://www.linkedin.com/in/hamza-mazen-8aab3b274/"
     },
 
@@ -131,16 +143,26 @@ export let friends = [
         "profile" : "https://www.linkedin.com/in/hamza-mazen-8aab3b274/"
     },
 
-    {
-        "name" : "Ahmed Ibrahim",
-        "image" : "AIbrahim.jpg",
-        "profile" : "https://www.linkedin.com/in/ahmed-ibrahim-sharaf-eldin-a43778222/"
-    },
+    // {
+    //     "name" : "Ahmed Ibrahim",
+    //     "image" : "AIbrahim.jpg",
+    //     "profile" : "https://www.linkedin.com/in/ahmed-ibrahim-sharaf-eldin-a43778222/"
+    // },
 
     {
         "name" : "Matthew Sherif",
         "image" : "Matthew.jpg",
         "profile" : "https://www.linkedin.com/in/matthew-sherif-134b0125b/"
+    },
+
+    //End of Misc
+
+    //Old Friends
+
+    {
+        "name" : "Omar Hatem",
+        "image" : "OHatem.png",
+        "profile" : "https://www.linkedin.com/in/omar-hatem-484a54233/"
     }
 
 ]

@@ -3,6 +3,7 @@ import { gsap } from 'gsap/gsap-core';
 import { Interactable } from './interactable';
 import { TextGeometry } from 'three/examples/jsm/Addons.js';
 import { commonTextures, HOFTitlefont } from '../loader';
+import { makeControls } from '../Utils/textUtils';
 
 export class TimelineBoard extends Interactable {
 
@@ -96,7 +97,7 @@ export class TimelineBoard extends Interactable {
         texture.colorSpace = THREE.SRGBColorSpace;
         const aspectRatio = texture.image.width / texture.image.height;
 
-        const imageGeo = new THREE.PlaneGeometry(3 * aspectRatio, 3);
+        const imageGeo = new THREE.PlaneGeometry(4 * aspectRatio, 4);
         const imageMat = new THREE.MeshBasicMaterial({
             map: texture,
             transparent: true,
@@ -129,16 +130,25 @@ export class TimelineBoard extends Interactable {
 
     /* ================= AVATAR ================= */
 
+    /**
+     * 
+     * @param {THREE.Mesh} parentImage 
+     */
     createAvatar(parentImage){
 
 
-        const geo = new THREE.CircleGeometry(0.5, 32);
+        const avatarRadius = 1
+        const geo = new THREE.CircleGeometry(avatarRadius, 32);
         const mat = new THREE.MeshBasicMaterial({ map: commonTextures["me"].texture });
         const avatar = new THREE.Mesh(geo, mat);
 
+        const box = new THREE.Box3().setFromObject(parentImage);
+        const size = new THREE.Vector3();
+        box.getSize(size);
+
         avatar.position.set(
             parentImage.position.x,
-            parentImage.position.y + 2.2,
+            parentImage.position.y + size.y / 2 + avatarRadius + 0.2,
             0.01
         );
 
@@ -152,19 +162,31 @@ export class TimelineBoard extends Interactable {
 
     createDateLabel(parentImage, text){
         const canvas = document.createElement('canvas');
-        canvas.width = 256;
-        canvas.height = 64;
-
         const ctx = canvas.getContext('2d');
+
+        const fontSize = 80;
+        ctx.font = `${fontSize}px Arial`;   // set font BEFORE measuring
+
+        const metrics = ctx.measureText(text);
+        const textWidth = Math.ceil(metrics.width);
+
+        // Set canvas size based on text
+        canvas.width = textWidth + 20;   // some padding
+        canvas.height = fontSize + 20;
+
+        // After resizing, you MUST reset the font again
+        ctx.font = `${fontSize}px Arial`;
         ctx.fillStyle = "#ffffff";
-        ctx.font = "46px Arial";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-        ctx.fillText(text, 128, 32);
+
+
+        // Draw text in center of canvas
+        ctx.fillText(text, canvas.width / 2, canvas.height / 2);
 
         const texture = new THREE.CanvasTexture(canvas);
 
-        const geo = new THREE.PlaneGeometry(2, 0.5);
+        const geo = new THREE.PlaneGeometry(3, 0.75);
         const mat = new THREE.MeshBasicMaterial({
             map: texture,
             transparent: true,
@@ -172,9 +194,16 @@ export class TimelineBoard extends Interactable {
         });
 
         const dateMesh = new THREE.Mesh(geo, mat);
+
+        //get parent image size
+        const box = new THREE.Box3().setFromObject(parentImage);
+        const size = new THREE.Vector3();
+        box.getSize(size);
+
+
         dateMesh.position.set(
             parentImage.position.x,
-            parentImage.position.y - 2.2,
+            parentImage.position.y - size.y / 2 - 0.75,
             0.01
         );
         this.dateList.push(dateMesh)
@@ -222,7 +251,7 @@ export class TimelineBoard extends Interactable {
             onComplete: () => {
                 this.currImageIdx+=inc;
                 this.isAnimating = false;
-                this.controls = this.namesList[this.currImageIdx] + "<br>E - Show Brief<br>N - Next<br>P - Previous"
+                this.controls = makeControls(this.namesList[this.currImageIdx], "E - Show Brief<br>N - Next<br>P - Previous")
                 this.updateDivContent()
             }
         });

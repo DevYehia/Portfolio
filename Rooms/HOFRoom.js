@@ -16,6 +16,8 @@ export class HOFRoom extends Room{
 
     imageSpacing = 0.5;
 
+    boardWallSpacing = 1
+
     constructor(boardOffset, depth, pplList){
         super({
             depth: depth
@@ -46,7 +48,7 @@ export class HOFRoom extends Room{
 
         this.board.position.x += this.width / 2;
         this.board.position.y += this.board.boardHeight / 2
-        this.board.position.z -= this.depth - 1;
+        this.board.position.z -= this.depth - this.boardWallSpacing;
 
         this.title.position.copy(this.board.position)
         let ttlSize = new THREE.Vector3()

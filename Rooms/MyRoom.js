@@ -8,6 +8,7 @@ import { Sign } from '../Objects/sign'
 import { handleInteraction } from "../Utils/interactionsUtils";
 import { SkillsBoardsGroup } from "../Objects/skillsBoardGroup";
 import { timelineData } from "../Data/timeline";
+import { makeControls } from "../Utils/textUtils";
 
 export class MyRoom extends Room{
 
@@ -73,7 +74,7 @@ export class MyRoom extends Room{
                 signBaseColor: 0x00ff00,
                 padding: signSpacing / 2,
                 signScale: 1.2,
-                controls: profiles[i].name + "<br>E - Show"});
+                controls: makeControls(profiles[i].name, "E - Show")});
             
             console.log("at " + signsPos.x)
   
@@ -125,7 +126,7 @@ export class MyRoom extends Room{
             handleInteraction(timelineData[this.timeLineBoard.currImageIdx].dialogue, "START_DIAG")
         }
 
-        this.timeLineBoard.controls = timelineData[0].name + "<br>E - Show Brief<br>N - Next<br>P - Previous"
+        this.timeLineBoard.controls = makeControls(timelineData[0].name, "E - Show Brief<br>N - Next<br>P - Previous")
     }
 
     //will be two skill boards at a time
@@ -152,13 +153,6 @@ export class MyRoom extends Room{
             handleInteraction(skillsBoardGroup, "PREV")
         }
 
-        skillsBoardGroup.boardsList.forEach(board => {
-            board.interactions ??= {};
-
-            board.interactions['e'] = () => {
-                handleInteraction(skills[board.boardName].dialogue, "START_DIAG");
-            };
-        });
 
         this.add(skillsBoardGroup)
 

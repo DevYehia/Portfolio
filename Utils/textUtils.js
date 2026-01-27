@@ -43,7 +43,8 @@ function animateIteration(){
 
 }
 
-//this function is to handle any inner html
-function specialAnimate(){
+//return controls UI HTML String
+export function makeControls(title, content){
 
+    return "<p id = 'controlsTitle'>" + title + "</p>" + content;
 }

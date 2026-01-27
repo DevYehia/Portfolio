@@ -4,6 +4,7 @@ import { skills } from '../Data/skills';
 import { Interactable } from './interactable';
 import { TextGeometry } from 'three/examples/jsm/Addons.js';
 import { HOFTitlefont } from '../loader';
+import { makeControls } from '../Utils/textUtils';
 
 export class SkillsBoardsGroup extends Interactable{
 
@@ -77,7 +78,6 @@ export class SkillsBoardsGroup extends Interactable{
             this.currBoardIdx = 0;
             this.nextBoardIdx = 1;
 
-            console.log(" ds" + this.prevBoardIdx)
             //add current, next and previous boards to object
             //next and previous should not appear due to clipping plane
             this.boardsList[0].position.x = 0;
@@ -87,11 +87,9 @@ export class SkillsBoardsGroup extends Interactable{
             this.add(this.boardsList[0], this.boardsList[1], this.boardsList[this.prevBoardIdx])
 
             //set up controls
-            this.controls = this.boardsList[0].boardName + "<br>E - Show Brief<br>N - Next<br>P - Prev"
 
-            this.interactions['e'] = () => {
-                this.boardsList[this.currBoardIdx].interactions['e']()
-            }
+            this.controls = makeControls(this.boardsList[0].boardName, "N - Next<br>P - Prev")
+
 
 
             //add title
@@ -127,7 +125,7 @@ export class SkillsBoardsGroup extends Interactable{
         if(nextBoard.position.x <= 0){
 
             //update controls 
-            this.controls = nextBoard.boardName + "<br>E - Show Brief<br>N - Next<br>P - Prev"
+            this.controls = makeControls(nextBoard.boardName, "N - Next<br>P - Prev")
             this.updateDivContent() //to update controls div
 
            // console.log("How are we here")
@@ -174,7 +172,7 @@ export class SkillsBoardsGroup extends Interactable{
         if(prevBoard.position.x >= 0){
 
             //update controls 
-            this.controls = prevBoard.boardName + "<br>E - Show Brief<br>N - Next<br>P - Prev"
+            this.controls = makeControls(prevBoard.boardName, "N - Next<br>P - Prev")
             this.updateDivContent() //to update controls div
 
             let nextBoard = this.boardsList[this.nextBoardIdx]

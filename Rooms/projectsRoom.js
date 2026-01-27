@@ -48,12 +48,7 @@ export class ProjectsRoom extends Room{
 
     addSigns(){
 
-
-        let projectKeys = Object.keys(projectsData); 
         let currProjectKeyIdx = 0;
-        let currProjectKey = projectKeys[currProjectKeyIdx];
-
-        let controls = "<br><br>V - Show Video<br>E - Interact<br>G - Github";
 
         let signsWallOffset = 1.5
 
@@ -63,54 +58,21 @@ export class ProjectsRoom extends Room{
         const leftSideSignsNum = 3
         const rightSideSignsNum = 3;
 
-        for(let i = 0 ; i < leftSideSignsNum ; i++){
-            let sign = new Sign({signID: currProjectKey,
-            signPic: "../textures/Projects/" + projectsData[currProjectKey].imagePath,
-            signName: projectsData[currProjectKey].name,
-            signBaseText: projectsData[currProjectKey].tech,
-            padding: this.signSpacing / 2,
-            signScale: 1.2,
-            controls: projectsData[currProjectKey].name.replace("\n", " ") +  controls});
-
-            this.addSignAt(sign, leftSignsPos)
-            sign.rotateY(Math.PI / 2)
-            leftSignsPos.z -= this.signSpacing;
-            currProjectKeyIdx = (currProjectKeyIdx + 1) % projectKeys.length;
-            currProjectKey = projectKeys[currProjectKeyIdx]
-        }
-
+        this.placeSignsRow(currProjectKeyIdx, leftSignsPos, leftSideSignsNum, Math.PI / 2, 1.2)
+        currProjectKeyIdx+=3
 
         let rightSignsX = this.width - signsWallOffset
         let rightSignsPos = new THREE.Vector3(rightSignsX, 0, -this.signSpacing);
+        
 
-        //place right signs
-        for(let i = 0 ; i < rightSideSignsNum ; i++){
-            let sign = new Sign({signID: currProjectKey,
-            signPic: "../textures/Projects/" + projectsData[currProjectKey].imagePath,
-            signName: projectsData[currProjectKey].name,
-            signBaseText: projectsData[currProjectKey].tech,
-            padding: this.signSpacing / 2,
-            signScale: 1.2,
-            controls: projectsData[currProjectKey].name.replace("\n", " ") +  controls});
-
-            this.addSignAt(sign, rightSignsPos)
-            sign.rotateY(-Math.PI / 2)
-            rightSignsPos.z -= this.signSpacing;
-            currProjectKeyIdx = (currProjectKeyIdx + 1) % projectKeys.length;
-            currProjectKey = projectKeys[currProjectKeyIdx]
-        }    
+        this.placeSignsRow(currProjectKeyIdx, rightSignsPos, rightSideSignsNum, -Math.PI / 2, 1.2)        
+        currProjectKeyIdx+=3
 
         //place central sign
         let centralSignPos = new THREE.Vector3().copy(rightSignsPos) //get last x
         centralSignPos.x = this.width / 2;
-        let sign = new Sign({signID: currProjectKey,
-            signPic: "../textures/Projects/" +  projectsData[currProjectKey].imagePath,
-            signName: projectsData[currProjectKey].name,
-            signBaseText: projectsData[currProjectKey].tech,
-            signScale: 3,
-            controls: projectsData[currProjectKey].name.replace("\n", " ") +  controls});
 
-        this.addSignAt(sign, centralSignPos)
+        this.placeSignsRow(currProjectKeyIdx, centralSignPos, 1, 0, 3)
     }
 
     addSignAt(sign, pos){
@@ -132,4 +94,31 @@ export class ProjectsRoom extends Room{
             handleInteraction(projectsData[sign.signID].dialogue, "START_DIAG")
         }
     }
+
+    placeSignsRow(currProjectKeyIdx, currPos, numSigns, signRot, signScale){
+        let projectKeys = Object.keys(projectsData); 
+        let currProjectKey = projectKeys[currProjectKeyIdx];
+
+        let controls = "V - Show Video<br>E - Interact<br>G - Github";
+
+        for(let i = 0 ; i < numSigns ; i++){
+
+            let controlsTitle = "<p id = 'controlsTitle'>" + projectsData[currProjectKey].name.replace("\n", "<br>") + "</p>"
+
+            let sign = new Sign({signID: currProjectKey,
+            signPic: "../textures/Projects/" + projectsData[currProjectKey].imagePath,
+            signName: projectsData[currProjectKey].name,
+            signBaseText: projectsData[currProjectKey].tech,
+            padding: this.signSpacing / 2,
+            signScale: signScale,
+            controls: controlsTitle +  controls});
+
+            this.addSignAt(sign, currPos)
+            sign.rotateY(signRot)
+            currPos.z -= this.signSpacing;
+            currProjectKeyIdx = (currProjectKeyIdx + 1) % projectKeys.length;
+            currProjectKey = projectKeys[currProjectKeyIdx]
+        }        
+    }
+
 }

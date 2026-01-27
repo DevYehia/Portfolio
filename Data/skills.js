@@ -31,7 +31,7 @@ export const skills = {
         ]
     },
 
-    "DataBase Stuff" : {
+    "Database Stuff" : {
         numRows: 2,
         list: [
             "SQL.png",

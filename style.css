@@ -23,6 +23,15 @@ body {
   color: #f2f2f2;
 }
 
+#controlsTitle {
+  font-size: 22px;
+  margin-bottom: 1px;
+  margin-top: 1px;    
+  color: #ff0000;
+  font-weight: bold;
+  
+}
+
 
 
 
@@ -40,13 +49,14 @@ body {
 
 /* Top-right info box */
 #controlsDiv {
+  text-align: center;
   position: fixed;
   top: 20px;
   right: 20px;
   background: rgba(0, 0, 0, 0.8);
   padding: 10px 20px;
   border: 2px solid white;
-  font-size: 16px;
+  font-size: 18px;
 }
 
 

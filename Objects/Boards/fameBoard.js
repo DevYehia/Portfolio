@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import { SquareImage } from '../squareImage'
 import { VarLengthBoard } from './varLengthBoard';
+import { makeControls } from '../../Utils/textUtils';
 
 
 export class Board extends VarLengthBoard{
@@ -74,7 +75,7 @@ export class Board extends VarLengthBoard{
                     name: pplList[idx].name,
                     profile: pplList[idx].profile,
                     imageName: "../textures/friends/" + pplList[idx].image,
-                    controls: pplList[idx].name + "<br>E - Show Profile"
+                    controls: makeControls(pplList[idx].name, "E - Show Profile")
                 });
                 this.add(image)
                 image.position.copy(currPos);
