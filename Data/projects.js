@@ -15,8 +15,7 @@ export const projectsData = [
         github: "https://github.com/DevYehia/Hazard-Detection-System",
         tech: "Embedded C",
         dialogue : [
-            "This was my embedded systems course project",
-            "We built a Hazard detection system using Tiva-C, ultrasonic sensor and smoke sensor",
+            "This was my embedded systems course project, We built a Hazard detection system using Tiva-C, ultrasonic sensor and smoke sensor",
             "The hazard info would be sent to the phone via bluetooth, Also would be sent to another micro-controller (Atmega32) via Light Signals",
             "The Atmega32 activates a buzzer and displays the hazard on an LCD",
             "It was a really cool project and i loved working on it with great people"
@@ -90,8 +89,7 @@ export const projectsData = [
         dialogue : [
             "And the most important project of them all is ...",
             "This one, the one you are currently in",
-            "It was a really fun project and made me understand more on how three js works",
-            "And it made me think of fun ways to express myself"
+            "It was a really fun project and made me understand more on how three js works and also made me think of fun ways to express myself"
         ]
     },
 ]

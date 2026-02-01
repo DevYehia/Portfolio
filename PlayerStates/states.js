@@ -201,7 +201,7 @@ export function setupStates(){
 
     let interactables = {
         "left" : [ env.projectsRoom.door ],
-        "projects" : [env.projectsRoom.door, ...env.projectsRoom.signsList],
+        "projects" : [env.projectsRoom.door, ...env.projectsRoom.signsList, env.projectsRoom.certificate],
         "right" : [ env.hallOfFameRoom.door ],
         "HOF" : [env.hallOfFameRoom.door, ...env.hallOfFameRoom.board.imageList, env.hallOfFameRoom.certificate],
         "forward" : [ env.myRoom.door ],

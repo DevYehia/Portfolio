@@ -70,7 +70,7 @@ export class Room extends THREE.Object3D{
 
         //put it at random position in the room
         this.certificate.position.x = this.width / 2;
-        this.certificate.position.z = - this.depth * 3 / 4
+        this.certificate.position.z = - this.depth / 2
         this.certificate.position.y += 0.1       
         
         this.certificate.controls = "Certificate<br>E - Collect"

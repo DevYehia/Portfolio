@@ -13,11 +13,7 @@
     <div id="clickDiv">Click to Start</div>
     <div id="controlsDiv" hidden = "true">Hello there 👋</div>
 
-    <!-- Pause Menu Icons -->
-    <!-- Hamburger Icon -->
-    <div id = "menuButton" class="menuButton">
-      ☰
-    </div>
+
 
     <!-- Side Menu -->
     <div id="gameMenu" class="closed">
@@ -28,7 +24,11 @@
 
    <div id="collectiblesContainer" class="closed">
         <div id = "collectiblesScroller"></div>
-        <div id = "collectiblesDetail"></div>
+        <div id = "collectiblesDetail" hidden = true>
+            <img id = "selCollImg"> <!-- The image of the selected certificate-->
+            <p id = "selCollName"></p>
+            <p id = "selCollDesc"></p>            
+        </div>
         <div id = "Back" class = "menuButton">Back</div>
    </div>
     <script type="module" src="/run.js"></script>

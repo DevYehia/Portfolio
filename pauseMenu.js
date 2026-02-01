@@ -1,18 +1,27 @@
 import { certificates } from "./Data/certificates"
 import { renderer } from "./run"
 
+
+
+export const pauseStates = {
+    NOT_PAUSED: 0,
+    PAUSED: 1,
+    COLLECTIBLES: 2
+}
+
+
+export let currPauseState = pauseStates.NOT_PAUSED;
+
 //needed HTML Elements
-let optionsMenuDiv = document.getElementById("menuButton")
 let pauseMenuOptionsDiv = document.getElementById("gameMenu")
 let continueButton = document.getElementById("continueBtn")
 let collectiblesButton = document.getElementById("collectiblesBtn")
 const collectiblesScroller = document.getElementById('collectiblesScroller');
+const collectiblesDetail = document.getElementById('collectiblesDetail');
 const backButton = document.getElementById("Back")
 
-function showPauseMenu(e){
-    e.stopPropagation()
-    pauseMenuOptionsDiv.hidden = false;
-    console.log("Presseddd")
+export function showPauseMenu(e){
+    e?.stopPropagation()
     pauseMenuOptionsDiv.classList.remove("closed");
     pauseMenuOptionsDiv.classList.add("open");    
 }
@@ -22,7 +31,21 @@ function hideCollectiblesMenu(){
     collectiblesContainer.classList.add("closed")    
 }
 
-function showCertificateDetails(){
+function showCertificateDetails(certID){
+    collectiblesDetail.hidden = false;
+
+    //get detail elements
+    const certImage = document.getElementById("selCollImg")
+    const certName = document.getElementById("selCollName")
+    const certDesc = document.getElementById("selCollDesc")
+
+    let cert = certificates[certID]
+
+    certImage.src = "textures/Certificates/" + cert.image
+    certName.innerHTML = cert.name
+    certDesc.innerHTML = cert.desc
+
+
 
 }
 
@@ -53,17 +76,28 @@ export function setupPauseMenu(){
 
         //setUp click handle for div
        // card.addEventListener("click")
-
-
-
         collectiblesScroller.appendChild(card); 
     } 
 
 
+    //setup collectibles detail menu
 
-    optionsMenuDiv.onclick = (e) => {
-        showPauseMenu(e)
+
+    //selected onclick
+    collectiblesScroller.onclick = (e) => {
+
+        const item = e.target.closest('.collectible-card');
+        if (!item || !collectiblesScroller.contains(item)) return; //didnt click on a card
+
+        collectiblesScroller.querySelectorAll('.collectible-card').forEach(i => i.classList.remove('selected')); //clear previous selections
+
+        item.classList.add('selected');
+
+        if(certificates[item.id].collected)
+            showCertificateDetails(item.id)
+
     }
+
 
     pauseMenuOptionsDiv.onclick = (e) => {
         e.stopPropagation()
@@ -76,11 +110,11 @@ export function setupPauseMenu(){
     }
 
     collectiblesButton.addEventListener("click", () => {
+        currPauseState = pauseStates.COLLECTIBLES
         pauseMenuOptionsDiv.classList.remove("open")
         pauseMenuOptionsDiv.classList.add("closed");
         collectiblesContainer.classList.remove("closed");
         collectiblesContainer.classList.add("open")
-        optionsMenuDiv.hidden = true
         backButton.hidden = false
 
         let numCertificates = collectiblesScroller.children.length;

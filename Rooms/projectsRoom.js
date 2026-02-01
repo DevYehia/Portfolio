@@ -36,7 +36,7 @@ export class ProjectsRoom extends Room{
 
         this.addFloor("../textures/floor.jpg", 4)
 
-        //this.addCollectible("Linux")
+        this.addCollectible("Linux")
 
         this.addTitle("Projects", ~0x00ffff)
 

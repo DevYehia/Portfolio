@@ -2,16 +2,19 @@ export const certificates = {
     "Linux" : {
         "name" : "Linux Administration",
         "image" : "Linux.jpg",
-        "collected" : false
+        "desc" : "Learned about Basic Linux Fundamentals, User Management, Bash Scripting and MakeFiles",
+        "collected" : true
     },
     "AutoSAR" : {
-        "name" : "Linux Administration",
+        "name" : "Classical AutoSAR",
         "image" : "AutoSAR.jpg",
-        "collected" : false
+        "desc" : "Learned About AUTOSAR Layered Software Architecture, AUTOSAR OS, AUTOSAR Communication Stack, AUTOSAR Diagnostics and Bootloader",
+        "collected" : true
     },
     "Testing" : {
-        "name" : "Linux Administration",
+        "name" : "Software Testing",
         "image" : "Testing.jpg",
-        "collected" : false
+        "desc" : "Learned About Fundamentals of Testing",
+        "collected" : true
     }
 }

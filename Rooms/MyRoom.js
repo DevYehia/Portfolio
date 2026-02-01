@@ -46,7 +46,7 @@ export class MyRoom extends Room{
 
         this.addLight()
 
-        //this.addCollectible("Testing")
+        this.addCollectible("Testing")
 
         this.addTitle("About Me", ~0x0000ff)
 

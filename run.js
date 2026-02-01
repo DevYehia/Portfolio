@@ -3,8 +3,8 @@ import {addAmbientLight, addBoundaryCuboids, addGround, addHOFRoom, addMyRoom, a
 
 import { PlayerData, changeState, currState } from './PlayerStates/common';
 import { KeyStates, keys, initKeyboardUtils, processKeyboardInput, resetKeys } from './Utils/keyboardUtils';
-import { setupPauseMenu } from './pauseMenu';
-import { loadStuff, throne } from './loader';
+import { currPauseState, pauseStates, setupPauseMenu, showPauseMenu } from './pauseMenu';
+import { loadStuff } from './loader';
 
 import { gsap } from 'gsap/gsap-core';
 import { setupStates, stateInstances } from './PlayerStates/states';
@@ -39,8 +39,6 @@ document.body.appendChild( renderer.domElement );
 
 await loadStuff()
 
-//scene.add(throne)
-throne.scale.set(2,2,2)
 
 initKeyboardUtils()
 setupPauseMenu()
@@ -124,14 +122,12 @@ function animate() {
 
     const delta = clock.getDelta();
 
-    if( keys['z'] == KeyStates.SINGLE_PRESS){
-      gsap.to(
-        mesh.position,
-        {
-          z : mesh.position.z == -30 ? 0 : - 30,
-          duration: 1
-        }
-      )
+    //custom pointer lock exit
+    if( keys['p'] == KeyStates.SINGLE_PRESS){
+
+        document.exitPointerLock();
+        if(currPauseState == pauseStates.NOT_PAUSED)
+            showPauseMenu()
     }
 
    //console.log("oh delta is " + delta)
@@ -210,21 +206,23 @@ renderer.setAnimationLoop( animate );
 //event listeners
 
 document.body.addEventListener('click', () => {
-    if(!currState.isInDialog)
+    if(!currState.isInDialog && currPauseState == pauseStates.NOT_PAUSED)
         renderer.domElement.requestPointerLock();
 });
 
 document.addEventListener('pointerlockchange', () => {
   const locked = document.pointerLockElement === renderer.domElement;
   inPointerLock = locked;
-  document.getElementById("clickDiv").hidden = locked;
+  document.getElementById("clickDiv").hidden = true;
 
   if(!locked){
     resetKeys()
-    optionsMenuDiv.hidden = false;
+    showPauseMenu()
+    currPauseState = pauseStates.PAUSED;
   }
   else{
-    optionsMenuDiv.hidden = true;
+    currPauseState = pauseStates.NOT_PAUSED;
+
   }
   
   console.log(locked ? 'Pointer locked!' : 'Pointer released');
@@ -269,6 +267,9 @@ window.addEventListener('mousemove', e => {
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) {
     resetKeys()
+    if(currPauseState == pauseStates.NOT_PAUSED)
+        showPauseMenu()
+    
   } else {
     //do nothing
   }
