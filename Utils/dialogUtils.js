@@ -1,3 +1,4 @@
+import { player } from "../player";
 import { currState } from "../PlayerStates/common";
 import { animateText } from "./textUtils";
 
@@ -9,7 +10,7 @@ let talkDiv = document.getElementById("talkDiv");
 export function startDialogue(diagList){
 
     //set dialog in currState
-    currState.isInDialog = true;
+    player.inDialog = true   
 
     currDialogList = diagList
     currDialogIdx = 0;
@@ -40,9 +41,8 @@ export function nextLine(){
     }
     else{
         talkDiv.hidden = true;
-        console.log("Ezay")
         controlsDiv.innerHTML = currState.interactionManager.interactable.controls
-        currState.isInDialog = false;  
+        player.inDialog = false   
         return false;
     }
 }
@@ -50,5 +50,5 @@ export function nextLine(){
 export function endDialogue(){
     talkDiv.hidden = true;
     controlsDiv.innerHTML = currState.interactionManager.interactable.controls
-    currState.isInDialog = false;   
+    player.inDialog = false   
 }

@@ -28,7 +28,6 @@ export function initKeyboardUtils(){
 }
 
 export function resetKeys(){
-    console.log("I was called")
     prevKeys = {};
     keys = {};
     helperKeys = {}
@@ -47,4 +46,12 @@ export function processKeyboardInput(){ //must be called in animation frame
         }
         prevKeys[key] = helperKeys[key]
     }
+}
+
+export function isPressed(key){
+    return keys[key] == KeyStates.SINGLE_PRESS || keys[key] == KeyStates.LONG_PRESS
+}
+
+export function isSinglePress(key){
+    return keys[key] == KeyStates.SINGLE_PRESS
 }

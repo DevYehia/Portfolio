@@ -1,38 +1,19 @@
-import * as THREE from 'three'
 
 
 export const collisionMargin = 0.5;
 
+
 export let currState = null;
 
 export function changeState(newStateObject){
+
+    //execute on exit
+    currState?.onExit?.()
     currState = newStateObject;
+    newStateObject.visited = true
     console.log("Now in " + currState.stateName)
 }
 
-
-export class PlayerData{
-
-  /** @type {THREE.Vector3} */
-  playerPos;
-
-  /** @type {THREE.Camera} */
-  camera
-
-  /** @type {THREE.Scene} */
-  scene;
-
-  //user input is stored here
-  inputKeys;
-
-
-  constructor(playerPos, camera, scene, inputKeys) {
-    this.playerPos = playerPos;
-    this.camera = camera;
-    this.scene = scene;
-    this.inputKeys = inputKeys
-  }    
-}
 
 export const directions = {
   "forward" : "-z",

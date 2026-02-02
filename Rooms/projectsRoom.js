@@ -2,7 +2,6 @@ import * as THREE from 'three'
 import { Room } from "./room";
 import { projectsData } from '../Data/projects';
 import { Sign } from '../Objects/sign';
-import { Collectible } from '../Objects/collectible';
 import { handleInteraction } from '../Utils/interactionsUtils';
 
 export class ProjectsRoom extends Room{
@@ -30,11 +29,10 @@ export class ProjectsRoom extends Room{
 
         let currRoomDims = this.getRoomDims();
         //this.setDims(this.width, this.height, currRoomDims.z + 1)
-        console.log("room dims is " + JSON.stringify(currRoomDims))
         this.depth = currRoomDims.z + 1;
-        this.addWalls("../textures/innerWall.jpg", 0x00ffff)
+        this.addWalls(0x00ffff)
 
-        this.addFloor("../textures/floor.jpg", 4)
+        this.addFloor()
 
         this.addCollectible("Linux")
 

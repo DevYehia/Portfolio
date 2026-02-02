@@ -2,6 +2,7 @@ import * as THREE from 'three'
 import { getDistanceXZ } from '../Utils/MathUtils';
 import { keys, KeyStates } from '../Utils/keyboardUtils'
 
+
 export class InteractionManager{
 
     camLookAt = new THREE.Vector3()
@@ -12,9 +13,6 @@ export class InteractionManager{
 
     interactableList = []
 
-    constructor(){
-
-    }
 
     /**
      * 
@@ -31,7 +29,7 @@ export class InteractionManager{
 
 
         camera.getWorldDirection(this.camLookAt);
-        this.rayCaster.set(camera.position, this.camLookAt);
+        this.rayCaster.set(playerPos, this.camLookAt);
 
         //console.log("Awl cond " + (dist <= triggerDistance) + " Tany Cond " + (this.rayCaster.intersectObject(object.hitBox, false).length > 0))
         
@@ -40,7 +38,10 @@ export class InteractionManager{
 
     }
 
-    checkInteraction(playerPos, camera){
+    checkInteraction(player){
+
+        let playerPos = player.position
+        let camera = player.camera
 
         if(this.isInDialog)return
         
@@ -70,7 +71,6 @@ export class InteractionManager{
                 if(this.interactableList[i] == null)continue
             
                 if(this.checkForTrigger(playerPos, camera, this.interactableList[i])){
-                    console.log("ALooo ")
                     this.interactable = this.interactableList[i];
                     this.interactable.trigger()
                     break;

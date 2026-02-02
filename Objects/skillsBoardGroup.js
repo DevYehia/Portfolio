@@ -53,7 +53,6 @@ export class SkillsBoardsGroup extends Interactable{
 
             for(let key in skills){
 
-                console.log(key + " hey " + JSON.stringify(skills.key))
 
                 let board = new SkillsBoard(
                         {

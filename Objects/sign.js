@@ -129,14 +129,7 @@ export class Sign extends Interactable{
         this.rotateY(Math.PI / 2);
     }
 
-    changeColor(){
-        //console.log("change color called")
-        this.main.material.color.setHex(0x00ffff);
-    }
 
-    revertColor(){
-        this.main.material.color.setHex(0xff00ff);        
-    }
 
     addText(signName){
         const canvas = document.createElement("canvas");

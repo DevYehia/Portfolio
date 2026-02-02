@@ -4,9 +4,10 @@ import { keys, KeyStates } from '../Utils/keyboardUtils'
 import { nextLine, endDialogue } from '../Utils/dialogUtils';
 import { stateInstances } from './states';
 import { changeState, directions } from './common';
-import { player } from '../run';
 import { CollisionHandler } from './collision';
 import { InteractionManager } from './interactionManager';
+import { player } from '../player';
+
 
 export class StateBorders{
 
@@ -52,8 +53,6 @@ export class StateNext{
 
 export class BaseState{
 
-    //is the user in dialog (no shit)
-    isInDialog = false;
 
     interactionManager = new InteractionManager()
 
@@ -62,7 +61,13 @@ export class BaseState{
     stateBorders
     nextStates
 
+    //for visited handling
     visited = false
+
+    //callBacks for handling what happens upon visiting
+    onFirstVisit = null
+    onRepeatedVisit = null
+    onExit = null;
 
     /**
      * @type {CollisionHandler}
@@ -70,40 +75,24 @@ export class BaseState{
 
     collider
 
-    constructor(stateName, visitedAction, notVisitedAction){
+    constructor({stateName = "SomeName",
+        onFirstVisit = null,
+        onRepeatedVisit = null,
+        onExit = null} = {}){
         this.stateName = stateName
-
-        if(this.visited){
-            visitedAction?.();
-        }
-        else{
-            this.visited = false;
-            notVisitedAction?.();
-        }
-
-        //adjust player light
- 
-        
-
+        this.onFirstVisit = onFirstVisit
+        this.onRepeatedVisit = onRepeatedVisit
+        this.onExit = onExit
     }
 
-
-
-    checkInteraction(playerPos, camera){
-
-        this.interactionManager.checkInteraction(playerPos, camera)
-
-    }
 
     handleDialog(){
-        if(this.isInDialog && keys["q"] == KeyStates.SINGLE_PRESS){
-            let areThereMoreLines = nextLine()
-            this.isInDialog = areThereMoreLines;
+        if(player.inDialog && keys["q"] == KeyStates.SINGLE_PRESS){
+            nextLine()
         }
         //end dialogue
-        else if(this.isInDialog && keys["x"] == KeyStates.SINGLE_PRESS){
+        else if(player.inDialog && keys["x"] == KeyStates.SINGLE_PRESS){
             endDialogue()
-            this.isInDialog = false;
         }        
     }
 
@@ -118,18 +107,16 @@ export class BaseState{
         this.collider.modifyPosition(playerPos, newPlayerPos)
     }
 
-    /** 
-    *@param  {PlayerData} playerData
-    */       
-    checkAndUpdateState(playerData){
-        let playerPos = playerData.playerPos;
 
+    checkAndUpdateState(player){
+
+        let playerPos = player.position
 
         this.handleDialog()
         this.animate()
     
         if(!this.isInDialog)
-            this.checkInteraction(playerPos, playerData.camera)
+            this.interactionManager.checkInteraction(player)
 
 
         //check next state

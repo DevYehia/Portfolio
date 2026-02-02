@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { KeyStates } from '../Utils/keyboardUtils'
+
 
 export class Interactable extends THREE.Object3D{
 
@@ -32,7 +32,6 @@ export class Interactable extends THREE.Object3D{
     }
 
     interact(key){
-        console.log("in key " + key)
         this.interactions[key]?.()
 
     }

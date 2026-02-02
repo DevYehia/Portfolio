@@ -1,10 +1,8 @@
 import * as THREE from 'three'
-import { StateBorders } from './baseState'
 import { Door } from '../Objects/door'
 import { directions } from './common'
 import { isBetween } from '../Utils/MathUtils'
-import { collisionMargin } from './common'
-import { player } from '../run'
+
 
 export class CollisionBorders{
 
@@ -114,12 +112,10 @@ export class CollisionHandler{
                 isBetween(doorPos[otherAxis], doorPos[otherAxis] + door.doorWidth * door.sign, playerPos[otherAxis])
             && door.isOpen()){
                 //don't unstuck
-                console.log("dont unstuck")
             }
             else if(
                 unStuckCond
             ) {
-                console.log('Unstuck')
                 playerPos[axis] = border;
                 modifyAxis[axis] = false
             }
@@ -131,7 +127,6 @@ export class CollisionHandler{
             }
 
             else if(!isBetween(doorPos[otherAxis], doorPos[otherAxis] + door.doorWidth * door.sign, playerPos[otherAxis])){
-                console.log("Elcondition el saye2")
                 if(cond)modifyAxis[axis] = false;
             }
             

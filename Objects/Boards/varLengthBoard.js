@@ -20,7 +20,6 @@ export class VarLengthBoard extends BaseBoard{
         this.numImagePerRow = numImagePerRow
         let boardWidth = (imageDim * numImagePerRow) + (imageSpacing * (numImagePerRow + 1));
         this.boardWidth = boardWidth
-        console.log("width is " + boardWidth)
         let boardHeight = (imageDim * numRows) + (imageSpacing * (numRows + 1));
         this.boardHeight = boardHeight
 

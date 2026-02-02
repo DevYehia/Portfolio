@@ -1,20 +1,15 @@
 import * as THREE from 'three';
-import {Sign} from './Objects/sign';
-import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
-import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
-import { Door } from './Objects/door';
-import { projectsData } from './Data/projects';
 import { ProjectsRoom } from './Rooms/projectsRoom';
 import { HOFRoom } from './Rooms/HOFRoom';
-import { friends } from './Data/friends';
 import { MyRoom } from './Rooms/MyRoom';
 import { loadTexture } from './Utils/sceneUtils';
 
+
 //configs
+export let pathWidth = 30;
 export const boundaryCuboidHeight = 12;
 export const boundaryCuboidWidth = 60;
 export const nearBoundaryCuboidDepth = boundaryCuboidWidth * 2;
-export let pathWidth = 30;
 export let stars;
 
 //central environment objects collection
@@ -46,16 +41,6 @@ export let hallOfFameRoom = null;
 
 export let myRoom = null;
 
-/**
- * @type {TheaterRoom}
- */
-
-export let theaterRoom = null;
-
-
-export let ambLight = new THREE.AmbientLight(0xffffff, 0);
-
-
 
 
 /**
@@ -70,19 +55,17 @@ function addCuboid(scene, geometry, material, position){
     cuboid.position.copy(position)
 }
 
-export function adjustCamera(camera){
-    camera.position.y += boundaryCuboidHeight / 2;
+//adjusts height and light
+export function adjustPlayer(player){
+    player.position.y += boundaryCuboidHeight / 2;
+    player.light.distance = pathWidth
 }
-
-
 
 
 /**
  * @param {THREE.Scene} scene
  */
-export function addBoundaryCuboids(scene, inputPathWidth){
-
-    pathWidth = inputPathWidth;
+export function addBoundaryCuboids(scene){
 
     let nearWidthTexture = loadTexture("textures/env/stone.jpeg", nearBoundaryCuboidDepth, boundaryCuboidHeight, 3)
     let depthTexture = loadTexture("textures/env/stone.jpeg", boundaryCuboidWidth, boundaryCuboidHeight, 3)
@@ -96,15 +79,18 @@ export function addBoundaryCuboids(scene, inputPathWidth){
     //order is right, left, top, bottom, front ,back
     let matList = [nearMat, nearMat, null, null, depthMat, depthMat]
 
+    let rightPosX = pathWidth/2 + boundaryCuboidWidth/2
+    let leftPosX = -rightPosX
+
     //near cuboids
-    addCuboid(scene, nearGeometry, matList, new THREE.Vector3(pathWidth/2 + boundaryCuboidWidth/2, boundaryCuboidHeight / 2 , 0));
-    addCuboid(scene, nearGeometry, matList, new THREE.Vector3(-pathWidth/2 - boundaryCuboidWidth/2, boundaryCuboidHeight / 2 , 0));
+    addCuboid(scene, nearGeometry, matList, new THREE.Vector3(rightPosX, boundaryCuboidHeight / 2 , 0));
+    addCuboid(scene, nearGeometry, matList, new THREE.Vector3(leftPosX, boundaryCuboidHeight / 2 , 0));
     
-    let farCuboidZ = nearBoundaryCuboidDepth/2 + pathWidth + boundaryCuboidWidth / 2;
+    let farCuboidZ = -(nearBoundaryCuboidDepth/2 + pathWidth + boundaryCuboidWidth / 2);
     
     //far cuboids
-    addCuboid(scene, farGeometry, depthMat, new THREE.Vector3(pathWidth/2 + boundaryCuboidWidth/2, boundaryCuboidHeight / 2 , -(farCuboidZ)));
-    addCuboid(scene, farGeometry, depthMat, new THREE.Vector3(-pathWidth/2 - boundaryCuboidWidth/2, boundaryCuboidHeight / 2 , -(farCuboidZ)));
+    addCuboid(scene, farGeometry, depthMat, new THREE.Vector3(rightPosX, boundaryCuboidHeight / 2 , farCuboidZ));
+    addCuboid(scene, farGeometry, depthMat, new THREE.Vector3(leftPosX, boundaryCuboidHeight / 2 , farCuboidZ));
 
 }
 
@@ -143,7 +129,7 @@ export function addHOFRoom(scene){
 
     let boardOffset = 20;
 
-    hallOfFameRoom = new HOFRoom(boardOffset, 50, friends);
+    hallOfFameRoom = new HOFRoom(boardOffset, 50);
 
 
     scene.add(hallOfFameRoom);
@@ -220,12 +206,6 @@ export function addStars(scene){
 }
 
 
-export function addAmbientLight(scene){
-    scene.add(ambLight)
-}
-
-
-
 export function addGround(scene){
     let groundTexture = new THREE.TextureLoader().load("textures/env/grass.avif")
     groundTexture.colorSpace = THREE.SRGBColorSpace
@@ -248,9 +228,5 @@ export function addGround(scene){
 
     scene.add(ground)
 
-
 }
-// module.exports = {
-//     addBoundaryCuboids
-// }
 

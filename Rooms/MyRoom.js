@@ -1,7 +1,6 @@
 import { Room } from "./room";
 import * as THREE from 'three'
 import { commonTextures } from "../loader";
-import { skills } from "../Data/skills";
 import { TimelineBoard } from "../Objects/myTimeline";
 import { profiles } from "../Data/profiles";
 import { Sign } from '../Objects/sign'
@@ -40,9 +39,9 @@ export class MyRoom extends Room{
         this.addSkillsBoards()
 
 
-        this.addWalls("../textures/innerWall.jpg", 0x0000ff)
+        this.addWalls(0x0000ff)
 
-        this.addFloor("../textures/floor.jpg", 4)
+        this.addFloor()
 
         this.addLight()
 
@@ -76,7 +75,6 @@ export class MyRoom extends Room{
                 signScale: 1.2,
                 controls: makeControls(profiles[i].name, "E - Show")});
             
-            console.log("at " + signsPos.x)
   
             sign.interactions['e'] = () => {handleInteraction(profiles[i].profile, profiles[i].interaction)}
 
@@ -89,7 +87,6 @@ export class MyRoom extends Room{
         //set depth
         this.width = 2 * signsWallOffset + (profiles.length + 1) * signSpacing
 
-        console.log("width is ", this.width)
 
 
     }

@@ -2,9 +2,9 @@ import * as THREE from 'three'
 import { Room } from './room'
 import { Board } from '../Objects/Boards/fameBoard';
 import { TextGeometry } from 'three/examples/jsm/Addons.js';
-import { FontLoader } from 'three/examples/jsm/Addons.js';
 import { HOFTitlefont } from '../loader';
 import { handleInteraction } from '../Utils/interactionsUtils';
+import { friends } from '../Data/friends';
 
 export class HOFRoom extends Room{
 
@@ -18,7 +18,7 @@ export class HOFRoom extends Room{
 
     boardWallSpacing = 1
 
-    constructor(boardOffset, depth, pplList){
+    constructor(boardOffset, depth){
         super({
             depth: depth
         })
@@ -29,7 +29,7 @@ export class HOFRoom extends Room{
         this.title = new THREE.Mesh(textGeo, textMat)
 
         this.board = new Board({
-            pplList: pplList,
+            pplList: friends,
             imageDim: 4,
             imageSpacing: 1,
             numRows: 2
@@ -64,11 +64,11 @@ export class HOFRoom extends Room{
 
         this.add(this.board, this.title)
 
-        this.addWalls("../textures/innerWall.jpg", 0xFFD700)
+        this.addWalls(0xFFD700)
 
         this.addLight()
 
-        this.addFloor("../textures/floor.jpg", 4)
+        this.addFloor()
 
         this.addCollectible("AutoSAR")
 

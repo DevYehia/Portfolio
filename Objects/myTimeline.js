@@ -44,7 +44,7 @@ export class TimelineBoard extends Interactable {
         //the current viewed image
         this.currImageIdx = 0
 
-        timeLineList.forEach((item, idx) => {console.log("police");this.addImage(item, idx)});
+        timeLineList.forEach((item, idx) => {this.addImage(item, idx)});
 
     }
 

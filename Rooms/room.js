@@ -1,12 +1,12 @@
 import * as THREE from 'three'
 import {Door} from '../Objects/door'
-import { MeshPhongMaterial, PlaneGeometry, Vector3 } from 'three/webgpu';
 import { handleInteraction } from '../Utils/interactionsUtils';
 import { Collectible } from '../Objects/collectible';
 import { certificates } from '../Data/certificates';
 import { commonTextures } from '../loader';
 import { TextGeometry } from 'three/examples/jsm/Addons.js';
 import { HOFTitlefont } from '../loader';
+import { makeControls } from '../Utils/textUtils';
 export class Room extends THREE.Object3D{
 
     //the door to enter the room
@@ -34,7 +34,6 @@ export class Room extends THREE.Object3D{
         this.height = height;
         this.depth = depth;
 
-        console.log("In Room Const " + width, " " + height , " " + depth)
 
         //if width is predefined
         if(width != null)
@@ -73,7 +72,7 @@ export class Room extends THREE.Object3D{
         this.certificate.position.z = - this.depth / 2
         this.certificate.position.y += 0.1       
         
-        this.certificate.controls = "Certificate<br>E - Collect"
+        this.certificate.controls = makeControls("Certificate", "E - Collect")
 
         this.certificate.interactions['e'] = () => {
             certificates[certID].collected = true;
@@ -104,13 +103,13 @@ export class Room extends THREE.Object3D{
     }
 
     //didn't make it in constructor as room depth is sometimes calculated dynamically
-    addWalls(texturePath, wallColor){
+    addWalls(wallColor){
 
         let roomWidth = this.width
         let roomHeight = this.height;
         let roomDepth = this.depth
 
-        console.log("In Add Walls  " + roomWidth, " " + roomHeight , " " + roomDepth)
+
 
         const backWallGeo = new THREE.PlaneGeometry(roomWidth, roomHeight);
         const sideWallGeo = new THREE.PlaneGeometry(roomDepth, roomHeight);
@@ -173,8 +172,8 @@ export class Room extends THREE.Object3D{
 
     }
 
-    addFloor(floorTexturePath, rep = 4){
-        const floorGeo = new PlaneGeometry(this.width, this.depth);
+    addFloor(rep = 4){
+        const floorGeo = new THREE.PlaneGeometry(this.width, this.depth);
         let floorTexture = commonTextures["floor"].texture.clone()
 
         floorTexture.colorSpace = THREE.SRGBColorSpace;

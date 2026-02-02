@@ -3,6 +3,7 @@ import { BaseState, StateBorders, StateNext } from './baseState'
 import { CollisionBorders, CollisionHandler, StateDoors } from './collision'
 import { collisionMargin, directions } from './common'
 import { envStuff } from '../environment'
+import { onLeaveRoom } from './triggers'
 
 //each state will have origin at its bottom left
 export const states = {
@@ -68,7 +69,7 @@ export const states = {
             "forward": true,
             "backward": true
         },
-        "axis" : "x"
+        "axis" : "x",
     },
     "projects": {
         "dims":{
@@ -87,7 +88,8 @@ export const states = {
             "right": true,
             "forward": true,
             "backward": true
-        }
+        },
+        "onExit" : onLeaveRoom
     } ,
     "right": {
         "dims":{
@@ -127,7 +129,8 @@ export const states = {
             "right": true,
             "forward": true,
             "backward": true
-        }
+        },
+        "onExit" : onLeaveRoom        
     } ,
     "forward": {
         "dims":{
@@ -167,7 +170,8 @@ export const states = {
             "right": true,
             "forward": true,
             "backward": true
-        }
+        },
+        "onExit" : onLeaveRoom
     } 
 }
 
@@ -244,7 +248,12 @@ export function setupStates(){
         if(state == null)continue;
         let stateNext = state.next
         let stateColl = state.coll
-        stateInstances[stateName] = new BaseState(stateName, state.axis)
+        stateInstances[stateName] = new BaseState({
+            stateName: stateName,
+            onFirstVisit: null,
+            onRepeatedVisit: null,
+            onExit: states[stateName].onExit ?? null
+        })
 
 
         //set up the state borders

@@ -5,9 +5,6 @@ import { commonTextures } from '../loader';
 import { gsap } from 'gsap/gsap-core';
 import { makeControls } from '../Utils/textUtils';
 
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
 
 const DoorStates = {
     CLOSED: 0, 
@@ -72,14 +69,12 @@ export class Door extends Interactable{
 
     async open(){
 
-        let originalRotationY = this.rotation.y;
 
         if(this.state == DoorStates.OPEN || this.state == DoorStates.OPENING || this.state == DoorStates.CLOSING){
             return;
         }
         this.state = DoorStates.OPENING
 
-        let sleepDuration = this.animationTime / this.numRotationsPerAnimation
         gsap.to(this.rotation, 
             {
             y: Math.PI / 2 * this.rotationSign,

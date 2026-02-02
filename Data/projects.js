@@ -14,6 +14,7 @@ export const projectsData = [
         imagePath : "Hazard.png",
         github: "https://github.com/DevYehia/Hazard-Detection-System",
         tech: "Embedded C",
+        video: "https://drive.google.com/file/d/1had-FkDq1Dql-rGcpyTzj17jXODQPuw0/view?usp=sharing",
         dialogue : [
             "This was my embedded systems course project, We built a Hazard detection system using Tiva-C, ultrasonic sensor and smoke sensor",
             "The hazard info would be sent to the phone via bluetooth, Also would be sent to another micro-controller (Atmega32) via Light Signals",
@@ -74,6 +75,7 @@ export const projectsData = [
         imagePath : "Gift.jpg",
         tech: "Flutter/Firebase",
         github: "https://github.com/DevYehia/Hediaty-Gifter",
+        video: "https://drive.google.com/file/d/1EG2yPHJLTagPbYGByabyviZA816kbc_5/view?usp=drive_link",
         dialogue : [
             "This was my first (and only) Mobile Application using flutter",
             "It is a gifting app where you can see your friend's events and what gifts they want",

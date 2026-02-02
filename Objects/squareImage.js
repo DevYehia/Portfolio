@@ -22,7 +22,6 @@ export class SquareImage extends Interactable{
 
         //necessary, don't know why
         super();
-        console.log(imageName)
 
         this.width = width
         this.height = height;

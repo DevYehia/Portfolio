@@ -1,33 +1,22 @@
 import * as THREE from 'three';
-import {addAmbientLight, addBoundaryCuboids, addGround, addHOFRoom, addMyRoom, addProjectsRoom,  addStars,  adjustCamera, pathWidth} from './environment';
+import {addBoundaryCuboids, addGround, addHOFRoom, addMyRoom, addProjectsRoom,  addStars,  adjustPlayer} from './environment';
 
-import { PlayerData, changeState, currState } from './PlayerStates/common';
-import { KeyStates, keys, initKeyboardUtils, processKeyboardInput, resetKeys } from './Utils/keyboardUtils';
+import { changeState, currState } from './PlayerStates/common';
+import { KeyStates, keys, initKeyboardUtils, processKeyboardInput, resetKeys, isSinglePress } from './Utils/keyboardUtils';
 import { currPauseState, pauseStates, setupPauseMenu, showPauseMenu } from './pauseMenu';
 import { loadStuff } from './loader';
-
-import { gsap } from 'gsap/gsap-core';
 import { setupStates, stateInstances } from './PlayerStates/states';
-import { Player } from './player';
 import { setUpAudio, walkingAudio } from './Utils/audioUtils';
-import { startSequence } from './Utils/sequenceUtils';
-import { startDialogue } from './Utils/dialogUtils';
+import { player } from './player'
+import { handleMovement } from './movementManager';
 
-
-
-
-
-let optionsMenuDiv = document.getElementById("menuButton")
 let inPointerLock = false;
 
 
 
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-const moveSpeed = 20
 
-let dict = {"yaya" : true}
-console.log(dict["lla"] + "eih")
+
 
 
 export const renderer = new THREE.WebGLRenderer({antialias: true});
@@ -40,161 +29,51 @@ document.body.appendChild( renderer.domElement );
 await loadStuff()
 
 
+//player stuff
+let camera = player.camera
+
 initKeyboardUtils()
 setupPauseMenu()
 setUpAudio()
-//important to start game
-
-
-
-adjustCamera(camera);
-
-addBoundaryCuboids(scene, 30)
-
+adjustPlayer(player);
+addBoundaryCuboids(scene)
 addGround(scene)
-//addSigns(scene)
-
-
-let playerData = new PlayerData(camera.position, camera, scene, keys);
-
-
-// addDoor(scene)
 addProjectsRoom(scene)
 addHOFRoom(scene)
 addMyRoom(scene)
 addStars(scene)
-addAmbientLight(scene)
-
-
 setupStates()
+scene.add(player)
 
 
-const geometry = new THREE.ConeGeometry(
-  1,    // radius (base half-size)
-  4,    // height
-);
 
-const material = new THREE.MeshStandardMaterial({ color: 0xffcc00 });
-const pyramid = new THREE.Mesh(geometry, material);
-
-scene.add(pyramid);
-
-
-let pointLight = new THREE.PointLight(0xffffff, 1, pathWidth, 0)
-scene.add(pointLight)
-
-export const player = new Player(camera, pointLight)
 
 changeState(stateInstances["start"]);
-
-let ambLight = new THREE.AmbientLight(0xffffff, 0.1)
- //scene.add(ambLight)
-
-pointLight.position.copy(camera.position)
-
-
-
 
 
 const clock = new THREE.Clock();
 
-// startSequence([
-//     [() => {startDialogue(["Hello Adventurer"])}, 1000],
-//     [() => {startDialogue(["Welcome to my portfolio"])}, 1000],
-//     [ () => {gsap.to(
-//         pointLight,
-//         {
-//             ease: "none",
-//             duration: 1,
-//             distance: pathWidth
-//         }
-//     )}, 1000],
-//     [() => {startDialogue(["Ahh Much Better"])}, 1000]
-// ])
-
-
-
 function animate() {
-
-
 
     processKeyboardInput()
 
     const delta = clock.getDelta();
 
     //custom pointer lock exit
-    if( keys['p'] == KeyStates.SINGLE_PRESS){
+    if(isSinglePress('p')){
 
         document.exitPointerLock();
         if(currPauseState == pauseStates.NOT_PAUSED)
             showPauseMenu()
     }
 
-   //console.log("oh delta is " + delta)
 
-
-    //testDoor.door.rotation.y += 0.1
 
     //movement logic
-    if(!currState.isInDialog){
-        let camLookAt = new THREE.Vector3;
-        camera.getWorldDirection(camLookAt);
-
-        //remove y component, so it doesn't alter movement
-        camLookAt.y = 0;
-        camLookAt.normalize()
-
-        //to get perpendicular we cross product with up vector
-        //this gives vector to left of look at vector
-        let perpendicularToCamLookAt = new THREE.Vector3(0,1,0).cross(camLookAt).normalize();
-
-        let finalMoveSpeed = moveSpeed * delta
-
-        //create a newPos vector, and add to it the movement
-        let newPos = new THREE.Vector3().copy(camera.position)
-        if(keys['w'] == KeyStates.SINGLE_PRESS || keys['w'] == KeyStates.LONG_PRESS){
-            newPos.z += camLookAt.z * finalMoveSpeed;
-            newPos.x += camLookAt.x * finalMoveSpeed;
-        }
-        else if(keys['s'] == KeyStates.SINGLE_PRESS || keys['s'] == KeyStates.LONG_PRESS){
-            newPos.z -= camLookAt.z * finalMoveSpeed;
-            newPos.x -= camLookAt.x * finalMoveSpeed
-        }
-
-        if(keys['a'] == KeyStates.SINGLE_PRESS || keys['a'] == KeyStates.LONG_PRESS){
-            newPos.z += perpendicularToCamLookAt.z * finalMoveSpeed;
-            newPos.x += perpendicularToCamLookAt.x * finalMoveSpeed;   
-            //testDoor.open()      
-            //testDoor.doorMesh.scale.set(20,20,1)   
-        }
-        else if(keys['d'] == KeyStates.SINGLE_PRESS || keys['d'] == KeyStates.LONG_PRESS){
-            newPos.z -= perpendicularToCamLookAt.z * finalMoveSpeed;
-            newPos.x -= perpendicularToCamLookAt.x * finalMoveSpeed;    
-            //testDoor.close()          
-        }
-
-        if(!camera.position.equals(newPos)){
-
-            currState.modifyPosition(camera.position, newPos);
-            pointLight.position.copy(camera.position)
-
-            if(camera.position.equals(newPos)){
-                walkingAudio.play()
-            }
-            else{
-                walkingAudio.pause();    // pauses playback
-                walkingAudio.currentTime = 0;  // resets to start
-            }
-
-        }
-        else{
-                walkingAudio.pause();    // pauses playback
-                walkingAudio.currentTime = 0;  // resets to start            
-        }
-    }
+    handleMovement(delta)
 
     //check for next state
-    currState.checkAndUpdateState(playerData);
+    currState.checkAndUpdateState(player);
 
     renderer.render( scene, camera );
 }
@@ -243,16 +122,6 @@ window.addEventListener('mousemove', e => {
     }
 
 
-    // if(e.movementX != 0){
-    //     camera.rotateOnWorldAxis(up, -e.movementX * 0.002)
-    // }
-    // let eulerRot = new THREE.Euler( 0, 0, 0, 'YXZ' );
-    // eulerRot.setFromQuaternion(camera.quaternion);
-
-    // eulerRot.y += -e.movementX * 0.002;
-    // eulerRot.x += -e.movementY * 0.002;
-
-    // camera.quaternion.setFromEuler(eulerRot);
     camera.rotation.y += -e.movementX * 0.002;
     let newCamRotX = camera.rotation.x + (-e.movementY * 0.002);
     if(newCamRotX < clampMargin && newCamRotX > -clampMargin)

@@ -121,7 +121,6 @@ export function setupPauseMenu(){
         for(let i = 0 ; i < numCertificates ; i++){
             let certUI = collectiblesScroller.children.item(i)
             let certID = certUI.id
-            console.log("FOund ID " + certID)
 
             let certificate = certificates[certID]
 
