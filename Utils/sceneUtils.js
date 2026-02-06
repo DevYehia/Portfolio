@@ -11,3 +11,13 @@ export function loadTexture(texturePath, width, height, rep){
 
     return stoneTexture
 }
+
+
+export function getTextGeoSize(textGeo){
+    textGeo.geometry.computeBoundingBox()
+    let size = new THREE.Vector3()
+
+    textGeo.geometry.boundingBox.getSize(size)
+    console.log("EIh" + JSON.stringify(size))
+    return size;
+}

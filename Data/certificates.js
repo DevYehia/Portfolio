@@ -16,5 +16,11 @@ export const certificates = {
         "image" : "Testing.jpg",
         "desc" : "Learned About Fundamentals of Testing",
         "collected" : true
+    },
+    "Grad" : {
+        "name" : "Graduation",
+        "image" : "Testing.jpg",
+        "desc" : "My Proudest Academic Achievemnt",
+        "collected" : true
     }
 }

@@ -2,7 +2,14 @@ import * as THREE from 'three';
 import { ProjectsRoom } from './Rooms/projectsRoom';
 import { HOFRoom } from './Rooms/HOFRoom';
 import { MyRoom } from './Rooms/MyRoom';
-import { loadTexture } from './Utils/sceneUtils';
+import { getTextGeoSize, loadTexture } from './Utils/sceneUtils';
+import { Collectible } from './Objects/collectible';
+import { certificates } from './Data/certificates';
+import { makeControls } from './Utils/textUtils';
+import { TextGeometry } from 'three/examples/jsm/Addons.js';
+import { HOFTitlefont } from './loader';
+import { onCollectLastCertificate } from './PlayerStates/triggers';
+import { envStuff } from './WorldObjects';
 
 
 //configs
@@ -12,17 +19,7 @@ export const boundaryCuboidWidth = 60;
 export const nearBoundaryCuboidDepth = boundaryCuboidWidth * 2;
 export let stars;
 
-//central environment objects collection
-export const envStuff = {"projectsRoom" : {
-    "door" : null
-},
-    "HOFRoom" : {
-    "door" : null
-},
-    "myRoom" : {
-    "door" : null
-}
-}; 
+
 
 /**
  * @type {ProjectsRoom}
@@ -40,6 +37,8 @@ export let hallOfFameRoom = null;
  */
 
 export let myRoom = null;
+
+export let finalCertificate;
 
 
 
@@ -230,3 +229,94 @@ export function addGround(scene){
 
 }
 
+//puts last certificate and wall
+export function addFinalPart(scene){
+    let certZ = nearBoundaryCuboidDepth / 2 - 5;
+    let certY = 0.1
+
+
+    let finalCertID = "Grad";
+
+    let cert = new Collectible({
+        width: 4,
+        height: 2,
+        padding: 5,
+        image: "../textures/Certificates/" + certificates[finalCertID].image
+    })
+    envStuff["finalCertificate"] = cert;
+    cert.position.set(0, certY, certZ)
+    cert.rotateY(Math.PI)
+
+    cert.controls = makeControls("Certificate", "E - Collect")
+
+    cert.interactions['e'] = () => {
+        onCollectLastCertificate(scene)
+    }
+
+    cert.visible = false
+    scene.add(cert)
+
+
+
+    //wall
+    let wall = new THREE.Mesh(
+        new THREE.PlaneGeometry(pathWidth, boundaryCuboidHeight),
+        new THREE.MeshStandardMaterial({
+            side: THREE.DoubleSide,
+            color: 0x000000
+        })
+    )
+
+    scene.add(wall)
+    wall.position.set(0, boundaryCuboidHeight / 2, nearBoundaryCuboidDepth / 2) //+ve z yay
+
+    envStuff["thanksWall"] = wall
+
+}
+
+
+
+
+export function addThanksMessage(scene, playerName){
+
+    const messageDepth = 0.5
+    const messageSize = 3
+
+    let thanksMessage = new THREE.Mesh(
+        new TextGeometry("THANK YOU", {size: messageSize, font: HOFTitlefont, depth: messageDepth}),
+        new THREE.MeshStandardMaterial(
+            {color: 0x0000ff}
+        )
+    )
+
+    let playerNameText = new THREE.Mesh(
+        new TextGeometry(playerName, {size: messageSize, font: HOFTitlefont, depth: messageDepth}),
+        new THREE.MeshStandardMaterial(
+            {color: 0x7f00ff
+            }
+        )
+    )
+
+    let thanksSize = getTextGeoSize(thanksMessage)
+    let nameSize = getTextGeoSize(playerNameText)
+
+
+    //set positions
+    thanksMessage.position.set( 
+        thanksSize.x / 2,
+        boundaryCuboidHeight * 2 / 3 - thanksSize.y / 2,
+        nearBoundaryCuboidDepth / 2 - messageDepth
+    )
+    playerNameText.position.set(
+        nameSize.x / 2,
+        boundaryCuboidHeight  / 3 - nameSize.y / 2, 
+        nearBoundaryCuboidDepth / 2 - messageDepth
+    )
+
+    //set rotations
+    thanksMessage.rotateY(Math.PI)
+    playerNameText.rotateY(Math.PI)
+
+    scene.add(thanksMessage, playerNameText)
+    
+}

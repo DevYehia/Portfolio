@@ -1,12 +1,13 @@
 import * as THREE from 'three';
-import {addBoundaryCuboids, addGround, addHOFRoom, addMyRoom, addProjectsRoom,  addStars,  adjustPlayer} from './environment';
+import {addBoundaryCuboids, addGround, addHOFRoom, addMyRoom, addProjectsRoom,  addStars,  adjustPlayer, addFinalPart, addThanksMessage} from './environment';
 
 import { changeState, currState } from './PlayerStates/common';
-import { KeyStates, keys, initKeyboardUtils, processKeyboardInput, resetKeys, isSinglePress } from './Utils/keyboardUtils';
+import { initKeyboardUtils, processKeyboardInput, resetKeys, isSinglePress } from './Utils/keyboardUtils';
 import { currPauseState, pauseStates, setupPauseMenu, showPauseMenu } from './pauseMenu';
 import { loadStuff } from './loader';
-import { setupStates, stateInstances } from './PlayerStates/states';
-import { setUpAudio, walkingAudio } from './Utils/audioUtils';
+import { setupStates} from './PlayerStates/states';
+import { stateInstances } from './PlayerStates/common';
+import { setUpAudio} from './Utils/audioUtils';
 import { player } from './player'
 import { handleMovement } from './movementManager';
 
@@ -42,6 +43,7 @@ addProjectsRoom(scene)
 addHOFRoom(scene)
 addMyRoom(scene)
 addStars(scene)
+addFinalPart(scene)
 setupStates()
 scene.add(player)
 

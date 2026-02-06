@@ -1,4 +1,6 @@
 
+
+
 let currIdx = 0;
 
 /**
@@ -12,20 +14,24 @@ let currElem;
 let originalText;
 let intervalHandler;
 
+let onFinishCallback; //callback to be called when done
+
 
 /** 
 *@param  {HTMLElement} divElement
 *@param  {string} text
 */
-export function animateText(divElement, text){
+export function animateText(divElement, text, onFinish = null){
 
     //clear previous interval
     clearInterval(intervalHandler);
     currIdx = 0;
     currElem = divElement;
     originalText = text;
+    onFinishCallback = onFinish
     let delay = 25
     intervalHandler = setInterval(animateIteration, delay);
+
 
 }
 
@@ -35,8 +41,10 @@ function animateIteration(){
 
 
     if(currIdx > originalText.length){
+
         clearInterval(intervalHandler);
         currIdx = 0;
+        onFinishCallback?.()
         return;
     }
 

@@ -24,6 +24,9 @@ export class InteractionManager{
     
     checkForTrigger(playerPos, camera, object){
 
+        //if interactable is invisible ignore it
+        if(!object.visible)return false
+
         let dist = getDistanceXZ(playerPos, object.hitBox)
         let triggerDistance = object.triggerDistance;
 

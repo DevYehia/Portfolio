@@ -25,6 +25,10 @@ export let commonTextures = {
     "floor" : {
         "image" : "textures/floor.jpg",
         "texture" : null            
+    },
+    "gold" : {
+        "image" : "textures/gold.jpg",
+        //"texture" : null
     }
 }
 

@@ -2,7 +2,7 @@ import * as THREE from 'three'
 
 import { keys, KeyStates } from '../Utils/keyboardUtils'
 import { nextLine, endDialogue } from '../Utils/dialogUtils';
-import { stateInstances } from './states';
+import { stateInstances } from './common';
 import { changeState, directions } from './common';
 import { CollisionHandler } from './collision';
 import { InteractionManager } from './interactionManager';

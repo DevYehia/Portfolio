@@ -72,4 +72,6 @@ export class Collectible extends SquareImage{
             }
             this.particles.geometry.attributes.position.needsUpdate = true;
     }
+
+
 }

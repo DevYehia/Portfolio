@@ -118,6 +118,7 @@ export function setupPauseMenu(){
         backButton.hidden = false
 
         let numCertificates = collectiblesScroller.children.length;
+        let numCollected = 0;
         for(let i = 0 ; i < numCertificates ; i++){
             let certUI = collectiblesScroller.children.item(i)
             let certID = certUI.id
@@ -125,11 +126,14 @@ export function setupPauseMenu(){
             let certificate = certificates[certID]
 
             if(certificate?.collected){
+                numCollected++
                 certUI.children.item(0).src = "textures/Certificates/" + certificate.image
                 certUI.children.item(1).innerHTML = certID
             }
 
         }
+
+        document.getElementById("totalColl").innerHTML = `Collected ${numCollected} of ${numCertificates} certificates`;
     
     })
 

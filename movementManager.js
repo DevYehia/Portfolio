@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import { isPressed } from './Utils/keyboardUtils';
 import { player } from "./player";
-import { walkingAudio } from './Utils/audioUtils';
+import { audios } from './Utils/audioUtils';
 import { currState } from './PlayerStates/common';
 
 const moveSpeed = 20
@@ -10,10 +10,25 @@ const moveSpeed = 20
 const straightMoveKeys = {'w' : 1, 's' : -1}
 const perpendicularMoveKeys = {'a' : 1, 'd': -1}
 
+function onMove(){
+    let walkingAudio = audios["walk"]
+    walkingAudio?.play()
+}
+
+function onStop(){
+    let walkingAudio = audios["walk"]
+    if(!walkingAudio)return
+    walkingAudio.pause()
+    walkingAudio.currentTime = 0    
+}
+
 export function handleMovement(delta){ //delta used to make different fps machines move at same speed per second
 
     
-    if(player.inDialog) return; //in dialog no movement
+    if(player.inDialog){
+        onStop();
+        return;
+    }; //in dialog no movement
 
     let camera = player.camera
     let camLookAt = new THREE.Vector3;
@@ -46,21 +61,21 @@ export function handleMovement(delta){ //delta used to make different fps machin
         }
     }
 
+    let walkingAudio = audios["walk"]
     if(!player.position.equals(newPos)){ //movement keys pressed
 
         currState.modifyPosition(player.position, newPos);
 
+
         if(player.position.equals(newPos)){ //position updated (no collision)
-            walkingAudio.play()
+            onMove()
         }
         else{ //collision
-            walkingAudio.pause();    // pauses playback
-            walkingAudio.currentTime = 0;  // resets to start
+            onStop()
         }
 
     }
     else{ //no movement keys pressed
-            walkingAudio.pause();    // pauses playback
-            walkingAudio.currentTime = 0;  // resets to start            
+        onStop()
     }
 }

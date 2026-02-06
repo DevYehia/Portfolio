@@ -7,6 +7,11 @@ let currDialogIdx = 0;
 let controlsDiv = document.getElementById("controlsDiv")
 let talkDiv = document.getElementById("talkDiv");
 
+function onFinishLine(){
+    //audios["talk"].pause()
+}
+
+
 export function startDialogue(diagList){
 
     //set dialog in currState
@@ -22,8 +27,7 @@ export function startDialogue(diagList){
     //clear previous dialogues
     talkDiv.innerHTML = ""
     talkDiv.hidden = false;
-
-    animateText(talkDiv, currDialogList[currDialogIdx]);
+    animateText(talkDiv, currDialogList[currDialogIdx], onFinishLine);
     currDialogIdx++;
 }
 
@@ -35,20 +39,19 @@ export function hasDialogEnded(){
 //return false if end of dialogue reached
 export function nextLine(){
     if(currDialogIdx < currDialogList.length){
-        animateText(talkDiv, currDialogList[currDialogIdx]);
+        animateText(talkDiv, currDialogList[currDialogIdx], onFinishLine);
         currDialogIdx++;
         return true;   
     }
     else{
-        talkDiv.hidden = true;
-        controlsDiv.innerHTML = currState.interactionManager.interactable.controls
-        player.inDialog = false   
+        endDialogue()
         return false;
     }
 }
 
 export function endDialogue(){
+    onFinishLine()
     talkDiv.hidden = true;
-    controlsDiv.innerHTML = currState.interactionManager.interactable.controls
+    controlsDiv.innerHTML = currState.interactionManager.interactable?.controls ?? ""
     player.inDialog = false   
 }

@@ -2,8 +2,9 @@ import * as env from '../environment'
 import { BaseState, StateBorders, StateNext } from './baseState'
 import { CollisionBorders, CollisionHandler, StateDoors } from './collision'
 import { collisionMargin, directions } from './common'
-import { envStuff } from '../environment'
+import { envStuff } from '../WorldObjects'
 import { onLeaveRoom } from './triggers'
+import { stateInstances } from './common'
 
 //each state will have origin at its bottom left
 export const states = {
@@ -175,7 +176,7 @@ export const states = {
     } 
 }
 
-export const stateInstances = {} 
+
 
 
 function setUpDynamic(){
@@ -204,6 +205,7 @@ export function setupStates(){
     setUpDynamic()
 
     let interactables = {
+        "start" : [envStuff["finalCertificate"]],
         "left" : [ env.projectsRoom.door ],
         "projects" : [env.projectsRoom.door, ...env.projectsRoom.signsList, env.projectsRoom.certificate],
         "right" : [ env.hallOfFameRoom.door ],
@@ -215,7 +217,8 @@ export function setupStates(){
     let animatables = {
         "projects" : [ envStuff["projectsRoom"]["cert"] ],
         "HOF" : [ envStuff["HOFRoom"]["cert"] ],
-        "myRoom" : [ envStuff["myRoom"]["cert"] ],        
+        "myRoom" : [ envStuff["myRoom"]["cert"] ],      
+        "start" : [envStuff["finalCertificate"]]  
     }
 
 

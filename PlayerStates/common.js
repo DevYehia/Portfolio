@@ -3,6 +3,7 @@
 export const collisionMargin = 0.5;
 
 
+export const stateInstances = {} 
 export let currState = null;
 
 export function changeState(newStateObject){
