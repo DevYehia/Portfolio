@@ -8,6 +8,7 @@ import { handleInteraction } from "../Utils/interactionsUtils";
 import { SkillsBoardsGroup } from "../Objects/skillsBoardGroup";
 import { timelineData } from "../Data/timeline";
 import { makeControls } from "../Utils/textUtils";
+import { Interaction } from "../Objects/interactable";
 
 export class MyRoom extends Room{
 
@@ -73,10 +74,10 @@ export class MyRoom extends Room{
                 signBaseColor: 0x00ff00,
                 padding: signSpacing / 2,
                 signScale: 1.2,
-                controls: makeControls(profiles[i].name, "E - Show")});
+                });
             
   
-            sign.interactions['e'] = () => {handleInteraction(profiles[i].profile, profiles[i].interaction)}
+            sign.interactions.push(new Interaction(profiles[i].interaction, profiles[i].profile , "Profile"))
 
             this.add(sign)
             this.signsList.push(sign)
@@ -110,20 +111,12 @@ export class MyRoom extends Room{
         this.timeLineBoard.position.z -= this.depth / 2;
         this.add(this.timeLineBoard)
 
-        //set up interactions
-        this.timeLineBoard.interactions['n'] = () => {
-            handleInteraction(this.timeLineBoard, "NEXT")
-        }
+        this.timeLineBoard.interactions.push(
+            new Interaction("NEXT", this.timeLineBoard, "Next"),
+            new Interaction("PREV", this.timeLineBoard, "Prev"),
+            new Interaction("START_DIAG", timelineData[this.timeLineBoard.currImageIdx].dialogue, "Learn More")            
+        )
 
-        this.timeLineBoard.interactions['p'] = () => {
-            handleInteraction(this.timeLineBoard, "PREV")
-        }
-
-        this.timeLineBoard.interactions['e'] = () => {
-            handleInteraction(timelineData[this.timeLineBoard.currImageIdx].dialogue, "START_DIAG")
-        }
-
-        this.timeLineBoard.controls = makeControls(timelineData[0].name, "E - Show Brief<br>N - Next<br>P - Previous")
     }
 
     //will be two skill boards at a time
@@ -142,13 +135,10 @@ export class MyRoom extends Room{
         skillsBoardGroup.position.set(1, 0, -this.depth / 2)
         
 
-        skillsBoardGroup.interactions['n'] = () => {
-            handleInteraction(skillsBoardGroup, "NEXT")
-        }
-
-        skillsBoardGroup.interactions['p'] = () => {
-            handleInteraction(skillsBoardGroup, "PREV")
-        }
+        skillsBoardGroup.interactions.push(
+            new Interaction("NEXT", skillsBoardGroup, "Next"),
+            new Interaction("PREV", skillsBoardGroup, "Prev")
+        )
 
 
         this.add(skillsBoardGroup)

@@ -3,7 +3,7 @@ import {addBoundaryCuboids, addGround, addHOFRoom, addMyRoom, addProjectsRoom,  
 
 import { changeState, currState } from './PlayerStates/common';
 import { initKeyboardUtils, processKeyboardInput, resetKeys, isSinglePress } from './Utils/keyboardUtils';
-import { currPauseState, pauseStates, setupPauseMenu, showPauseMenu } from './pauseMenu';
+import { currPauseState, pauseStates, setupPauseMenu, showPauseMenu, updatePauseState } from './pauseMenu';
 import { loadStuff } from './loader';
 import { setupStates} from './PlayerStates/states';
 import { stateInstances } from './PlayerStates/common';
@@ -99,10 +99,10 @@ document.addEventListener('pointerlockchange', () => {
   if(!locked){
     resetKeys()
     showPauseMenu()
-    currPauseState = pauseStates.PAUSED;
+    updatePauseState(pauseStates.PAUSED);
   }
   else{
-    currPauseState = pauseStates.NOT_PAUSED;
+    updatePauseState(pauseStates.NOT_PAUSED);
 
   }
   
@@ -119,7 +119,7 @@ const clampMargin = Math.PI / 3;
 camera.rotation.order = 'YXZ';
 
 window.addEventListener('mousemove', e => {
-    if(!inPointerLock || currState.isInDialog){
+    if(!inPointerLock || player.inInteraction || player.inDialog){
         return;
     }
 

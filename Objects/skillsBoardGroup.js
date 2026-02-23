@@ -22,7 +22,10 @@ export class SkillsBoardsGroup extends Interactable{
         numRows = 2,
         clippingPlanes = []} = {}){
 
-            super()
+            super({
+                showMenu: true,
+                menuTitle: ""
+            })
 
 
             this.clippingPlanes = clippingPlanes
@@ -85,9 +88,9 @@ export class SkillsBoardsGroup extends Interactable{
 
             this.add(this.boardsList[0], this.boardsList[1], this.boardsList[this.prevBoardIdx])
 
-            //set up controls
-
-            this.controls = makeControls(this.boardsList[0].boardName, "N - Next<br>P - Prev")
+            //set up menuTitle
+            this.menuTitle = this.boardsList[0].boardName
+            //this.controls = makeControls(this.boardsList[0].boardName, "N - Next<br>P - Prev")
 
 
 
@@ -124,8 +127,10 @@ export class SkillsBoardsGroup extends Interactable{
         if(nextBoard.position.x <= 0){
 
             //update controls 
-            this.controls = makeControls(nextBoard.boardName, "N - Next<br>P - Prev")
-            this.updateDivContent() //to update controls div
+            //this.controls = makeControls(nextBoard.boardName, "N - Next<br>P - Prev")
+            //this.updateDivContent() //to update controls div
+            this.menuTitle = nextBoard.boardName
+            this.updateOptionsMenu()
 
            // console.log("How are we here")
             //to handle offshooting
@@ -171,8 +176,9 @@ export class SkillsBoardsGroup extends Interactable{
         if(prevBoard.position.x >= 0){
 
             //update controls 
-            this.controls = makeControls(prevBoard.boardName, "N - Next<br>P - Prev")
-            this.updateDivContent() //to update controls div
+            //this.controls = makeControls(prevBoard.boardName, "N - Next<br>P - Prev")
+            this.menuTitle = prevBoard.boardName
+            this.updateOptionsMenu() //to update title
 
             let nextBoard = this.boardsList[this.nextBoardIdx]
             //to handle offshooting

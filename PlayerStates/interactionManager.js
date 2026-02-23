@@ -1,6 +1,8 @@
 import * as THREE from 'three'
 import { getDistanceXZ } from '../Utils/MathUtils';
-import { keys, KeyStates } from '../Utils/keyboardUtils'
+import { keys, isSinglePress } from '../Utils/keyboardUtils'
+import { hideOptions, showOptions } from '../interactionUI';
+import { Interactable } from '../Objects/interactable';
 
 
 export class InteractionManager{
@@ -12,6 +14,8 @@ export class InteractionManager{
     interactable = null;
 
     interactableList = []
+
+    interactionKey = 'e'
 
 
     /**
@@ -46,7 +50,7 @@ export class InteractionManager{
         let playerPos = player.position
         let camera = player.camera
 
-        if(this.isInDialog)return
+        if(player.inDialog || player.inInteraction)return
         
         //check current interactable
         if(this.interactable != null){
@@ -58,9 +62,29 @@ export class InteractionManager{
             }
             else{
                 //interaction handling
-                for(let key in keys){
-                    if(keys[key] == KeyStates.SINGLE_PRESS)
-                        this.interactable?.interact(key)
+                if(isSinglePress(this.interactionKey)){
+
+
+                    if(this.interactable.showMenu){
+
+                        this.makePlayerFaceInteractable(player, this.interactable)
+                       
+                        //set updating menu callback
+                        this.interactable.updateMenuCallback = () => {
+                            hideOptions(false)
+                            showOptions(this.interactable, () => {
+                            player.inInteraction = false;
+                            })
+                        }
+                        player.inInteraction = true; //to prevent movement
+                        showOptions(this.interactable, () => {
+                            player.inInteraction = false;
+                        })                        
+                    }
+                    else{
+                        this.interactable.interact(0)
+                    }
+
                 }
 
             }
@@ -81,6 +105,34 @@ export class InteractionManager{
             }
         }
 
+    }
+
+    /**
+     * 
+     * @param {THREE.Object3D} player 
+     * @param {Interactable} interactable 
+     */
+
+    makePlayerFaceInteractable(player, interactable){
+
+        let interactableNormal = new THREE.Vector3()
+        let interactablePosition = new THREE.Vector3()
+        let playerNewPos = new THREE.Vector3();
+
+        //use hitbox as it is easier
+        interactable.hitBox.getWorldDirection(interactableNormal).normalize()
+        interactable.hitBox.getWorldPosition(interactablePosition)
+
+        playerNewPos.add(interactablePosition).add(interactableNormal.multiplyScalar(interactable.triggerDistance - 0.5))
+        playerNewPos.y = player.position.y //don't modify y
+
+        player.position.copy(playerNewPos) //new pos
+
+
+        player.camera.lookAt(interactablePosition)
+
+        player.camera.rotation.z = 0
+        
     }
 
 }

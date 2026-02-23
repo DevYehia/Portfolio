@@ -16,6 +16,7 @@ export function initKeyboardUtils(){
     
         let key = e.key.toLowerCase()
 
+        //console.log("key is " + key)
 
         helperKeys[key] = true;
     
@@ -49,9 +50,11 @@ export function processKeyboardInput(){ //must be called in animation frame
 }
 
 export function isPressed(key){
+    key = key.toLowerCase()
     return keys[key] == KeyStates.SINGLE_PRESS || keys[key] == KeyStates.LONG_PRESS
 }
 
 export function isSinglePress(key){
+    key = key.toLowerCase()
     return keys[key] == KeyStates.SINGLE_PRESS
 }

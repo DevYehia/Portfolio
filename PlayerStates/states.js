@@ -188,7 +188,7 @@ function setUpDynamic(){
     //HOF Room
     states["HOF"]["dims"]["origin"]["x"] = env.pathWidth / 2 + env.boundaryCuboidWidth
     states["HOF"]["dims"]["origin"]["z"] = -env.nearBoundaryCuboidDepth / 2 - env.pathWidth / 2 + env.hallOfFameRoom.width / 2;    
-    states["HOF"]["dims"]["width"] = env.hallOfFameRoom.depth - env.hallOfFameRoom.boardWallSpacing - 3;
+    states["HOF"]["dims"]["width"] = env.hallOfFameRoom.depth - env.hallOfFameRoom.boardWallSpacing - 0.5;
     states["HOF"]["dims"]["depth"] = env.hallOfFameRoom.width ;
 
     //myRoom

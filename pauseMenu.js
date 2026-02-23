@@ -12,6 +12,10 @@ export const pauseStates = {
 
 export let currPauseState = pauseStates.NOT_PAUSED;
 
+export function updatePauseState(newState){
+    currPauseState = newState
+}
+
 //needed HTML Elements
 let pauseMenuOptionsDiv = document.getElementById("gameMenu")
 let continueButton = document.getElementById("continueBtn")

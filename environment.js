@@ -8,15 +8,14 @@ import { certificates } from './Data/certificates';
 import { makeControls } from './Utils/textUtils';
 import { TextGeometry } from 'three/examples/jsm/Addons.js';
 import { HOFTitlefont } from './loader';
-import { onCollectLastCertificate } from './PlayerStates/triggers';
 import { envStuff } from './WorldObjects';
-
+import { Interaction } from './Objects/interactable';
 
 //configs
 export let pathWidth = 30;
 export const boundaryCuboidHeight = 12;
 export const boundaryCuboidWidth = 60;
-export const nearBoundaryCuboidDepth = boundaryCuboidWidth * 2;
+export const nearBoundaryCuboidDepth = boundaryCuboidWidth * 1.5;
 export let stars;
 
 
@@ -249,9 +248,10 @@ export function addFinalPart(scene){
 
     cert.controls = makeControls("Certificate", "E - Collect")
 
-    cert.interactions['e'] = () => {
-        onCollectLastCertificate(scene)
-    }
+    // cert.interactions['e'] = () => {
+    //     onCollectLastCertificate(scene)
+    // }
+    cert.interactions.push(new Interaction("CERT", [finalCertID, scene, cert]))
 
     cert.visible = false
     scene.add(cert)

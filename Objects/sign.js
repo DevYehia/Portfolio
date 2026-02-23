@@ -11,7 +11,6 @@ import { projectsData } from '../Data/projects';
 
 export class Sign extends Interactable{
 
-  controlsDiv =  document.getElementById("controlsDiv")
 
     /**
    * @type {THREE.Mesh}
@@ -44,9 +43,13 @@ export class Sign extends Interactable{
         signScale = 1,
         padding = 4,
         triggerDistance = 15,
-        controls = "asd"} = {}){
+        showMenu = false,
+        menuTitle = ""} = {}){
 
-        super()
+        super({
+            showMenu:showMenu,
+            menuTitle:menuTitle
+        })
         this.signBaseHeight = signBaseHeight;
         this.signBaseWidth = signBaseWidth;
         this.signBaseText = signBaseText;
@@ -55,9 +58,6 @@ export class Sign extends Interactable{
         this.signID = signID
         this.signName = signName
         this.triggerDistance = triggerDistance
-        this.controls = controls
-
-
 
 
         const baseGeometry = new TextGeometry(signBaseText, {
@@ -67,12 +67,14 @@ export class Sign extends Interactable{
         })//new THREE.PlaneGeometry( signBaseWidth, signBaseHeight);
         const mainGeometry = new THREE.PlaneGeometry( signMainWidth, this.signMainHeight);
 
-        let hitBoxWidth = signMainWidth + padding; //not affected by scale
-        let hitBoxHeight = signMainHeight + signBaseHeight + 2 * padding;
+        let hitBoxWidth = signMainWidth + 2 * padding; //not affected by scale
+        let hitBoxHeight = signMainHeight + signBaseHeight;
         const hitBoxGeo = new THREE.BoxGeometry(hitBoxWidth, hitBoxHeight, 0);
         const hitBoxMat = new THREE.MeshBasicMaterial({color: 0xff0000});
-        this.hitBox = new THREE.Mesh(hitBoxGeo, hitBoxMat); //will be an attribute, needed for collision detection        
+        this.hitBox = new THREE.Mesh(hitBoxGeo, hitBoxMat); //will be an attribute, needed for collision detection 
+        this.hitBox.position.y += hitBoxHeight / 2       
         this.hitBox.visible = false;
+
         const baseMaterial = new THREE.MeshStandardMaterial({color: signBaseColor});
 
         const texture = new THREE.TextureLoader().load( "textures/" + signPic );
@@ -104,7 +106,8 @@ export class Sign extends Interactable{
         this.main.position.y += baseSize.y + this.signMainHeight / 2 + mainBaseOffset;
 
         //name
-        this.textSprite.position.y += baseSize.y + this.signMainHeight + mainBaseOffset + 2 / signScale
+        let textMainOffset = 1.2 / signScale
+        this.textSprite.position.y += baseSize.y + this.signMainHeight + mainBaseOffset + textMainOffset
         this.textSprite.position.z += 1.2
 
 

@@ -1,12 +1,13 @@
 import * as THREE from 'three'
 
-import { keys, KeyStates } from '../Utils/keyboardUtils'
+import { isSinglePress, keys, KeyStates } from '../Utils/keyboardUtils'
 import { nextLine, endDialogue } from '../Utils/dialogUtils';
 import { stateInstances } from './common';
 import { changeState, directions } from './common';
 import { CollisionHandler } from './collision';
 import { InteractionManager } from './interactionManager';
 import { player } from '../player';
+import { optionsMoveLeft, optionsMoveRight, optionsMoveUp, optionsMoveDown, executeInteraction} from '../interactionUI';
 
 
 export class StateBorders{
@@ -96,6 +97,27 @@ export class BaseState{
         }        
     }
 
+    handleInteractionMenu(){
+
+        if(!player.inInteraction || player.inDialog)return
+
+        if(isSinglePress("arrowRight") || isSinglePress("d")){
+            optionsMoveRight()
+        }
+        else if(isSinglePress("arrowLeft") || isSinglePress("a")){
+            optionsMoveLeft()
+        }
+        else if(isSinglePress("arrowUp") || isSinglePress("w")){
+            optionsMoveUp()
+        }
+        else if(isSinglePress("arrowDown") || isSinglePress("s")){
+            optionsMoveDown()
+        }
+        else if(isSinglePress("Enter")){
+            executeInteraction()
+        }
+    }
+
 /** 
 *@param  {THREE.Vector3} playerPos
 *@param  {THREE.Vector3} newPlayerPos
@@ -110,12 +132,15 @@ export class BaseState{
 
     checkAndUpdateState(player){
 
+        //console.log("Flag is what" + player.inInteraction)
+
         let playerPos = player.position
 
         this.handleDialog()
+        this.handleInteractionMenu()
         this.animate()
     
-        if(!this.isInDialog)
+        if(!player.inDialog)
             this.interactionManager.checkInteraction(player)
 
 

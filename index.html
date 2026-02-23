@@ -9,10 +9,17 @@
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <div id="talkDiv" hidden="true">Hello World</div>
-    <div id="clickDiv">Click to Start</div>
-    <div id="controlsDiv" hidden = "true">Hello there 👋</div>
 
+    <div id="ui">
+        <div id="interactHint">[E] Open Door</div>
+    </div>
+
+    <div id="talkDiv" class="bottomDiv" hidden="true">Hello World</div>
+    <div id="clickDiv">Click to Start</div>
+    <div id = "optionsContainer" class="bottomDiv" hidden = "true">
+        <div id="optionsTitle" class = "optionsTitle centered"></div>
+        <div id="optionsGrid"></div>
+    </div>
 
 
     <!-- Side Menu -->

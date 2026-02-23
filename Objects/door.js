@@ -1,6 +1,6 @@
 //el baab
 import * as THREE from 'three'
-import { Interactable } from './interactable';
+import { Interactable, Interaction } from './interactable';
 import { commonTextures } from '../loader';
 import { gsap } from 'gsap/gsap-core';
 import { makeControls } from '../Utils/textUtils';
@@ -36,7 +36,6 @@ export class Door extends Interactable{
 
         super()
 
-        this.controls = makeControls("Door", "E - Open/Close")
 
         if(isClockWiseOpen){
             this.rotationSign = -1;
@@ -63,6 +62,9 @@ export class Door extends Interactable{
         this.hitBox.position.y += this.doorHeight / 2;
         
         this.add(this.doorMesh, this.hitBox)
+
+        //add its interaction
+        this.interactions.push(new Interaction("DOOR", this))
 
     }
 

@@ -5,6 +5,7 @@ import { TextGeometry } from 'three/examples/jsm/Addons.js';
 import { HOFTitlefont } from '../loader';
 import { handleInteraction } from '../Utils/interactionsUtils';
 import { friends } from '../Data/friends';
+import { Interaction } from '../Objects/interactable';
 
 export class HOFRoom extends Room{
 
@@ -38,7 +39,8 @@ export class HOFRoom extends Room{
         //set up image interactions
         for(let imageIdx in this.board.imageList){
             let image = this.board.imageList[imageIdx]
-            image.interactions['e'] = () =>{ handleInteraction(image.profile, "OPEN_LINK")}
+            //image.interactions['e'] = () =>{ handleInteraction(image.profile, "OPEN_LINK")}
+            image.interactions.push(new Interaction("OPEN_LINK", image.profile, "Profile"))
         }
 
         //set width and add door

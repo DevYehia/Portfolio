@@ -16,12 +16,14 @@ export class SquareImage extends Interactable{
         padding = 1,
         noHitbox = false,
         maintainAspectRatio = true,
-        controls = "",
+        showMenu= false,
         clippingPlanes = []
     } = {}){
 
-        //necessary, don't know why
-        super();
+        //necessary, now i know why
+        super({
+            showMenu: showMenu
+        });
 
         this.width = width
         this.height = height;
@@ -29,7 +31,7 @@ export class SquareImage extends Interactable{
         this.profile = profile;
         this.padding = padding
         this.clippingPlanes = clippingPlanes
-        this.controls = controls
+        this.menuTitle = name
 
 
         //add promise to wait for loading

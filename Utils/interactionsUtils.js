@@ -6,8 +6,12 @@
 
 import { audios, playOneTimeAudio } from "./audioUtils"
 import { startDialogue } from "./dialogUtils"
+import { onCollectLastCertificate } from "../PlayerStates/triggers"
+import { certificates } from "../Data/certificates"
+import { player } from "../player"
+import { hideOptions, reShowOptions } from "../interactionUI"
 
-export function handleInteraction(target, interaction){
+export function handleInteraction(interaction, target){
 
     let action = interactions[interaction]
 
@@ -32,7 +36,15 @@ export const interactions = {
     },
 
     "START_DIAG" : (target) => {
-        startDialogue(target)
+        //dialog started from interaction menu
+        if(player.inInteraction){
+            hideOptions(false)
+            startDialogue(target, reShowOptions)
+        }
+        else{
+            startDialogue(target)
+        }
+
     },
 
     "DOOR" : (target) => {
@@ -49,7 +61,26 @@ export const interactions = {
 
     "PREV" : (target) => {
         target.prev()
+    },
+
+    //target[0] --> certificate ID
+    //target[1] --> certificate container
+    //target[2] --> certificate object
+    "CERT" : (target) => {
+
+        certificates[target[0]].collected = true
+        target[1].remove(target[2])
+
+        if(target[0] == "Grad"){
+            onCollectLastCertificate(target[1])
+        }
     }
 
 
 }
+
+/*
+            certificates[certID].collected = true;
+            this.remove(this.certificate)
+
+*/

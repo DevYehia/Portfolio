@@ -3,6 +3,7 @@ import { Room } from "./room";
 import { projectsData } from '../Data/projects';
 import { Sign } from '../Objects/sign';
 import { handleInteraction } from '../Utils/interactionsUtils';
+import { Interaction } from '../Objects/interactable';
 
 export class ProjectsRoom extends Room{
 
@@ -80,36 +81,35 @@ export class ProjectsRoom extends Room{
 
         //setup sign interactions
         //setup interactions
-        sign.interactions['v'] = () => {
-            handleInteraction(projectsData[sign.signID].video, "OPEN_VIDEO")
+        sign.interactions.push(
+            new Interaction("START_DIAG", projectsData[sign.signID].dialogue, "Show Brief"),
+            new Interaction("OPEN_LINK", projectsData[sign.signID].github, "Github")
+        )
+
+        if(projectsData[sign.signID].video){
+            sign.interactions.push(new Interaction("OPEN_LINK", projectsData[sign.signID].video, "Video"))           
         }
 
-        sign.interactions['g'] = () => {
-            handleInteraction(projectsData[sign.signID].github, "OPEN_LINK")
-        }
-
-        sign.interactions['e'] = () => {
-            handleInteraction(projectsData[sign.signID].dialogue, "START_DIAG")
-        }
     }
 
     placeSignsRow(currProjectKeyIdx, currPos, numSigns, signRot, signScale){
         let projectKeys = Object.keys(projectsData); 
         let currProjectKey = projectKeys[currProjectKeyIdx];
 
-        let controls = "V - Show Video<br>E - Interact<br>G - Github";
+        let controls = "E - Interact<br>G - Github<br>V - Show Video";
 
         for(let i = 0 ; i < numSigns ; i++){
 
-            let controlsTitle = "<p id = 'controlsTitle'>" + projectsData[currProjectKey].name.replace("\n", "<br>") + "</p>"
+            let currProject = projectsData[currProjectKey]
 
             let sign = new Sign({signID: currProjectKey,
-            signPic: "../textures/Projects/" + projectsData[currProjectKey].imagePath,
-            signName: projectsData[currProjectKey].name,
-            signBaseText: projectsData[currProjectKey].tech,
+            signPic: "../textures/Projects/" + currProject.imagePath,
+            signName: currProject.name,
+            signBaseText: currProject.tech,
             padding: this.signSpacing / 2,
             signScale: signScale,
-            controls: controlsTitle +  controls});
+            showMenu: true,
+            menuTitle: currProject.name});
 
             this.addSignAt(sign, currPos)
             sign.rotateY(signRot)

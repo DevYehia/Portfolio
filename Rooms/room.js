@@ -1,12 +1,12 @@
 import * as THREE from 'three'
 import {Door} from '../Objects/door'
-import { handleInteraction } from '../Utils/interactionsUtils';
 import { Collectible } from '../Objects/collectible';
 import { certificates } from '../Data/certificates';
 import { commonTextures } from '../loader';
 import { TextGeometry } from 'three/examples/jsm/Addons.js';
 import { HOFTitlefont } from '../loader';
 import { makeControls } from '../Utils/textUtils';
+import { Interaction } from '../Objects/interactable';
 export class Room extends THREE.Object3D{
 
     //the door to enter the room
@@ -53,7 +53,6 @@ export class Room extends THREE.Object3D{
         let doorZ = 0;
         this.door.position.copy(new THREE.Vector3(doorX, doorY, doorZ))
         this.door.name = "door";
-        this.door.interactions['e'] = (() => {handleInteraction(this.door, "DOOR")}).bind(this)
         this.add(this.door)
     }
 
@@ -74,10 +73,11 @@ export class Room extends THREE.Object3D{
         
         this.certificate.controls = makeControls("Certificate", "E - Collect")
 
-        this.certificate.interactions['e'] = () => {
-            certificates[certID].collected = true;
-            this.remove(this.certificate)
-        }
+        // this.certificate.interactions['e'] = () => {
+        //     certificates[certID].collected = true;
+        //     this.remove(this.certificate)
+        // }
+        this.certificate.interactions.push(new Interaction("CERT", [certID, this, this.certificate]))
 
     }
 

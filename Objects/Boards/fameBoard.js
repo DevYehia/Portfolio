@@ -75,7 +75,7 @@ export class Board extends VarLengthBoard{
                     name: pplList[idx].name,
                     profile: pplList[idx].profile,
                     imageName: "../textures/friends/" + pplList[idx].image,
-                    controls: makeControls(pplList[idx].name, "E - Show Profile")
+                    showMenu: true
                 });
                 this.add(image)
                 image.position.copy(currPos);

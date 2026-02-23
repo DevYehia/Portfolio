@@ -4,6 +4,7 @@ import { Interactable } from './interactable';
 import { TextGeometry } from 'three/examples/jsm/Addons.js';
 import { commonTextures, HOFTitlefont } from '../loader';
 import { makeControls } from '../Utils/textUtils';
+import { timelineData } from '../Data/timeline';
 
 export class TimelineBoard extends Interactable {
 
@@ -24,7 +25,12 @@ export class TimelineBoard extends Interactable {
         timeLineList = [],
         clipPlanes = []
     } = {}){
-        super();
+        super({
+            showMenu: true,
+            menuTitle: timeLineList[0].name
+        });
+
+        
 
         this.width = width
         this.height = height
@@ -220,7 +226,8 @@ export class TimelineBoard extends Interactable {
     }
 
     skip(isForward){
-        if(isForward && this.currImageIdx >= this.imgList.length){
+
+        if(isForward && this.currImageIdx >= this.imgList.length - 1){
             return;
         }
 
@@ -233,6 +240,16 @@ export class TimelineBoard extends Interactable {
             this.skipHandler(isForward)
         }
         //this.otherSkipForward()
+    }
+
+    //if we reach ends of timeline
+    //latest --> remove next option
+    //first --> remove prev option
+    modifyInteractions(){
+        
+
+        
+
     }
 
 
@@ -251,8 +268,8 @@ export class TimelineBoard extends Interactable {
             onComplete: () => {
                 this.currImageIdx+=inc;
                 this.isAnimating = false;
-                this.controls = makeControls(this.namesList[this.currImageIdx], "E - Show Brief<br>N - Next<br>P - Previous")
-                this.updateDivContent()
+                this.menuTitle = this.namesList[this.currImageIdx]
+                this.updateOptionsMenu()
             }
         });
 

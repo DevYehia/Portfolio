@@ -4,16 +4,19 @@ import { animateText } from "./textUtils";
 
 let currDialogList;
 let currDialogIdx = 0;
-let controlsDiv = document.getElementById("controlsDiv")
+//let controlsDiv = document.getElementById("controlsDiv")
 let talkDiv = document.getElementById("talkDiv");
+
+let onFinishDiag = null;
 
 function onFinishLine(){
     //audios["talk"].pause()
 }
 
 
-export function startDialogue(diagList){
+export function startDialogue(diagList, onFinishDiagCallback = null){
 
+    onFinishDiag = onFinishDiagCallback
     //set dialog in currState
     player.inDialog = true   
 
@@ -21,8 +24,8 @@ export function startDialogue(diagList){
     currDialogIdx = 0;
 
     //set available controls
-    controlsDiv.innerHTML = "Q - Next Line<br>X - Skip All"
-    controlsDiv.hidden = false;
+    // controlsDiv.innerHTML = "Q - Next Line<br>X - Skip All"
+    // controlsDiv.hidden = false;
 
     //clear previous dialogues
     talkDiv.innerHTML = ""
@@ -51,7 +54,8 @@ export function nextLine(){
 
 export function endDialogue(){
     onFinishLine()
+    onFinishDiag?.()
     talkDiv.hidden = true;
-    controlsDiv.innerHTML = currState.interactionManager.interactable?.controls ?? ""
+    //controlsDiv.innerHTML = currState.interactionManager.interactable?.controls ?? null
     player.inDialog = false   
 }
