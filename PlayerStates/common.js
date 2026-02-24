@@ -1,4 +1,4 @@
-
+//common stuff
 
 export const collisionMargin = 0.5;
 
@@ -11,8 +11,11 @@ export function changeState(newStateObject){
     //execute on exit
     currState?.onExit?.()
     currState = newStateObject;
+    if(!currState.visited){ //first visit
+        currState.onFirstVisit?.()
+    }
     newStateObject.visited = true
-    console.log("Now in " + currState.stateName)
+    // console.log("Now in " + currState.stateName)
 }
 
 
@@ -22,3 +25,5 @@ export const directions = {
   "left" : "-x",
   "right" : "+x"
 }
+
+

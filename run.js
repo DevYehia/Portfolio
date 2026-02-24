@@ -4,7 +4,7 @@ import {addBoundaryCuboids, addGround, addHOFRoom, addMyRoom, addProjectsRoom,  
 import { changeState, currState } from './PlayerStates/common';
 import { initKeyboardUtils, processKeyboardInput, resetKeys, isSinglePress } from './Utils/keyboardUtils';
 import { currPauseState, pauseStates, setupPauseMenu, showPauseMenu, updatePauseState } from './pauseMenu';
-import { loadStuff } from './loader';
+import { loadingManager, loadStuff } from './loader';
 import { setupStates} from './PlayerStates/states';
 import { stateInstances } from './PlayerStates/common';
 import { setUpAudio} from './Utils/audioUtils';
@@ -50,12 +50,15 @@ scene.add(player)
 
 
 
+
+
 changeState(stateInstances["start"]);
 
 
 const clock = new THREE.Clock();
 
 function animate() {
+
 
     processKeyboardInput()
 
@@ -87,8 +90,13 @@ renderer.setAnimationLoop( animate );
 //event listeners
 
 document.body.addEventListener('click', () => {
-    if(!currState.isInDialog && currPauseState == pauseStates.NOT_PAUSED)
+
+    if(!player.inDialog && currPauseState == pauseStates.NOT_PAUSED){
+
+        console.log("Are we here?" + player.inDialog + " " + (currPauseState == pauseStates.NOT_PAUSED))
         renderer.domElement.requestPointerLock();
+
+    }
 });
 
 document.addEventListener('pointerlockchange', () => {
@@ -103,7 +111,6 @@ document.addEventListener('pointerlockchange', () => {
   }
   else{
     updatePauseState(pauseStates.NOT_PAUSED);
-
   }
   
   console.log(locked ? 'Pointer locked!' : 'Pointer released');

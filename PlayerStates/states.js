@@ -3,192 +3,28 @@ import { BaseState, StateBorders, StateNext } from './baseState'
 import { CollisionBorders, CollisionHandler, StateDoors } from './collision'
 import { collisionMargin, directions } from './common'
 import { envStuff } from '../WorldObjects'
-import { onLeaveRoom } from './triggers'
 import { stateInstances } from './common'
-
-//each state will have origin at its bottom left
-export const states = {
-    "start":{
-        "dims":{
-            "origin" : {
-                "x" : -env.pathWidth / 2,
-                "z" : env.nearBoundaryCuboidDepth / 2
-            },
-            "width": env.pathWidth,
-            "depth": env.nearBoundaryCuboidDepth
-        },
-        "next":{
-            "forward" : "fork"
-        },
-        "coll" : {
-            "left": true,
-            "right": true,
-            "forward": false,
-            "backward": true
-        },
-        "axis" : "z"
-    },
-    "fork": {
-        "dims":{
-            "origin" : {
-                "x" : -env.pathWidth / 2,
-                "z" : - env.nearBoundaryCuboidDepth / 2
-            },
-            "width": env.pathWidth,
-            "depth": env.pathWidth
-        },
-        "next":{
-            "forward" : "forward",
-            "left" : "left",
-            "right" : "right",
-            "backward" : "start"
-        },
-        "coll" : {
-            "left": false,
-            "right": false,
-            "forward": false,
-            "backward": false
-        },
-        "axis" : "all"
-    },
-    "left": {
-        "dims":{
-            "origin" : {
-                "x" : -env.pathWidth / 2 - env.boundaryCuboidWidth,
-                "z" : - env.nearBoundaryCuboidDepth / 2
-            },
-            "width": env.boundaryCuboidWidth,
-            "depth": env.pathWidth
-        },
-        "next":{
-            "left" : "projects",
-            "right" : "fork"
-        },
-        "coll" : {
-            "left": true,
-            "right": false,
-            "forward": true,
-            "backward": true
-        },
-        "axis" : "x",
-    },
-    "projects": {
-        "dims":{
-            "origin" : {
-                "x" : -env.pathWidth / 2 - env.boundaryCuboidWidth,
-                "z" : - env.nearBoundaryCuboidDepth / 2
-            },
-            "width": env.boundaryCuboidWidth,
-            "depth": env.pathWidth
-        },
-        "next":{
-            "right" : "left"
-        },
-        "coll" : {
-            "left": true,
-            "right": true,
-            "forward": true,
-            "backward": true
-        },
-        "onExit" : onLeaveRoom
-    } ,
-    "right": {
-        "dims":{
-            "origin" : {
-                "x" : env.pathWidth / 2,
-                "z" : - env.nearBoundaryCuboidDepth / 2
-            },
-            "width": env.boundaryCuboidWidth,
-            "depth": env.pathWidth
-        },
-        "next":{
-            "left" : "fork",
-            "right" : "HOF"
-        },
-        "coll" : {
-            "left": false,
-            "right": true,
-            "forward": true,
-            "backward": true
-        },
-        "axis" : "x"
-    },
-    "HOF": {
-        "dims":{
-            "origin" : {
-                "x" : -env.pathWidth / 2 - env.boundaryCuboidWidth,
-                "z" : - env.nearBoundaryCuboidDepth / 2
-            },
-            "width": env.boundaryCuboidWidth,
-            "depth": env.pathWidth
-        },
-        "next":{
-            "left": "right"
-        },
-        "coll" : {
-            "left": true,
-            "right": true,
-            "forward": true,
-            "backward": true
-        },
-        "onExit" : onLeaveRoom        
-    } ,
-    "forward": {
-        "dims":{
-            "origin" : {
-                "x" : - env.pathWidth / 2,
-                "z" : - env.nearBoundaryCuboidDepth / 2 - env.pathWidth
-            },
-            "width": env.pathWidth,
-            "depth": env.boundaryCuboidWidth
-        },
-        "next":{
-            "forward" : "myRoom",
-            "backward" : "fork"
-        },
-        "coll" : {
-            "left": true,
-            "right": true,
-            "forward": true,
-            "backward": false
-        },
-        "axis" : "z"
-    },
-    "myRoom": {
-        "dims":{
-            "origin" : {
-                "x" : -env.pathWidth / 2 - env.boundaryCuboidWidth,
-                "z" : - env.nearBoundaryCuboidDepth / 2
-            },
-            "width": env.boundaryCuboidWidth,
-            "depth": env.pathWidth
-        },
-        "next":{
-            "backward" : "forward"
-        },
-        "coll" : {
-            "left": true,
-            "right": true,
-            "forward": true,
-            "backward": true
-        },
-        "onExit" : onLeaveRoom
-    } 
-}
+import { states } from './statesConfig'
 
 
 
 
+//this function is needed to set dimensions of room states
+//because some of them are computed in runtime
 function setUpDynamic(){
+
+    //projects Room
     states["projects"]["dims"]["origin"]["x"] = -env.pathWidth / 2 - env.boundaryCuboidWidth - env.projectsRoom.depth;
     states["projects"]["dims"]["origin"]["z"] = -env.nearBoundaryCuboidDepth / 2 - env.pathWidth / 2 + env.projectsRoom.width / 2;    
     states["projects"]["dims"]["width"] = env.projectsRoom.depth;
     states["projects"]["dims"]["depth"] = env.projectsRoom.width;
 
     //HOF Room
+    const boardMargin = 0.5 //min distance you can stand from board
+
     states["HOF"]["dims"]["origin"]["x"] = env.pathWidth / 2 + env.boundaryCuboidWidth
     states["HOF"]["dims"]["origin"]["z"] = -env.nearBoundaryCuboidDepth / 2 - env.pathWidth / 2 + env.hallOfFameRoom.width / 2;    
-    states["HOF"]["dims"]["width"] = env.hallOfFameRoom.depth - env.hallOfFameRoom.boardWallSpacing - 0.5;
+    states["HOF"]["dims"]["width"] = env.hallOfFameRoom.depth - env.hallOfFameRoom.boardWallSpacing - boardMargin;
     states["HOF"]["dims"]["depth"] = env.hallOfFameRoom.width ;
 
     //myRoom
@@ -204,6 +40,7 @@ export function setupStates(){
     // projects room
     setUpDynamic()
 
+    //each state will have some items user can interact with
     let interactables = {
         "start" : [envStuff["finalCertificate"]],
         "left" : [ env.projectsRoom.door ],
@@ -214,6 +51,7 @@ export function setupStates(){
         "myRoom" : [env.myRoom.door, ...env.myRoom.signsList, env.myRoom.skillsBoardGroup, env.myRoom.timeLineBoard, env.myRoom.certificate]
     }
 
+    //each state will have some animated objects
     let animatables = {
         "projects" : [ envStuff["projectsRoom"]["cert"] ],
         "HOF" : [ envStuff["HOFRoom"]["cert"] ],
@@ -265,14 +103,13 @@ export function setupStates(){
         const width   = state?.dims?.width   ?? 0;
         const depth   = state?.dims?.depth   ?? 0;
 
-        let collMargin = collisionMargin
-
-        state["borders"] = {}
-        state["borders"]["left"] = originX 
-        state["borders"]["backward"] = originZ 
-        state["borders"]["forward"] = originZ - depth 
-        state["borders"]["right"] = originX + width 
-        let stateBorders = state.borders
+        //define state borders from dimensions and origin
+        let stateBorders = {
+            "left" : originX,
+            "backward": originZ,
+            "forward" : originZ - depth,
+            "right" : originX + width
+        }
 
         //set directions stuff
         let stateBordersObj = new StateBorders()
@@ -285,14 +122,16 @@ export function setupStates(){
 
             stateBordersObj[dir] = (dir in stateBorders) ? stateBorders[dir] : null
             stateNextObj[dir] = (dir in stateNext) ? stateNext[dir] : null
-            stateBordersColl[dir] = (stateColl[dir] == true) ? stateBorders[dir] + collMargin * sign : null
+            stateBordersColl[dir] = (stateColl[dir] == true) ? stateBorders[dir] + collisionMargin * sign : null
             stateDoorsObj[dir] = stateDoors?.[stateName]?.[dir] ?? null
         }
         stateInstances[stateName].axis = state.axis ?? null;
         stateInstances[stateName].stateBorders = stateBordersObj
         stateInstances[stateName].nextStates = stateNextObj
         stateInstances[stateName].collider = new CollisionHandler(stateBordersColl, stateDoorsObj) 
-        //console.log("Ba2olk eih " + stateName + " " + JSON.stringify(stateBordersColl))       
+        //console.log("Ba2olk eih " + stateName + " " + JSON.stringify(stateBordersColl))    
+        
+        stateInstances[stateName].onFirstVisit = state?.onFirstVisit ?? null;
 
 
         if(stateName in interactables)

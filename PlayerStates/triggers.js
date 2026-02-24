@@ -1,6 +1,6 @@
 //here will be all the functions that are called on visiting certain states
 
-import { onAllRoomsVisitedDialogue } from "../Data/miscDialogues";
+import { onAllRoomsVisitedDialogue, roomEnterDialogues } from "../Data/miscDialogues";
 import { startDialogue } from "../Utils/dialogUtils";
 import { stateInstances } from "./common"
 import { player } from "../player";
@@ -63,4 +63,10 @@ export function onCollectLastCertificate(scene){
         addThanksMessage(scene, "Yehia")
     }
 
+}
+
+export function onEnterRoom(roomName){
+    if(roomName in roomEnterDialogues){
+        startDialogue(roomEnterDialogues[roomName])
+    }
 }

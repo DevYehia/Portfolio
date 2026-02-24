@@ -1,6 +1,7 @@
 //this contains base class for all images
 import * as THREE from 'three'
 import { Interactable } from './interactable';
+import { loadingManager } from '../loader';
 
 
 export class SquareImage extends Interactable{
@@ -44,7 +45,7 @@ export class SquareImage extends Interactable{
 
         //the image
         if(maintainAspectRatio){
-            new THREE.TextureLoader().load("textures/" + imageName, this.onLoad.bind(this));
+            new THREE.TextureLoader(loadingManager).load("textures/" + imageName, this.onLoad.bind(this));
         }
         else{
             const imageTexture = new THREE.TextureLoader().load("textures/" + imageName);

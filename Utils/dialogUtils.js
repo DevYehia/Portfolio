@@ -5,6 +5,7 @@ import { animateText } from "./textUtils";
 let currDialogList;
 let currDialogIdx = 0;
 //let controlsDiv = document.getElementById("controlsDiv")
+let talkDivContainer = document.getElementById("talkDivContainer");
 let talkDiv = document.getElementById("talkDiv");
 
 let onFinishDiag = null;
@@ -29,7 +30,7 @@ export function startDialogue(diagList, onFinishDiagCallback = null){
 
     //clear previous dialogues
     talkDiv.innerHTML = ""
-    talkDiv.hidden = false;
+    talkDivContainer.hidden = false;
     animateText(talkDiv, currDialogList[currDialogIdx], onFinishLine);
     currDialogIdx++;
 }
@@ -55,7 +56,7 @@ export function nextLine(){
 export function endDialogue(){
     onFinishLine()
     onFinishDiag?.()
-    talkDiv.hidden = true;
+    talkDivContainer.hidden = true;
     //controlsDiv.innerHTML = currState.interactionManager.interactable?.controls ?? null
     player.inDialog = false   
 }

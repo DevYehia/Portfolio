@@ -111,6 +111,7 @@ export function setupPauseMenu(){
         pauseMenuOptionsDiv.classList.remove("open")
         pauseMenuOptionsDiv.classList.add("closed");
         renderer.domElement.requestPointerLock();
+        currPauseState = pauseStates.NOT_PAUSED
     }
 
     collectiblesButton.addEventListener("click", () => {

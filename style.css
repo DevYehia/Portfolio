@@ -19,6 +19,16 @@ body {
     display: none;
 }
 
+.bottomDivTitle{
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: red;
+    bottom: calc(20% + 25px);
+    left: 20px;
+    font-size: 30px;
+    font-family: "Quantico", sans-serif;
+}
+
 /* Bottom dialog box */
 .bottomDiv {
   position: absolute;
