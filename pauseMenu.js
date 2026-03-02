@@ -45,7 +45,7 @@ function showCertificateDetails(certID){
 
     let cert = certificates[certID]
 
-    certImage.src = "textures/Certificates/" + cert.image
+    certImage.src = "textures/Certificates/" + cert.image.highRes
     certName.innerHTML = cert.name
     certDesc.innerHTML = cert.desc
 
@@ -61,7 +61,7 @@ export function setupPauseMenu(){
     //setup collectibles
     for(let certKey in certificates){
         let item = certificates[certKey]
-        let imageToShow = item.collected ? item.image : 'black.png';
+        let imageToShow = item.collected ? item.image.highRes : 'black.png';
         let descToShow = item.collected ? item.description : '??';
 
         // create UI element
@@ -132,7 +132,7 @@ export function setupPauseMenu(){
 
             if(certificate?.collected){
                 numCollected++
-                certUI.children.item(0).src = "textures/Certificates/" + certificate.image
+                certUI.children.item(0).src = "textures/Certificates/" + certificate.image.highRes
                 certUI.children.item(1).innerHTML = certID
             }
 

@@ -48,10 +48,6 @@ setupStates()
 scene.add(player)
 
 
-
-
-
-
 changeState(stateInstances["start"]);
 
 
@@ -80,6 +76,8 @@ function animate() {
     //check for next state
     currState.checkAndUpdateState(player);
 
+    // console.log("Hello man")
+
     renderer.render( scene, camera );
 }
 
@@ -93,27 +91,26 @@ document.body.addEventListener('click', () => {
 
     if(!player.inDialog && currPauseState == pauseStates.NOT_PAUSED){
 
-        console.log("Are we here?" + player.inDialog + " " + (currPauseState == pauseStates.NOT_PAUSED))
         renderer.domElement.requestPointerLock();
 
     }
 });
 
 document.addEventListener('pointerlockchange', () => {
-  const locked = document.pointerLockElement === renderer.domElement;
-  inPointerLock = locked;
-  document.getElementById("clickDiv").hidden = true;
+    const locked = document.pointerLockElement === renderer.domElement;
+    inPointerLock = locked;
+    document.getElementById("clickDiv").hidden = true;
 
-  if(!locked){
-    resetKeys()
-    showPauseMenu()
-    updatePauseState(pauseStates.PAUSED);
-  }
-  else{
-    updatePauseState(pauseStates.NOT_PAUSED);
-  }
-  
-  console.log(locked ? 'Pointer locked!' : 'Pointer released');
+    if(!locked){
+        resetKeys()
+        showPauseMenu()
+        updatePauseState(pauseStates.PAUSED);
+    }
+    else{
+        updatePauseState(pauseStates.NOT_PAUSED);
+    }
+    
+    console.log(locked ? 'Pointer locked!' : 'Pointer released');
 });
 
 

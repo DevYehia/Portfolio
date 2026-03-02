@@ -43,8 +43,8 @@ export function setupStates(){
     //each state will have some items user can interact with
     let interactables = {
         "start" : [envStuff["finalCertificate"]],
-        "left" : [ env.projectsRoom.door ],
-        "projects" : [env.projectsRoom.door, ...env.projectsRoom.signsList, env.projectsRoom.certificate],
+        "left" : [  envStuff["projectsRoom"]["door"] ],
+        "projects" : [envStuff["projectsRoom"]["door"], ...envStuff['projectsRoom']['signs'], envStuff["projectsRoom"]["cert"]],
         "right" : [ env.hallOfFameRoom.door ],
         "HOF" : [env.hallOfFameRoom.door, ...env.hallOfFameRoom.board.imageList, env.hallOfFameRoom.certificate],
         "forward" : [ env.myRoom.door ],

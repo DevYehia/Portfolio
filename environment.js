@@ -119,7 +119,7 @@ export function addProjectsRoom(scene){
     let projectsEnv = envStuff["projectsRoom"]
     projectsEnv["door"] = projectsRoom.door
     projectsEnv["cert"] = projectsRoom.certificate
-    projectsRoom["signs"] = projectsRoom.signsList
+    projectsEnv["signs"] = projectsRoom.signsList
 
 }
 
@@ -240,7 +240,7 @@ export function addFinalPart(scene){
         width: 4,
         height: 2,
         padding: 5,
-        image: "../textures/Certificates/" + certificates[finalCertID].image
+        image: "../textures/Certificates/" + certificates[finalCertID].image.lowRes
     })
     envStuff["finalCertificate"] = cert;
     cert.position.set(0, certY, certZ)

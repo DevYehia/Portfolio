@@ -10,6 +10,7 @@ import { onCollectLastCertificate } from "../PlayerStates/triggers"
 import { certificates } from "../Data/certificates"
 import { player } from "../player"
 import { hideOptions, reShowOptions } from "../interactionUI"
+import { showPopup } from "../UI/certificateCollectPopUp"
 
 export function handleInteraction(interaction, target){
 
@@ -67,6 +68,8 @@ export const interactions = {
     //target[1] --> certificate container
     //target[2] --> certificate object
     "CERT" : (target) => {
+
+        showPopup("../textures/Certificates/" + certificates[target[0]].image.highRes)
 
         certificates[target[0]].collected = true
         target[1].remove(target[2])

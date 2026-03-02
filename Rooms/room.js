@@ -62,7 +62,7 @@ export class Room extends THREE.Object3D{
             height: 2,
             padding: 5,
             particlesColor: 0x000000,
-            image: "../textures/Certificates/" + certificates[certID].image
+            image: "../textures/Certificates/" + certificates[certID].image.lowRes
         });
         this.add(this.certificate)
 
