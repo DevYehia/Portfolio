@@ -6,21 +6,25 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Quantico:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="Style/overlay.css">
+    <link rel="stylesheet" href="Style/pauseMenu.css">
   </head>
   <body>
 
-    <div id = "certCollectedPopUp" >
-        <div id = "backgroundImageDiv">
-            <img id = "certImage">
-        </div>
-        <p>Certificate Collected <br> Press P to view in Pause Menu</p>
+    <!-- PopUp when user collects certificate -->
+    <div id = "certCollectedPopUp" hidden = "true">
+        <img id = "certImage">
+        <p id = "popUpTitle">Certificate Collected!</p>
+        <p>Press P to view in Pause Menu</p>
     </div>
 
+    <!-- Interaction Hint -->
     <div id="ui">
         <div id="interactHint">[E] Open Door</div>
     </div>
-    <div id = "talkDivContainer"   hidden="true">
+
+    <!-- Dialog Container -->
+    <div id = "talkDivContainer" class = "bottomDivContainer"  hidden="true">
         <div id = "talkControls" class = "bottomDivTitle">
             Q - Next Line<br>
             X - Skip All
@@ -28,9 +32,16 @@
         <div id="talkDiv" class="bottomDiv"></div>
     </div>
     <div id="clickDiv">Click to Start</div>
-    <div id = "optionsContainer" class="bottomDiv" hidden = "true">
-        <div id="optionsTitle" class = "optionsTitle centered"></div>
-        <div id="optionsGrid"></div>
+
+    <!-- Options Container -->
+    <div id = "optionsContainer" class="bottomDivContainer" hidden = "true">
+        <div class = "bottomDivTitle">
+            ENTER - Select
+        </div>
+        <div class="bottomDiv" style = "display: flex; flex-direction: column;">
+            <div id="optionsTitle" class = "optionsTitle centered"></div>
+            <div id="optionsGrid"></div>
+        </div>
     </div>
 
 

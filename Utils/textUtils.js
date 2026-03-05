@@ -16,6 +16,8 @@ let intervalHandler;
 
 let onFinishCallback; //callback to be called when done
 
+const delayBetweenLetters = 20
+
 
 /** 
 *@param  {HTMLElement} divElement
@@ -29,8 +31,7 @@ export function animateText(divElement, text, onFinish = null){
     currElem = divElement;
     originalText = text;
     onFinishCallback = onFinish
-    let delay = 25
-    intervalHandler = setInterval(animateIteration, delay);
+    intervalHandler = setInterval(animateIteration, delayBetweenLetters);
 
 
 }

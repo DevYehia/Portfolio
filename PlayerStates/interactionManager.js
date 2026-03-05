@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import { getDistanceXZ } from '../Utils/MathUtils';
 import { keys, isSinglePress } from '../Utils/keyboardUtils'
-import { hideOptions, showOptions } from '../interactionUI';
+import { hideOptions, showOptions, reShowOptions } from '../interactionUI';
 import { Interactable } from '../Objects/interactable';
 
 
@@ -72,9 +72,7 @@ export class InteractionManager{
                         //set updating menu callback
                         this.interactable.updateMenuCallback = () => {
                             hideOptions(false)
-                            showOptions(this.interactable, () => {
-                            player.inInteraction = false;
-                            })
+                            reShowOptions()
                         }
                         player.inInteraction = true; //to prevent movement
                         showOptions(this.interactable, () => {

@@ -70,9 +70,7 @@ export class Room extends THREE.Object3D{
         this.certificate.position.x = this.width / 2;
         this.certificate.position.z = - this.depth / 2
         this.certificate.position.y += 0.1       
-        
-        this.certificate.controls = makeControls("Certificate", "E - Collect")
-
+    
         // this.certificate.interactions['e'] = () => {
         //     certificates[certID].collected = true;
         //     this.remove(this.certificate)

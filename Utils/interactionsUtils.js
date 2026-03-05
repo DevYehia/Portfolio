@@ -69,13 +69,16 @@ export const interactions = {
     //target[2] --> certificate object
     "CERT" : (target) => {
 
-        showPopup("../textures/Certificates/" + certificates[target[0]].image.highRes)
+
 
         certificates[target[0]].collected = true
-        target[1].remove(target[2])
+        target[2].visible = false;
 
         if(target[0] == "Grad"){
             onCollectLastCertificate(target[1])
+        }
+        else{ //show popup for all except last certificate
+            showPopup("../textures/Certificates/" + certificates[target[0]].image.lowRes)
         }
     }
 

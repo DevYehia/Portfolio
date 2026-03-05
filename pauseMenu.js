@@ -61,7 +61,7 @@ export function setupPauseMenu(){
     //setup collectibles
     for(let certKey in certificates){
         let item = certificates[certKey]
-        let imageToShow = item.collected ? item.image.highRes : 'black.png';
+        let imageToShow = item.collected ? item.image.highRes : "notCollected.jpg";
         let descToShow = item.collected ? item.description : '??';
 
         // create UI element
@@ -91,14 +91,13 @@ export function setupPauseMenu(){
     collectiblesScroller.onclick = (e) => {
 
         const item = e.target.closest('.collectible-card');
-        if (!item || !collectiblesScroller.contains(item)) return; //didnt click on a card
+        if (!item || !collectiblesScroller.contains(item) || !certificates[item.id].collected) return; //didnt click on a card or click on a non collected
 
         collectiblesScroller.querySelectorAll('.collectible-card').forEach(i => i.classList.remove('selected')); //clear previous selections
 
         item.classList.add('selected');
 
-        if(certificates[item.id].collected)
-            showCertificateDetails(item.id)
+        showCertificateDetails(item.id)
 
     }
 

@@ -1,0 +1,167 @@
+/* Reset default margins */
+body {
+  margin: 0;
+  overflow: hidden;
+  font-family: "Quantico", sans-serif;
+  color: white;
+}
+
+
+/* Options Menu Styling */
+
+#optionsGrid {
+
+    flex-grow: 1;
+ 
+    place-items: center;
+    display: grid;
+    /* grid-template-columns: auto auto auto;     */
+    /* justify-content: space-evenly; */
+
+    /* width: fit-content */
+}
+
+#optionsGrid[hidden]{
+    display: none;
+}
+
+
+.optionsTitle {
+    color: red
+}
+
+.optionSelected{
+    color:lawngreen
+}
+
+/* End of Options Menu Styling */
+.bottomDivContainer{
+  position: absolute;
+  bottom: 20px;
+  left: 5%;
+  width: 90%;
+  height: 30%;
+  padding-left: 10px;
+  padding-top: 10px;
+  display: flex;
+  flex-direction: column;
+  font-size: 30px;
+  font-family: "Quantico", sans-serif;
+}
+
+.bottomDivContainer[hidden]{
+    display: none;
+}
+
+.bottomDivTitle{
+    background-color: rgba(0, 0, 0, 0.8);
+    color: red;
+    width: fit-content;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-bottom: 1px solid grey;
+    /* height: 30%; */
+}
+
+/* Bottom dialog box */
+.bottomDiv {
+  padding: 10px 10px 10px 10px;
+  pointer-events: none; /* clicks pass through */
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #f2f2f2;
+  height: 70%;
+}
+
+
+
+/* Center click text */
+#clickDiv {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 30px;
+  padding: 20px 40px;
+  border-radius: 10px;
+  pointer-events: none;
+}
+
+
+
+
+#ui {
+  position: fixed;
+  inset: 0;
+  pointer-events: none; /* So clicks pass to canvas */
+}
+
+
+#interactHint {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* 25px below crosshair */
+  padding: 6px 12px;
+  background: rgba(0, 0, 0, 0.65);
+  border-radius: 6px;
+  font-size: 14px;
+  color: white;
+  opacity: 0;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+
+
+.centered{
+    text-align: center;
+}
+
+
+
+#certCollectedPopUp[hidden]{
+    display: none;
+    
+}
+
+#certCollectedPopUp{
+
+    background-color: black;
+    opacity: 0.8;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 50%;
+    height: 50%;
+
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+
+    text-align: center;
+
+    transition: opacity 0.25s ease;    
+    
+}
+
+
+#certCollectedPopUp img{
+    margin: auto;
+    width: 40%
+}
+
+#certCollectedPopUp p{
+    display: inline;
+    width: 100%;
+    padding: 5px 5px 5px 5px;
+    margin: 0;
+    text-align: center;
+    font-size: 32px;
+    
+}
+
+#certCollectedPopUp p#popUpTitle{
+    color: red;
+    font-size: 35px;
+}

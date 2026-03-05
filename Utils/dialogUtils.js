@@ -28,10 +28,13 @@ export function startDialogue(diagList, onFinishDiagCallback = null){
     // controlsDiv.innerHTML = "Q - Next Line<br>X - Skip All"
     // controlsDiv.hidden = false;
 
+    //add dots to indicate otehr lines
+    let firstLine = currDialogList.length == 1 ? currDialogList[currDialogIdx] : currDialogList[currDialogIdx] + "..."
+
     //clear previous dialogues
     talkDiv.innerHTML = ""
     talkDivContainer.hidden = false;
-    animateText(talkDiv, currDialogList[currDialogIdx], onFinishLine);
+    animateText(talkDiv, firstLine, onFinishLine);
     currDialogIdx++;
 }
 
@@ -43,7 +46,12 @@ export function hasDialogEnded(){
 //return false if end of dialogue reached
 export function nextLine(){
     if(currDialogIdx < currDialogList.length){
-        animateText(talkDiv, currDialogList[currDialogIdx], onFinishLine);
+
+        //add dots if next line is not end line
+        let nextLine = currDialogIdx + 1 == currDialogList.length ?
+         currDialogList[currDialogIdx] :
+         currDialogList[currDialogIdx] + "..."
+        animateText(talkDiv, nextLine, onFinishLine);
         currDialogIdx++;
         return true;   
     }

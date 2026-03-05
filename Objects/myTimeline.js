@@ -3,8 +3,7 @@ import { gsap } from 'gsap/gsap-core';
 import { Interactable } from './interactable';
 import { TextGeometry } from 'three/examples/jsm/Addons.js';
 import { commonTextures, HOFTitlefont } from '../loader';
-import { makeControls } from '../Utils/textUtils';
-import { timelineData } from '../Data/timeline';
+
 
 export class TimelineBoard extends Interactable {
 
@@ -58,7 +57,7 @@ export class TimelineBoard extends Interactable {
         //set up title
         const ttlGeometry = new TextGeometry("MY JOURNEY", {
             font: HOFTitlefont,
-            size : 5,
+            size : 4,
             depth: 0.2
         })            
         const ttlMat = new THREE.MeshBasicMaterial({color: 0xff0000})

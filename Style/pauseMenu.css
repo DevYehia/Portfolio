@@ -1,0 +1,139 @@
+/* Pause Menu Stuff */
+
+#gameMenu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+
+  background: rgba(20, 20, 20, 0.9);
+
+  z-index: 999;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* center vertically */
+  align-items: center; /* center horizontally */
+  gap: 30px;
+
+  transition: opacity 0.25s ease;
+}
+
+/* When menu is open */
+.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.closed {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.menu-item {
+  color: white;
+  padding: 15px 25px;
+  font-size: 24px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+  width: 200px;
+  text-align: center;
+}
+
+.menu-item:hover {
+  background: rgba(255,255,255,0.25);
+}
+
+#collectiblesContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  background-color: rgba(20, 20, 20, 0.9);
+  transition: opacity 0.25s ease;
+  
+}
+
+#collectiblesScroller{
+  top: 0;
+  left: 0;
+  width: 25%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+
+}
+
+#collectiblesDetail{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+    width: 75%;
+    height: 100%;
+}
+
+
+.collectible-card {
+    cursor: pointer;
+    text-align: center;
+    padding: 10px;
+    background-color: #1a1a1a;
+    color: white;
+}
+
+.collectible-card:hover {
+    background-color: blue;
+}
+
+.collectible-card img {
+    width: 100%;
+    height: 150px;
+}
+
+.collectible-card.selected {
+    background-color:dodgerblue;
+}
+
+
+/*certificate detail*/
+#totalColl{
+    font-size: 30px;
+}
+
+#selCollImg{
+  margin-top: 20px;
+  max-width: 100%;   /* or whatever fits your layout */
+  max-height: 60%;  /* optional */
+  width: auto;
+  height: auto;
+}
+
+#selCollName {
+  font-size: 22px;
+  margin-top: 5 px;    
+  color: #ff0000;
+  font-weight: bold;
+  
+}
+
+.menuButton {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  font-size: 32px;
+  cursor: pointer;
+  z-index: 1000;
+  background: rgba(0,0,0,0.5);
+  padding: 10px 14px;
+  border-radius: 8px;
+  color: white;
+  user-select: none;
+}

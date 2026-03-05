@@ -76,6 +76,7 @@ function animate() {
     //check for next state
     currState.checkAndUpdateState(player);
 
+
     // console.log("Hello man")
 
     renderer.render( scene, camera );

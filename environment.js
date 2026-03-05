@@ -228,6 +228,10 @@ export function addGround(scene){
 
 }
 
+/**
+ * 
+ * @param {THREE.Scene} scene 
+ */
 //puts last certificate and wall
 export function addFinalPart(scene){
     let certZ = nearBoundaryCuboidDepth / 2 - 5;
@@ -246,16 +250,14 @@ export function addFinalPart(scene){
     cert.position.set(0, certY, certZ)
     cert.rotateY(Math.PI)
 
-    cert.controls = makeControls("Certificate", "E - Collect")
 
     // cert.interactions['e'] = () => {
     //     onCollectLastCertificate(scene)
     // }
     cert.interactions.push(new Interaction("CERT", [finalCertID, scene, cert]))
 
-    cert.visible = false
+    //cert.visible = false
     scene.add(cert)
-
 
 
     //wall

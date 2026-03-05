@@ -1,6 +1,5 @@
 export const onAllRoomsVisitedDialogue = [
-    "Congrats Adventurer, You have explored all the rooms",
-    "Please go back behind the starting area"
+    "Congrats Adventurer, You have explored all the rooms, Please go back behind the starting area"
 ]
 
 
@@ -14,7 +13,6 @@ export const roomEnterDialogues = {
     ],
 
     "HOF": [
-        "Here are some great people who had an influence on my life",
-        "Apologies if i forgot anyone"
+        "Here are some awsome people you can also check out, Approach any of the images to interact"
     ]
 }

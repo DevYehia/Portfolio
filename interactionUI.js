@@ -56,9 +56,18 @@ export function showOptions(inputInteractable, inputOnQuitCallback){
     }
     interactionsArray = []
 
+    let numRows;
+    let numColumns; 
     //set rows and columns
-    let numRows = Math.ceil(options.length / 2)
-    let numColumns = 2 
+    //align as one row if few options
+    if(options.length < 4){
+        numRows = 1
+        numColumns = options.length 
+    }
+    else{
+        numRows = Math.ceil(options.length / 2)
+        numColumns = 2
+    }
 
 
     console.log("El options " + options)
@@ -71,7 +80,7 @@ export function showOptions(inputInteractable, inputOnQuitCallback){
     //set up options menu
     optionsContainer.hidden = false
     optionsMenu.innerHTML = null
-    optionsMenu.style.gridTemplateRows = `repeat(${numRows + 1}, 1fr)` //1 extra for the title
+    optionsMenu.style.gridTemplateRows = `repeat(${numRows}, 1fr)`
     optionsMenu.style.gridTemplateColumns = `repeat(${numColumns}, 1fr)`
 
     for(let row = 0 ; row < numRows ; row++){
@@ -117,6 +126,7 @@ export function hideOptions(executeQuitCallback = true){
 //just shows the options menu
 //useful when hiding and showing options menu mid interaction
 export function reShowOptions(){
+    optionsTitle.innerHTML = interactable.menuTitle
     optionsContainer.hidden = false
 }
 

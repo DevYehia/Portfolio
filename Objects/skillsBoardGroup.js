@@ -34,24 +34,11 @@ export class SkillsBoardsGroup extends Interactable{
 
             let imageSpacing = 1;
 
-            //set up title
-            const ttlGeometry = new TextGeometry("SKILLS", {
-                font: HOFTitlefont,
-                size : 5,
-                depth: 0.2
-            })            
-            const ttlMat = new THREE.MeshBasicMaterial({color: 0xff0000})
+            //add board title
+            this.addTitle()
 
-            const texture = new THREE.TextureLoader().load( "textures/border3.jpg" );
-            texture.colorSpace = THREE.SRGBColorSpace
+            this.addMainBoard()
 
-            //add the board
-            const baordGeo = new THREE.PlaneGeometry(boardWidth, boardHeight);
-            const boardMat = new THREE.MeshBasicMaterial({side: THREE.DoubleSide, map: texture});
-            this.boardMesh = new THREE.Mesh(baordGeo, boardMat);      
-            this.add(this.boardMesh)      
-            this.hitBox = this.boardMesh
-            this.boardMesh.position.y += boardHeight / 2
             //this.boardMesh.rotateY(Math.PI / 2)
 
             for(let key in skills){
@@ -90,21 +77,44 @@ export class SkillsBoardsGroup extends Interactable{
 
             //set up menuTitle
             this.menuTitle = this.boardsList[0].boardName
-            //this.controls = makeControls(this.boardsList[0].boardName, "N - Next<br>P - Prev")
 
 
-
-            //add title
-            let ttl = new THREE.Mesh(ttlGeometry, ttlMat);
-            ttl.position.y += boardHeight / 2
-            this.ttl = ttl
-            this.add(ttl)
-            let ttlSize = new THREE.Vector3()
-            this.ttl.geometry.computeBoundingBox()
-            this.ttl.position.x -= this.ttl.geometry.boundingBox.getSize(ttlSize).x / 2
-            this.ttl.position.y += ttlSize.y / (2) + 10;
 
         }
+
+    addTitle(){
+        //set up title
+        const ttlGeometry = new TextGeometry("SKILLS", {
+            font: HOFTitlefont,
+            size : 4,
+            depth: 0.2
+        })            
+        const ttlMat = new THREE.MeshBasicMaterial({color: 0xff0000})
+            //add title
+        let ttl = new THREE.Mesh(ttlGeometry, ttlMat);
+        this.ttl = ttl
+        ttl.position.y += this.boardHeight
+        let ttlSize = new THREE.Vector3()
+        this.ttl.geometry.computeBoundingBox()
+        this.ttl.position.x -= this.ttl.geometry.boundingBox.getSize(ttlSize).x / 2
+        this.ttl.position.y += ttlSize.y / (2) ;
+
+
+        this.add(ttl);
+    }
+
+    addMainBoard(){
+        const texture = new THREE.TextureLoader().load( "textures/border3.jpg" );
+        texture.colorSpace = THREE.SRGBColorSpace
+
+        //add the board
+        const baordGeo = new THREE.PlaneGeometry(this.boardWidth, this.boardHeight);
+        const boardMat = new THREE.MeshBasicMaterial({side: THREE.DoubleSide, map: texture});
+        this.boardMesh = new THREE.Mesh(baordGeo, boardMat);      
+        this.add(this.boardMesh)      
+        this.hitBox = this.boardMesh
+        this.boardMesh.position.y += this.boardHeight / 2
+    }
     
 
 

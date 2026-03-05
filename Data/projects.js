@@ -67,7 +67,7 @@ export const projectsData = [
         dialogue : [
             "This was a side project i built with my friend",
             "I was interested in how system calls worked on linux so me and my friend tried to build something that uses these system calls in linux i.e.: our shell",
-            "This shell is able to execute some commands like pwd, ls and cat (we named it meow). It can also execute applications from it"
+            "This shell is able to execute some commands like pwd, ls and cat (we named it meow). It can also execute other programs from it"
         ]
     },
     {
@@ -87,7 +87,7 @@ export const projectsData = [
         name: "This",
         imagePath : "this.png",
         tech: "JavaScript/Three.js",
-        github: "https://github.com/DevYehia/Hediaty-Gifter",
+        github: "https://github.com/DevYehia/Portfolio",
         dialogue : [
             "And the most important project of them all is ...",
             "This one, the one you are currently in",
