@@ -3,15 +3,17 @@
 
 let currIdx = 0;
 
-/**
- * @type {HTMLElement}
- */
-let currElem;
+let onAnimateLetter //function to call when a letter is animated
 
 /**
  * @type {String}
  */
 let originalText;
+
+/**
+ * @type {String}
+ */
+let currText //the text visible in current animation
 let intervalHandler;
 
 let onFinishCallback; //callback to be called when done
@@ -20,15 +22,14 @@ const delayBetweenLetters = 20
 
 
 /** 
-*@param  {HTMLElement} divElement
 *@param  {string} text
 */
-export function animateText(divElement, text, onFinish = null){
+export function animateText( text, animateLetterCallBack, onFinish = null){
 
     //clear previous interval
     clearInterval(intervalHandler);
     currIdx = 0;
-    currElem = divElement;
+    onAnimateLetter = animateLetterCallBack
     originalText = text;
     onFinishCallback = onFinish
     intervalHandler = setInterval(animateIteration, delayBetweenLetters);
@@ -37,7 +38,8 @@ export function animateText(divElement, text, onFinish = null){
 }
 
 function animateIteration(){
-    currElem.innerHTML = originalText.slice(0, currIdx);
+    currText = originalText.slice(0, currIdx);
+    onAnimateLetter?.(currText)
     currIdx++;
 
 

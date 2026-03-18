@@ -12,7 +12,7 @@ import { envStuff } from './WorldObjects';
 import { Interaction } from './Objects/interactable';
 
 //configs
-export let pathWidth = 30;
+export let pathWidth = 25;
 export const boundaryCuboidHeight = 12;
 export const boundaryCuboidWidth = 60;
 export const nearBoundaryCuboidDepth = boundaryCuboidWidth * 1.5;
@@ -320,5 +320,6 @@ export function addThanksMessage(scene, playerName){
     playerNameText.rotateY(Math.PI)
 
     scene.add(thanksMessage, playerNameText)
+
     
 }

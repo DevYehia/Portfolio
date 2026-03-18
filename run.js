@@ -10,6 +10,9 @@ import { stateInstances } from './PlayerStates/common';
 import { setUpAudio} from './Utils/audioUtils';
 import { player } from './player'
 import { handleMovement } from './movementManager';
+import { startDialogue } from './Utils/dialogUtils';
+import { startDialogueLines } from './Data/miscDialogues';
+import { focusOnInput, onEnterName, showInput } from './UI/nameInput';
 
 let inPointerLock = false;
 
@@ -47,6 +50,8 @@ addFinalPart(scene)
 setupStates()
 scene.add(player)
 
+//showInput()
+
 
 changeState(stateInstances["start"]);
 
@@ -66,6 +71,13 @@ function animate() {
         document.exitPointerLock();
         if(currPauseState == pauseStates.NOT_PAUSED)
             showPauseMenu()
+    }
+
+    //input routing
+    if(player.inWaitingForName){
+        if(isSinglePress("Enter")){
+            onEnterName()
+        }
     }
 
 
@@ -108,6 +120,18 @@ document.addEventListener('pointerlockchange', () => {
         updatePauseState(pauseStates.PAUSED);
     }
     else{
+
+        //display starting dialog if not started
+        if(!player.hasStarted){
+            player.hasStarted = true;
+            startDialogue(startDialogueLines)
+        }
+
+        //focus on input
+        if(player.inWaitingForName){
+            focusOnInput()
+        }
+
         updatePauseState(pauseStates.NOT_PAUSED);
     }
     
@@ -124,7 +148,7 @@ const clampMargin = Math.PI / 3;
 camera.rotation.order = 'YXZ';
 
 window.addEventListener('mousemove', e => {
-    if(!inPointerLock || player.inInteraction || player.inDialog){
+    if(!inPointerLock || !player.canMove()){
         return;
     }
 

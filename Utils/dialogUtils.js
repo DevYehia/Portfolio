@@ -14,10 +14,15 @@ function onFinishLine(){
     //audios["talk"].pause()
 }
 
+function onAnimateLetter(currText){
+    talkDiv.innerHTML = currText
+}
 
 export function startDialogue(diagList, onFinishDiagCallback = null){
 
     onFinishDiag = onFinishDiagCallback
+
+    console.log("On finish Diag is " + onFinishDiag)
     //set dialog in currState
     player.inDialog = true   
 
@@ -34,7 +39,7 @@ export function startDialogue(diagList, onFinishDiagCallback = null){
     //clear previous dialogues
     talkDiv.innerHTML = ""
     talkDivContainer.hidden = false;
-    animateText(talkDiv, firstLine, onFinishLine);
+    animateText(firstLine, onAnimateLetter, onFinishLine);
     currDialogIdx++;
 }
 
@@ -51,7 +56,7 @@ export function nextLine(){
         let nextLine = currDialogIdx + 1 == currDialogList.length ?
          currDialogList[currDialogIdx] :
          currDialogList[currDialogIdx] + "..."
-        animateText(talkDiv, nextLine, onFinishLine);
+        animateText(nextLine, onAnimateLetter, onFinishLine);
         currDialogIdx++;
         return true;   
     }

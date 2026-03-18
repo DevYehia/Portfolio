@@ -25,7 +25,7 @@ function onStop(){
 export function handleMovement(delta){ //delta used to make different fps machines move at same speed per second
 
     
-    if(player.inDialog || player.inInteraction){
+    if(!player.canMove()){
         onStop();
         return;
     }; //in dialog no movement
